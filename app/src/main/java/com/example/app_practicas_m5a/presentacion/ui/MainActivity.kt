@@ -1,10 +1,10 @@
-package com.example.app_practicas_m5a
+package com.example.app_practicas_m5a.presentacion.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.app_practicas_m5a.R
 import com.example.app_practicas_m5a.data.model.MySqlConexion
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
