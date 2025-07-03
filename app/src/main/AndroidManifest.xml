@@ -14,20 +14,47 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App_practicas_m5a"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
+        <!-- Página principal para ADMIN -->
         <activity
-            android:name=".presentacion.ui.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.App_practicas_m5a">
+            android:name=".presentacion.ui.Pagina_principal_adm"
+            android:exported="false" />
+
+        <!-- Página principal para VOLUNTARIOS -->
+        <activity
+            android:name=".presentacion.ui.Pagina_principal_vol"
+            android:exported="false" />
+
+        <!-- Pantalla de Login (actividad inicial) -->
+        <activity
+            android:name=".presentacion.ui.Login"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <!-- Registro de usuarios voluntarios -->
+        <activity
+            android:name=".presentacion.ui.Registro_voluntario"
+            android:exported="false" />
+
+        <!-- Registro de usuarios administradores (opcional, si lo implementas) -->
+        <!--
+        <activity
+            android:name=".presentacion.ui.Registro_admin"
+            android:exported="false" />
+        -->
+
+        <!-- Otra actividad general -->
+        <activity
+            android:name=".presentacion.ui.MainActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.App_practicas_m5a" />
     </application>
 
 </manifest>

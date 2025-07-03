@@ -5,7 +5,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.app_practicas_m5a.R
-import com.example.app_practicas_m5a.data.model.MySqlConexion
+import com.example.app_practicas_m5a.data.dao.MySqlConexion
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
