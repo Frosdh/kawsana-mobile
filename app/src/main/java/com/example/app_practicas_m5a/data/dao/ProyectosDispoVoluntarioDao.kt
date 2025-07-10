@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.app_practicas_m5a.data.model.core_proyecto
 import java.sql.Connection
 
-object ProyectosDispoVoluntarioDao {
+object  ProyectosDispoVoluntarioDao {
 
     private fun getConnection(): Connection? = MySqlConexion.getConexion()
 
