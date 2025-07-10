@@ -189,5 +189,78 @@ object CoreUsuarioDao {
             }
         }
     }
+    fun obtenerUsuarioPorCedula(cedula: String): CoreUsuarioModel? {
+        val conn = getConexion()
+        var user: CoreUsuarioModel? = null
+        try {
+            val sql = "SELECT * FROM core_usuario WHERE cedula = ? AND estado = 1 LIMIT 1"
+            val ps = conn?.prepareStatement(sql)
+            ps?.setString(1, cedula)
+            val rs = ps?.executeQuery()
+            if (rs != null && rs.next()) {
+                user = CoreUsuarioModel(
+                    id = rs.getLong("id"),
+                    email = rs.getString("email"),
+                    contraseña = rs.getString("contraseña"),
+                    tipo_usuario = rs.getString("tipo_usuario"),
+                    fecha_registro = rs.getDate("fecha_registro"),
+                    estado = rs.getBoolean("estado"),
+                    nombres = rs.getString("nombres"),
+                    apellidos = rs.getString("apellidos"),
+                    cedula = rs.getString("cedula"),
+                    telefono = rs.getString("telefono"),
+                    direccion = rs.getString("direccion"),
+                    fecha_nacimiento = rs.getDate("fecha_nacimiento"),
+                    barrio_id = rs.getLong("barrio_id")
+                )
+            }
+            rs?.close()
+            ps?.close()
+            conn?.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return user
+    }
+    fun actualizarPerfil(usuario: CoreUsuarioModel): Boolean {
+        val conn = getConexion() ?: run {
+            Log.e("CoreUsuarioDao", "No se pudo obtener conexión a la BD")
+            return false
+        }
+
+        val sql = """
+        UPDATE core_usuario
+        SET nombres = ?, apellidos = ?, email = ?, telefono = ?, direccion = ?
+        WHERE cedula = ? AND estado = 1
+    """.trimIndent()
+
+        var ps: PreparedStatement? = null
+
+        return try {
+            ps = conn.prepareStatement(sql)
+            ps.setString(1, usuario.nombres)
+            ps.setString(2, usuario.apellidos)
+            ps.setString(3, usuario.email)
+            ps.setString(4, usuario.telefono)
+            ps.setString(5, usuario.direccion)
+            ps.setString(6, usuario.cedula)
+
+            Log.d("CoreUsuarioDao", "Ejecutando update perfil para cédula: ${usuario.cedula} con nombres: ${usuario.nombres}, apellidos: ${usuario.apellidos}, email: ${usuario.email}, teléfono: ${usuario.telefono}, dirección: ${usuario.direccion}")
+            val res = ps.executeUpdate()
+            Log.d("CoreUsuarioDao", "Filas afectadas: $res")
+            res > 0
+        } catch (ex: Exception) {
+            Log.e("CoreUsuarioDao", "Error al actualizar perfil: ${ex.message}")
+            ex.printStackTrace()
+            false
+        } finally {
+            ps?.close()
+            conn.close()
+        }
+    }
+
+
+
+
 
 }
