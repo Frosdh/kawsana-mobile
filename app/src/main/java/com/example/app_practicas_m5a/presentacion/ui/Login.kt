@@ -55,9 +55,11 @@ class Login : AppCompatActivity() {
                     Toast.makeText(this@Login, "Bienvenido ${user.nombres}", Toast.LENGTH_LONG).show()
 
                     val intent = when (user.tipo_usuario.uppercase()) {
-                        "ADMIN" -> Intent(this@Login, Pagina_principal_adm::class.java)
+                        "ADMIN", "LIDER" -> Intent(this@Login, Pagina_principal_adm::class.java).apply {
+                            putExtra("cedula", user.cedula) // ✅ PASAR CÉDULA AL ADMIN
+                        }
                         "VOLUNTARIO" -> Intent(this@Login, Pagina_principal_vol::class.java).apply {
-                            putExtra("cedula", user.cedula) // ✅ PASAR CÉDULA
+                            putExtra("cedula", user.cedula) // ✅ PASAR CÉDULA AL VOLUNTARIO
                         }
                         else -> {
                             Toast.makeText(this@Login, "Tipo de usuario desconocido", Toast.LENGTH_SHORT).show()

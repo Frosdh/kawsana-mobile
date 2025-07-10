@@ -1,8 +1,8 @@
 package com.example.app_practicas_m5a.presentacion.ui
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,6 +25,8 @@ class Pagina_principal_vol : AppCompatActivity() {
     private lateinit var tvNoticias: TextView
     private lateinit var tvAvance: TextView
     private lateinit var progreso: ProgressBar
+    private lateinit var btnVerPerfil: Button
+    private lateinit var cedula: String // Cédula del usuario logueado
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +42,13 @@ class Pagina_principal_vol : AppCompatActivity() {
         tvNoticias = findViewById(R.id.tvNoticias)
         tvAvance = findViewById(R.id.tvAvance)
         progreso = findViewById(R.id.progressBarAvance)
+        btnVerPerfil = findViewById(R.id.btnVerPerfil)
+
+        // Obtener la cédula del intent (pasada desde Login)
+        cedula = intent.getStringExtra("cedula") ?: "No disponible"
 
         tvActividades.text = "Cargando actividades..."
         tvProyectosDisponibles.text = "Cargando proyectos..."
-
-        // Puedes recibir cedula si la usas, pero no es obligatoria para mostrar
-        val cedula = intent.getStringExtra("cedula")
 
         lifecycleScope.launch {
             // Cargar actividades en background
@@ -85,13 +88,21 @@ class Pagina_principal_vol : AppCompatActivity() {
             } else {
                 tvProyectosDisponibles.text = "No hay proyectos disponibles por el momento."
             }
-        }
 
-        // Ajuste de paddings por barras del sistema
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+            // Configurar el botón para ir al perfil
+            btnVerPerfil.setOnClickListener {
+                val intent = Intent(this@Pagina_principal_vol, Perfil_voluntario::class.java).apply {
+                    putExtra("cedula_usuario", cedula) // Pasar la cédula del usuario logueado
+                }
+                startActivity(intent)
+            }
+
+            // Ajuste de paddings por barras del sistema
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
         }
     }
 }
