@@ -54,10 +54,11 @@ class Login : AppCompatActivity() {
                 if (user != null) {
                     Toast.makeText(this@Login, "Bienvenido ${user.nombres}", Toast.LENGTH_LONG).show()
 
-                    // Redirección según tipo de usuario
                     val intent = when (user.tipo_usuario.uppercase()) {
                         "ADMIN" -> Intent(this@Login, Pagina_principal_adm::class.java)
-                        "VOLUNTARIO" -> Intent(this@Login, Pagina_principal_vol::class.java)
+                        "VOLUNTARIO" -> Intent(this@Login, Pagina_principal_vol::class.java).apply {
+                            putExtra("cedula", user.cedula) // ✅ PASAR CÉDULA
+                        }
                         else -> {
                             Toast.makeText(this@Login, "Tipo de usuario desconocido", Toast.LENGTH_SHORT).show()
                             return@launch
@@ -74,8 +75,7 @@ class Login : AppCompatActivity() {
         }
 
         btnRegistrar.setOnClickListener {
-            val intent = Intent(this, Registro_voluntario::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Registro_voluntario::class.java))
         }
     }
 }

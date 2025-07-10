@@ -17,6 +17,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
+        <!-- Actividad de perfil del voluntario -->
+        <activity
+            android:name=".presentacion.ui.Perfil_voluntario"
+            android:exported="false" />
+
         <!-- Página principal para ADMIN -->
         <activity
             android:name=".presentacion.ui.Pagina_principal_adm"
@@ -42,7 +47,7 @@
             android:name=".presentacion.ui.Registro_voluntario"
             android:exported="false" />
 
-        <!-- Registro de usuarios administradores (opcional, si lo implementas) -->
+        <!-- Registro de usuarios administradores (opcional, si lo implementas en el futuro) -->
         <!--
         <activity
             android:name=".presentacion.ui.Registro_admin"
@@ -55,6 +60,7 @@
             android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.App_practicas_m5a" />
+
     </application>
 
 </manifest>
