@@ -27,6 +27,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <Button
+            android:id="@+id/btnVerPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ver Perfil"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#66BB6A"
+            android:layout_marginTop="24dp"/>
+
+
         <TextView
             android:id="@+id/tvPuntos"
             android:text="🔥 Puntos: ..."
