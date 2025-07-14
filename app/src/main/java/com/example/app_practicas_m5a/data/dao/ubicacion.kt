@@ -4,6 +4,7 @@ import com.example.app_practicas_m5a.data.model.Barrio
 import com.example.app_practicas_m5a.data.model.Ciudad
 import com.example.app_practicas_m5a.data.model.Parroquia
 import java.sql.Connection
+import java.sql.DriverManager.getConnection
 import java.sql.ResultSet
 import java.sql.SQLException
 
