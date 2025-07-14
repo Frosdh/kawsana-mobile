@@ -21,6 +21,7 @@ class Login : AppCompatActivity() {
     private lateinit var btnIniciar: Button
     private lateinit var btnRegistrar: Button
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -57,15 +58,18 @@ class Login : AppCompatActivity() {
                     val intent = when (user.tipo_usuario.uppercase()) {
                         "ADMIN", "LIDER" -> Intent(this@Login, Pagina_principal_adm::class.java).apply {
                             putExtra("cedula", user.cedula)
+                            putExtra("usuario_id", user.id) // ✅ Agregar usuarioId
                         }
                         "VOLUNTARIO" -> Intent(this@Login, Pagina_principal_vol::class.java).apply {
                             putExtra("cedula", user.cedula)
+                            putExtra("usuario_id", user.id) // ✅ Agregar usuarioId
                         }
                         else -> {
                             Toast.makeText(this@Login, "Tipo de usuario desconocido: ${user.tipo_usuario}", Toast.LENGTH_SHORT).show()
                             return@launch
                         }
                     }
+
 
                     startActivity(intent)
                     finish()

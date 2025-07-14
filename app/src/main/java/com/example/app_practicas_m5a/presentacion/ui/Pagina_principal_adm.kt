@@ -21,8 +21,12 @@ class Pagina_principal_adm : AppCompatActivity() {
     private lateinit var tvCorreoAdmin: TextView
     private lateinit var imgPerfil: ImageView
     private lateinit var btnVerPerfil: Button
+    private lateinit var btnFinal: Button
+
 
     private lateinit var cedula: String
+    private var usuarioId: Long = -1  // ✅ Declarar variable de clase
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +39,7 @@ class Pagina_principal_adm : AppCompatActivity() {
         tvCorreoAdmin = findViewById(R.id.tvCorreoAdmin)
         imgPerfil = findViewById(R.id.imgPerfil)
         btnVerPerfil = findViewById(R.id.btnVerPerfil)
+        btnFinal = findViewById(R.id.btnFinal)
 
         // Obtener cédula enviada desde Login
         cedula = intent.getStringExtra("cedula") ?: ""
@@ -46,6 +51,8 @@ class Pagina_principal_adm : AppCompatActivity() {
             }
 
             if (admin != null) {
+                usuarioId = admin.id  // ✅ Asignar ID
+
                 tvNombreAdmin.text = "Nombre: ${admin.nombres} ${admin.apellidos}"
                 tvCorreoAdmin.text = "Correo: ${admin.email}"
             } else {
@@ -69,6 +76,13 @@ class Pagina_principal_adm : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Acción del botón Ver Actividades
+        btnFinal.setOnClickListener {
+            val intent = Intent(this, Proyecto_Actuales_Lider::class.java)
+            intent.putExtra("cedula", cedula)
+            intent.putExtra("usuario_id", usuarioId)
+            startActivity(intent)
+        }
 
         // Padding para barras del sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainInicioAdmin)) { v, insets ->
