@@ -12,6 +12,9 @@ import com.example.app_practicas_m5a.R
 import com.example.app_practicas_m5a.data.dao.CoreUsuarioDao
 import com.example.app_practicas_m5a.data.dao.ubicacion
 import com.example.app_practicas_m5a.data.model.CoreUsuarioModel
+import com.example.app_practicas_m5a.data.model.Ciudad
+import com.example.app_practicas_m5a.data.model.Parroquia
+import com.example.app_practicas_m5a.data.model.Barrio
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -32,6 +35,10 @@ class Registro_voluntario : AppCompatActivity() {
     private lateinit var spinnerBarrio: Spinner
     private lateinit var btnRegistrar: Button
 
+    private var ciudadSeleccionada: Ciudad? = null
+    private var parroquiaSeleccionada: Parroquia? = null
+    private var barrioSeleccionado: Barrio? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -43,7 +50,6 @@ class Registro_voluntario : AppCompatActivity() {
             insets
         }
 
-        // Referencias a las vistas
         etNombres = findViewById(R.id.etNombres)
         etApellidos = findViewById(R.id.etApellidos)
         etEmail = findViewById(R.id.etEmail)
@@ -59,7 +65,6 @@ class Registro_voluntario : AppCompatActivity() {
         spinnerBarrio = findViewById(R.id.spinnerBarrio)
         btnRegistrar = findViewById(R.id.btnRegistrar)
 
-        // Spinner con opciones
         val tipos = arrayOf("VOLUNTARIO", "ADMIN")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, tipos)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -78,7 +83,6 @@ class Registro_voluntario : AppCompatActivity() {
                     spinnerBarrio.visibility = View.GONE
                 }
             }
-
             override fun onNothingSelected(parentView: AdapterView<*>) {}
         }
 
@@ -89,46 +93,50 @@ class Registro_voluntario : AppCompatActivity() {
                 spinnerParroquia.visibility = View.VISIBLE
                 spinnerBarrio.visibility = View.VISIBLE
 
-                // Cargar ciudades
                 GlobalScope.launch(Dispatchers.Main) {
                     val ciudades = withContext(Dispatchers.IO) {
                         ubicacion.obtenerCiudades()
                     }
-                    val adapterCiudad = ArrayAdapter(this@Registro_voluntario, android.R.layout.simple_spinner_item, ciudades)
+                    val adapterCiudad = ArrayAdapter(this@Registro_voluntario, android.R.layout.simple_spinner_item, ciudades.map { it.nombre })
                     adapterCiudad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spinnerCiudad.adapter = adapterCiudad
-                }
 
-                spinnerCiudad.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        val ciudadId = position + 1
-                        GlobalScope.launch(Dispatchers.Main) {
-                            val parroquias = withContext(Dispatchers.IO) {
-                                ubicacion.obtenerParroquiasPorCiudad(ciudadId)
+                    spinnerCiudad.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                            ciudadSeleccionada = ciudades[position]
+                            GlobalScope.launch(Dispatchers.Main) {
+                                val parroquias = withContext(Dispatchers.IO) {
+                                    ubicacion.obtenerParroquiasPorCiudad(ciudadSeleccionada!!.id)
+                                }
+                                val adapterParroquia = ArrayAdapter(this@Registro_voluntario, android.R.layout.simple_spinner_item, parroquias.map { it.nombre })
+                                adapterParroquia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                spinnerParroquia.adapter = adapterParroquia
+
+                                spinnerParroquia.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                        parroquiaSeleccionada = parroquias[position]
+                                        GlobalScope.launch(Dispatchers.Main) {
+                                            val barrios = withContext(Dispatchers.IO) {
+                                                ubicacion.obtenerBarriosPorParroquia(parroquiaSeleccionada!!.id)
+                                            }
+                                            val adapterBarrio = ArrayAdapter(this@Registro_voluntario, android.R.layout.simple_spinner_item, barrios.map { it.nombre })
+                                            adapterBarrio.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                            spinnerBarrio.adapter = adapterBarrio
+
+                                            spinnerBarrio.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                                                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                                    barrioSeleccionado = barrios[position]
+                                                }
+                                                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                                            }
+                                        }
+                                    }
+                                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                                }
                             }
-                            val adapterParroquia = ArrayAdapter(this@Registro_voluntario, android.R.layout.simple_spinner_item, parroquias)
-                            adapterParroquia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                            spinnerParroquia.adapter = adapterParroquia
                         }
+                        override fun onNothingSelected(parent: AdapterView<*>?) {}
                     }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                }
-
-                spinnerParroquia.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        val parroquiaId = position + 1
-                        GlobalScope.launch(Dispatchers.Main) {
-                            val barrios = withContext(Dispatchers.IO) {
-                                ubicacion.obtenerBarriosPorParroquia(parroquiaId)
-                            }
-                            val adapterBarrio = ArrayAdapter(this@Registro_voluntario, android.R.layout.simple_spinner_item, barrios)
-                            adapterBarrio.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                            spinnerBarrio.adapter = adapterBarrio
-                        }
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
             } else {
                 Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show()
@@ -161,7 +169,8 @@ class Registro_voluntario : AppCompatActivity() {
                 apellidos = apellidos,
                 cedula = cedula,
                 telefono = telefono,
-                direccion = direccion
+                direccion = direccion,
+                barrio_id = barrioSeleccionado?.id?.toLong()
             )
 
             GlobalScope.launch(Dispatchers.Main) {

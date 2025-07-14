@@ -1,12 +1,11 @@
 package com.example.app_practicas_m5a.presentacion.ui
 
-
+import android.graphics.Color
 import android.os.Bundle
-import android.widget.*
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.app_practicas_m5a.R
 import com.example.app_practicas_m5a.data.dao.CoreUsuarioDao
@@ -15,58 +14,50 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Perfil_Admin : AppCompatActivity()  {
+class Perfil_Admin : AppCompatActivity() {
 
-    private lateinit var etEmail: EditText
-    private lateinit var etTelefono: EditText
-    private lateinit var etDireccion: EditText
-    private lateinit var etCedula: EditText
-    private lateinit var etNombres: EditText
-    private lateinit var etApellidos: EditText
-    private lateinit var btnModificar: Button
+    private lateinit var tvCedula: EditText
+    private lateinit var tvNombres: EditText
+    private lateinit var tvApellidos: EditText
+    private lateinit var tvEmail: EditText
+    private lateinit var tvTelefono: EditText
+    private lateinit var tvDireccion: EditText
+    private lateinit var btnEditarPerfil: Button
     private lateinit var btnVolver: Button
 
     private var usuario: CoreUsuarioModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_perfil_admin)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-        // Asignar vistas
-        etCedula = findViewById(R.id.tvCedula)
-        etNombres = findViewById(R.id.tvNombres)
-        etApellidos = findViewById(R.id.tvApellidos)
-        etEmail = findViewById(R.id.tvEmail)
-        etTelefono = findViewById(R.id.tvTelefono)
-        etDireccion = findViewById(R.id.tvDireccion)
-        btnModificar = findViewById(R.id.btnEditarPerfil)
+        tvCedula = findViewById(R.id.tvCedula)
+        tvNombres = findViewById(R.id.tvNombres)
+        tvApellidos = findViewById(R.id.tvApellidos)
+        tvEmail = findViewById(R.id.tvEmail)
+        tvTelefono = findViewById(R.id.tvTelefono)
+        tvDireccion = findViewById(R.id.tvDireccion)
+        btnEditarPerfil = findViewById(R.id.btnEditarPerfil)
         btnVolver = findViewById(R.id.btnVolver)
 
         // La cédula nunca se edita
-        etCedula.isEnabled = false
+        tvCedula.isEnabled = false
 
-        // Recibir cédula
-        val cedula = intent.getStringExtra("cedula_usuario") ?: return
+        // Modo inicial: campos deshabilitados, fondo gris (modo solo lectura)
+        setEditable(false)
 
-        // Cargar datos
+        val cedula = intent.getStringExtra("cedula") ?: return
         cargarDatos(cedula)
 
-        btnModificar.setOnClickListener {
-            val estaEditable = etEmail.isEnabled
-            if (estaEditable) {
+        btnEditarPerfil.setOnClickListener {
+            if (tvEmail.isEnabled) {
+                // Guardar cambios
                 usuario?.let {
-                    it.nombres = etNombres.text.toString()
-                    it.apellidos = etApellidos.text.toString()
-                    it.email = etEmail.text.toString()
-                    it.telefono = etTelefono.text.toString()
-                    it.direccion = etDireccion.text.toString()
+                    it.nombres = tvNombres.text.toString()
+                    it.apellidos = tvApellidos.text.toString()
+                    it.email = tvEmail.text.toString()
+                    it.telefono = tvTelefono.text.toString()
+                    it.direccion = tvDireccion.text.toString()
 
                     lifecycleScope.launch {
                         val actualizado = withContext(Dispatchers.IO) {
@@ -75,15 +66,16 @@ class Perfil_Admin : AppCompatActivity()  {
                         if (actualizado) {
                             Toast.makeText(this@Perfil_Admin, "Perfil actualizado", Toast.LENGTH_SHORT).show()
                             setEditable(false)
-                            btnModificar.text = "Modificar"
+                            btnEditarPerfil.text = "Editar Perfil"
                         } else {
                             Toast.makeText(this@Perfil_Admin, "Error al actualizar", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             } else {
+                // Habilitar edición
                 setEditable(true)
-                btnModificar.text = "Guardar cambios"
+                btnEditarPerfil.text = "Guardar cambios"
             }
         }
 
@@ -93,11 +85,22 @@ class Perfil_Admin : AppCompatActivity()  {
     }
 
     private fun setEditable(habilitar: Boolean) {
-        etNombres.isEnabled = habilitar
-        etApellidos.isEnabled = habilitar
-        etEmail.isEnabled = habilitar
-        etTelefono.isEnabled = habilitar
-        etDireccion.isEnabled = habilitar
+        val colorFondo = if (habilitar) Color.WHITE else Color.parseColor("#FFEEEEEE")
+
+        tvNombres.isEnabled = habilitar
+        tvNombres.setBackgroundColor(colorFondo)
+
+        tvApellidos.isEnabled = habilitar
+        tvApellidos.setBackgroundColor(colorFondo)
+
+        tvEmail.isEnabled = habilitar
+        tvEmail.setBackgroundColor(colorFondo)
+
+        tvTelefono.isEnabled = habilitar
+        tvTelefono.setBackgroundColor(colorFondo)
+
+        tvDireccion.isEnabled = habilitar
+        tvDireccion.setBackgroundColor(colorFondo)
     }
 
     private fun cargarDatos(cedula: String) {
@@ -105,14 +108,13 @@ class Perfil_Admin : AppCompatActivity()  {
             usuario = withContext(Dispatchers.IO) {
                 CoreUsuarioDao.obtenerUsuarioPorCedula(cedula)
             }
-
             usuario?.let {
-                etCedula.setText(it.cedula)
-                etNombres.setText(it.nombres)
-                etApellidos.setText(it.apellidos)
-                etEmail.setText(it.email)
-                etTelefono.setText(it.telefono)
-                etDireccion.setText(it.direccion)
+                tvCedula.setText(it.cedula)
+                tvNombres.setText(it.nombres)
+                tvApellidos.setText(it.apellidos)
+                tvEmail.setText(it.email)
+                tvTelefono.setText(it.telefono)
+                tvDireccion.setText(it.direccion)
             }
         }
     }

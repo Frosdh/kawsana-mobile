@@ -15,5 +15,5 @@ data class CoreUsuarioModel(
     var telefono: String,
     var direccion: String,
     var fecha_nacimiento: Date? = null,
-    var barrio_id: Long? = null
+    val barrio_id: Long? = null
 )

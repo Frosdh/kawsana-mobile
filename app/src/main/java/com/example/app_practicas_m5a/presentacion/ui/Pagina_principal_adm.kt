@@ -29,7 +29,6 @@ class Pagina_principal_adm : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_pagina_principal_adm)
 
-
         // Vincular UI
         tvTituloAdmin = findViewById(R.id.tvTituloAdmin)
         tvNombreAdmin = findViewById(R.id.tvNombreAdmin)
@@ -54,14 +53,22 @@ class Pagina_principal_adm : AppCompatActivity() {
             }
         }
 
-        // Acción del botón
+        // Acción del botón: Ir a Perfil_Admin
         btnVerPerfil.setOnClickListener {
             val intent = Intent(this, Perfil_Admin::class.java)
             intent.putExtra("cedula", cedula)
             startActivity(intent)
-            setContentView(R.layout.activity_perfil_admin)
-
         }
+
+
+        val btnVerProyecto = findViewById<Button>(R.id.btnVerProyecto)
+        btnVerProyecto.setOnClickListener {
+            val intent = Intent(this, Proyectos_Disponibles::class.java)
+            intent.putExtra("titulo", "Proyecto Kausana")
+            intent.putExtra("descripcion", "Plataforma de apoyo social para comunidades rurales.")
+            startActivity(intent)
+        }
+
 
         // Padding para barras del sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainInicioAdmin)) { v, insets ->
