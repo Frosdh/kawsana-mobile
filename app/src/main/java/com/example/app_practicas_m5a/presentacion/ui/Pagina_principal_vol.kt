@@ -42,7 +42,7 @@ class Pagina_principal_vol : AppCompatActivity() {
         tvNoticias = findViewById(R.id.tvNoticias)
         tvAvance = findViewById(R.id.tvAvance)
         progreso = findViewById(R.id.progressBarAvance)
-        btnVerPerfil = findViewById(R.id.btnVerPerfil)
+        //btnVerPerfil = findViewById(R.id.btnVerPerfil)
 
         // Obtener la cédula del intent (pasada desde Login)
         cedula = intent.getStringExtra("cedula") ?: "No disponible"
@@ -89,13 +89,7 @@ class Pagina_principal_vol : AppCompatActivity() {
                 tvProyectosDisponibles.text = "No hay proyectos disponibles por el momento."
             }
 
-            // Configurar el botón para ir al perfil
-            btnVerPerfil.setOnClickListener {
-                val intent = Intent(this@Pagina_principal_vol, Perfil_voluntario::class.java).apply {
-                    putExtra("cedula_usuario", cedula) // Pasar la cédula del usuario logueado
-                }
-                startActivity(intent)
-            }
+
 
             // Ajuste de paddings por barras del sistema
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Barra de progreso estilo gráfica de barras -->
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M4,14h2v4H4v-4zM8,10h2v8H8v-8zM12,6h2v12h-2V6zM16,2h2v16h-2V2z"/>
+
+</vector>
