@@ -63,6 +63,9 @@ dependencies {
     // ❌ Se recomienda eliminar esto si no usas Flutter embebido
     // implementation(project(":flutter"))
 
+    implementation ("androidx.recyclerview:recyclerview:1.3.0")
+    implementation ("androidx.cardview:cardview:1.0.0")
+
     // ✅ TensorFlow Lite
     implementation("org.tensorflow:tensorflow-lite:2.13.0")
 

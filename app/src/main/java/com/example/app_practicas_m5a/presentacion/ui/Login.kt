@@ -58,17 +58,20 @@ class Login : AppCompatActivity() {
                     val intent = when (user.tipo_usuario.uppercase()) {
                         "ADMIN", "LIDER" -> Intent(this@Login, Pagina_principal_adm::class.java).apply {
                             putExtra("cedula", user.cedula)
-                            putExtra("usuario_id", user.id) // ✅ Agregar usuarioId
+                            putExtra("usuario_id", user.id)
+                            putExtra("nombre", user.nombres) // ✅ Aquí adentro
                         }
                         "VOLUNTARIO" -> Intent(this@Login, Pagina_principal_vol::class.java).apply {
                             putExtra("cedula", user.cedula)
-                            putExtra("usuario_id", user.id) // ✅ Agregar usuarioId
+                            putExtra("usuario_id", user.id)
+                            putExtra("nombre", user.nombres) // ✅ Aquí adentro
                         }
                         else -> {
                             Toast.makeText(this@Login, "Tipo de usuario desconocido: ${user.tipo_usuario}", Toast.LENGTH_SHORT).show()
                             return@launch
                         }
                     }
+
 
 
                     startActivity(intent)

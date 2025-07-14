@@ -62,6 +62,11 @@
         <activity
             android:name=".presentacion.ui.Subir_Actividades_Proyecto"
             android:exported="false" />
+
+        <activity android:name=".presentacion.ui.Proyectos_Disponibles_Vol"
+            android:exported="false" />
+        <activity android:name=".presentacion.ui.Actividades_Disponibles_Vol"
+            android:exported="false" />
         <!-- Otra actividad general -->
         <activity
             android:name=".presentacion.ui.MainActivity"
