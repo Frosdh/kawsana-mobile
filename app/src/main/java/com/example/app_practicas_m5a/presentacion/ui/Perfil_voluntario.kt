@@ -1,5 +1,6 @@
 package com.example.app_practicas_m5a.presentacion.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
@@ -52,7 +53,7 @@ class Perfil_voluntario : AppCompatActivity() {
         etCedula.isEnabled = false
 
         // Recibir cédula
-        val cedula = intent.getStringExtra("cedula_usuario") ?: return
+        val cedula = intent.getStringExtra("cedula") ?: return
 
         // Cargar datos
         cargarDatos(cedula)
@@ -88,8 +89,13 @@ class Perfil_voluntario : AppCompatActivity() {
 
 
         btnVolver.setOnClickListener {
-            finish()
+            val intent = Intent(this, Pagina_principal_vol::class.java)
+            intent.putExtra("cedula", usuario?.cedula) // Puedes enviar la cédula si es necesario
+            intent.putExtra("nombre", usuario?.nombres) // Si quieres mostrar el nombre en el saludo
+            startActivity(intent)
+            finish() // Finaliza esta pantalla para que no se apile
         }
+
     }
 
     private fun setEditable(habilitar: Boolean) {

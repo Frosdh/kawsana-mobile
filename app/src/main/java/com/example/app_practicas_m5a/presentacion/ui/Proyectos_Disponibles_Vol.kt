@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 class Proyectos_Disponibles_Vol : AppCompatActivity() {
 
     private lateinit var rvListaProyectos: RecyclerView
+    private lateinit var cedula: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,9 +25,13 @@ class Proyectos_Disponibles_Vol : AppCompatActivity() {
         rvListaProyectos = findViewById(R.id.rvListaProyectos)
         rvListaProyectos.layoutManager = LinearLayoutManager(this)
 
+        // Obtener la cédula enviada desde la pantalla anterior
+        cedula = intent.getStringExtra("cedula") ?: ""
+
         lifecycleScope.launch {
             val proyectos = withContext(Dispatchers.IO) {
-                ProyectosDispoVoluntarioDao.obtenerProyectosActivos()
+                // CORREGIDO: llamado al método correcto
+                ProyectosDispoVoluntarioDao.obtenerProyectosDelVoluntario(cedula)
             }
 
             if (proyectos.isNotEmpty()) {
@@ -39,7 +44,11 @@ class Proyectos_Disponibles_Vol : AppCompatActivity() {
                 }
                 rvListaProyectos.adapter = adapter
             } else {
-                Toast.makeText(this@Proyectos_Disponibles_Vol, "No hay proyectos disponibles por el momento.", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@Proyectos_Disponibles_Vol,
+                    "No hay proyectos disponibles por el momento.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
