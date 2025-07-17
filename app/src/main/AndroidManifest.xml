@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.app_practicas_m5a">
 
-    <!-- Permiso para permitir conexiones de red -->
+    <!-- Declarar uso obligatorio de cámara -->
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
+    <!-- Permisos necesarios -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!-- Permisos para almacenamiento, solo si el target API <= 28 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
 
     <application
         android:allowBackup="true"
@@ -17,22 +29,30 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <!-- Actividad de perfil del voluntario -->
+        <!-- Provider para compartir archivos con la cámara -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <!-- Declaración de actividades -->
         <activity
             android:name=".presentacion.ui.Perfil_voluntario"
             android:exported="false" />
 
-        <!-- Página principal para ADMIN -->
         <activity
             android:name=".presentacion.ui.Pagina_principal_adm"
             android:exported="false" />
 
-        <!-- Página principal para VOLUNTARIOS -->
         <activity
             android:name=".presentacion.ui.Pagina_principal_vol"
             android:exported="false" />
 
-        <!-- Pantalla de Login (actividad inicial) -->
         <activity
             android:name=".presentacion.ui.Login"
             android:exported="true">
@@ -42,17 +62,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentacion.ui.Perfil_Admin" />
+        <activity android:name=".presentacion.ui.Perfil_Admin" android:exported="false" />
 
-        <!-- Registro de usuarios voluntarios -->
         <activity
             android:name=".presentacion.ui.Registro_voluntario"
             android:exported="false" />
 
-        <!-- Actividades de proyecto -->
+        <!-- Opcional: Registro de admin si se implementa -->
+        <!--
+        <activity
+            android:name=".presentacion.ui.Registro_admin"
+            android:exported="false" />
+        -->
+
         <activity
             android:name=".presentacion.ui.Proyecto_Actuales_Lider"
             android:exported="false" />
+
         <activity
             android:name=".presentacion.ui.Subir_Actividades_Proyecto"
             android:exported="false" />
@@ -60,30 +86,11 @@
         <activity
             android:name=".presentacion.ui.Proyectos_Disponibles_Vol"
             android:exported="false" />
+
         <activity
             android:name=".presentacion.ui.Actividades_Disponibles_Vol"
             android:exported="false" />
 
-        <!-- Actividad que estaba faltando -->
-        <activity
-            android:name=".presentacion.ui.Proyectos_Disponibles"
-            android:exported="false" />
-
-        <!-- Actividades adicionales del segundo manifiesto -->
-        <activity
-            android:name=".presentacion.ui.ActividadesDeProyectoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentacion.ui.NoticiasActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentacion.ui.NoticiaDetalleActivity"
-            android:exported="false" />
-
-        <activity android:name=".presentacion.ui.Detalle_Proyecto"
-            android:exported="false" />
-
-        <!-- Otra actividad general -->
         <activity
             android:name=".presentacion.ui.MainActivity"
             android:exported="false"
