@@ -57,21 +57,16 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    // ✅ Conector MySQL (sólo útil si realmente estás usando JDBC)
     implementation("mysql:mysql-connector-java:5.1.49")
 
-    // ❌ Se recomienda eliminar esto si no usas Flutter embebido
-    // implementation(project(":flutter"))
-
-    implementation ("androidx.recyclerview:recyclerview:1.3.0")
-    implementation ("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.0")
+    implementation("androidx.cardview:cardview:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 
-    // ✅ TensorFlow Lite
     implementation("org.tensorflow:tensorflow-lite:2.13.0")
 
     implementation(libs.libreria.pcs)
@@ -81,6 +76,9 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.room.common.jvm)
 
+    // Aquí agregamos MPAndroidChart:
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -89,4 +87,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
 

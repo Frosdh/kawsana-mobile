@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollDetalleProyecto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:background="#FAFAFA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvNombreProyectoDetalle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre del Proyecto"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#2E7D32"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Descripción -->
+        <TextView
+            android:id="@+id/tvDescripcionProyectoDetalle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripción del proyecto"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Fechas -->
+        <TextView
+            android:id="@+id/tvFechaInicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha de inicio: "
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvFechaFin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha de fin: "
+            android:layout_marginBottom="12dp" />
+
+        <!-- Datos de la organización -->
+        <TextView
+            android:id="@+id/tvNombreOrganizacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Organización: "
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/tvDireccionOrganizacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dirección: " />
+
+        <TextView
+            android:id="@+id/tvTelefonoOrganizacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Teléfono: " />
+
+        <TextView
+            android:id="@+id/tvRepresentanteOrganizacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Representante: " />
+
+        <!-- Botón de registro -->
+        <Button
+            android:id="@+id/btnRegistrarseProyecto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registrarse a este proyecto"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#388E3C"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</ScrollView>

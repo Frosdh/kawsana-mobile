@@ -17,10 +17,10 @@ object CoreUsuarioDao {
         val conn = getConexion() ?: return false
 
         val sql = """
-            INSERT INTO core_usuario
-            (email, contraseña, tipo_usuario, fecha_registro, estado, nombres, apellidos, cedula, telefono, direccion)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """.trimIndent()
+        INSERT INTO core_usuario
+        (email, contraseña, tipo_usuario, fecha_registro, estado, nombres, apellidos, cedula, telefono, direccion, barrio_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """.trimIndent()
 
         var ps: PreparedStatement? = null
         return try {
@@ -36,6 +36,13 @@ object CoreUsuarioDao {
             ps.setString(9, usuario.telefono)
             ps.setString(10, usuario.direccion)
 
+            // Asignar barrio_id, si no hay valor se inserta NULL
+            if (usuario.barrio_id != null) {
+                ps.setLong(11, usuario.barrio_id!!)
+            } else {
+                ps.setNull(11, java.sql.Types.BIGINT)
+            }
+
             val res = ps.executeUpdate()
             res > 0
         } catch (ex: Exception) {
@@ -46,6 +53,7 @@ object CoreUsuarioDao {
             conn.close()
         }
     }
+
     fun login(cedula: String, password: String): CoreUsuarioModel? {
         val conn = getConexion()
         var user: CoreUsuarioModel? = null
@@ -258,9 +266,4 @@ object CoreUsuarioDao {
             conn.close()
         }
     }
-
-
-
-
-
 }

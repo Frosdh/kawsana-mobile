@@ -41,6 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".presentacion.ui.Perfil_Admin" />
 
         <!-- Registro de usuarios voluntarios -->
@@ -48,14 +49,7 @@
             android:name=".presentacion.ui.Registro_voluntario"
             android:exported="false" />
 
-        <!-- Registro de usuarios administradores (opcional, si lo implementas en el futuro) -->
-        <!--
-        <activity
-            android:name=".presentacion.ui.Registro_admin"
-            android:exported="false" />
-        -->
-
-
+        <!-- Actividades de proyecto -->
         <activity
             android:name=".presentacion.ui.Proyecto_Actuales_Lider"
             android:exported="false" />
@@ -63,18 +57,32 @@
             android:name=".presentacion.ui.Subir_Actividades_Proyecto"
             android:exported="false" />
 
-        <activity android:name=".presentacion.ui.Proyectos_Disponibles_Vol"
+        <activity
+            android:name=".presentacion.ui.Proyectos_Disponibles_Vol"
             android:exported="false" />
-        <activity android:name=".presentacion.ui.Actividades_Disponibles_Vol"
-            android:exported="false" />
-        <activity android:name=".presentacion.ui.ActividadesDeProyectoActivity"
-            android:exported="false" />
-
-        <activity android:name=".presentacion.ui.NoticiasActivity"
+        <activity
+            android:name=".presentacion.ui.Actividades_Disponibles_Vol"
             android:exported="false" />
 
-        <activity android:name=".presentacion.ui.NoticiaDetalleActivity"
+        <!-- Actividad que estaba faltando -->
+        <activity
+            android:name=".presentacion.ui.Proyectos_Disponibles"
             android:exported="false" />
+
+        <!-- Actividades adicionales del segundo manifiesto -->
+        <activity
+            android:name=".presentacion.ui.ActividadesDeProyectoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentacion.ui.NoticiasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentacion.ui.NoticiaDetalleActivity"
+            android:exported="false" />
+
+        <activity android:name=".presentacion.ui.Detalle_Proyecto"
+            android:exported="false" />
+
         <!-- Otra actividad general -->
         <activity
             android:name=".presentacion.ui.MainActivity"

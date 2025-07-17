@@ -1,87 +1,48 @@
 package com.example.app_practicas_m5a.data.dao
 
 import android.util.Log
-import com.example.app_practicas_m5a.data.model.ProyectoModel
 import com.example.app_practicas_m5a.data.model.core_proyecto
 import java.sql.Connection
-import java.sql.Date
 
 object ProyectosDispoVoluntarioDao {
 
     private fun getConnection(): Connection? = MySqlConexion.getConexion()
 
-    fun obtenerProyectosDelVoluntario(cedulaVoluntario: String): List<ProyectoModel> {
-        val listaProyectos = mutableListOf<ProyectoModel>()
-        val conn: Connection = MySqlConexion.getConexion() ?: return listaProyectos
+    fun obtenerProyectosActivos(): List<core_proyecto> {
+        val proyectos = mutableListOf<core_proyecto>()
+        val conn = getConnection() ?: return proyectos
 
         val sql = """
-            SELECT p.id, p.nombre, p.descripcion, p.fecha_inicio, p.fecha_fin, p.estado, p.progreso
-            FROM core_proyecto p
-            JOIN core_liderproyectobarrio lp ON p.id = lp.proyecto_id
-            JOIN core_usuario u ON lp.usuario_id = u.id
-            WHERE u.cedula = ? AND p.estado = 1
+            SELECT id, nombre, fecha_inicio, fecha_fin, descripcion, estado, organizacion_id
+            FROM core_proyecto
+            WHERE estado = 1
+            ORDER BY fecha_inicio ASC
         """.trimIndent()
 
-        var stmt = conn.prepareStatement(sql)
-        var rs = null as java.sql.ResultSet?
-
         try {
-            stmt.setString(1, cedulaVoluntario)
-            rs = stmt.executeQuery()
-
-            while (rs.next()) {
-                val proyecto = ProyectoModel(
-                    id = rs.getLong("id"),
-                    nombre = rs.getString("nombre"),
-                    descripcion = rs.getString("descripcion"),
-                    fechaInicio = rs.getDate("fecha_inicio") as Date,
-                    fechaFin = rs.getDate("fecha_fin") as Date,
-                    estado = rs.getInt("estado"),
-                    progreso = rs.getString("progreso")
-                )
-                listaProyectos.add(proyecto)
-            }
-        } catch (ex: Exception) {
-            Log.e("ProyectoDao", "Error al obtener proyectos del voluntario: ${ex.message}")
-            ex.printStackTrace()
-        } finally {
-            rs?.close()
-            stmt?.close()
-            conn.close()
-        }
-
-        return listaProyectos
-    }
-
-    fun obtenerPuntosTotalesPorCedula(cedula: String): Int {
-        var totalPuntos = 0
-        val conn = MySqlConexion.getConexion() ?: return 0
-
-        val sql = """
-        SELECT COALESCE(SUM(a.puntos), 0) AS total_puntos
-        FROM core_proyecto p
-        JOIN core_liderproyectobarrio lp ON lp.proyecto_id = p.id
-        JOIN core_usuario u ON lp.usuario_id = u.id
-        JOIN core_actividad a ON a.proyecto_id = p.id
-        WHERE u.cedula = ? AND a.estado = 1
-    """.trimIndent()
-
-        try {
-            conn.use { c ->
-                c.prepareStatement(sql).use { ps ->
-                    ps.setString(1, cedula)
+            conn.use { connection ->
+                connection.prepareStatement(sql).use { ps ->
                     ps.executeQuery().use { rs ->
-                        if (rs.next()) {
-                            totalPuntos = rs.getInt("total_puntos")
+                        while (rs.next()) {
+                            proyectos.add(
+                                core_proyecto(
+                                    id = rs.getLong("id"),
+                                    nombre = rs.getString("nombre"),
+                                    fecha_inicio = rs.getDate("fecha_inicio")?.toString() ?: "",
+                                    fecha_fin = rs.getDate("fecha_fin")?.toString(),
+                                    descripcion = rs.getString("descripcion"),
+                                    estado = rs.getBoolean("estado"),
+                                    organizacion_id = rs.getLong("organizacion_id")
+                                )
+                            )
                         }
                     }
                 }
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (ex: Exception) {
+            Log.e("ProyectoDao", "Error al obtener proyectos: ", ex)
         }
 
-        return totalPuntos
+        return proyectos
     }
-
 }

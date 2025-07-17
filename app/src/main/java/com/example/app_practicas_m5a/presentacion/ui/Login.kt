@@ -1,5 +1,6 @@
 package com.example.app_practicas_m5a.presentacion.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
@@ -10,6 +11,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.app_practicas_m5a.R
 import com.example.app_practicas_m5a.data.dao.CoreUsuarioDao
+import com.example.app_practicas_m5a.data.model.CoreUsuarioModel
+import com.example.app_practicas_m5a.data.model.Usuario
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,6 +29,7 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -71,6 +75,16 @@ class Login : AppCompatActivity() {
                             return@launch
                         }
                     }
+
+                    val prefs = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                    prefs.edit()
+                        .putLong("usuario_id", user.id)
+                        .apply()
+
+                    user.barrio_id?.let {
+                        prefs.edit().putLong("barrio_id", it).apply()
+                    }
+
 
 
 

@@ -51,13 +51,17 @@ class Perfil_Admin : AppCompatActivity() {
 
         btnEditarPerfil.setOnClickListener {
             if (tvEmail.isEnabled) {
-                // Guardar cambios
+                // Guardar cambios: validar primero
+                if (!validarCampos()) {
+                    return@setOnClickListener
+                }
+
                 usuario?.let {
-                    it.nombres = tvNombres.text.toString()
-                    it.apellidos = tvApellidos.text.toString()
-                    it.email = tvEmail.text.toString()
-                    it.telefono = tvTelefono.text.toString()
-                    it.direccion = tvDireccion.text.toString()
+                    it.nombres = tvNombres.text.toString().trim()
+                    it.apellidos = tvApellidos.text.toString().trim()
+                    it.email = tvEmail.text.toString().trim()
+                    it.telefono = tvTelefono.text.toString().trim()
+                    it.direccion = tvDireccion.text.toString().trim()
 
                     lifecycleScope.launch {
                         val actualizado = withContext(Dispatchers.IO) {
@@ -117,5 +121,74 @@ class Perfil_Admin : AppCompatActivity() {
                 tvDireccion.setText(it.direccion)
             }
         }
+    }
+
+    private fun validarCampos(): Boolean {
+        val nombres = tvNombres.text.toString().trim()
+        val apellidos = tvApellidos.text.toString().trim()
+        val email = tvEmail.text.toString().trim()
+        val telefono = tvTelefono.text.toString().trim()
+        val direccion = tvDireccion.text.toString().trim()
+        val cedula = tvCedula.text.toString().trim()
+
+        if (nombres.isEmpty()) {
+            tvNombres.error = "Ingrese nombres"
+            tvNombres.requestFocus()
+            return false
+        }
+        if (apellidos.isEmpty()) {
+            tvApellidos.error = "Ingrese apellidos"
+            tvApellidos.requestFocus()
+            return false
+        }
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            tvEmail.error = "Ingrese un email válido"
+            tvEmail.requestFocus()
+            return false
+        }
+        if (telefono.isEmpty() || telefono.length < 7) {
+            tvTelefono.error = "Ingrese un teléfono válido"
+            tvTelefono.requestFocus()
+            return false
+        }
+        if (direccion.isEmpty()) {
+            tvDireccion.error = "Ingrese dirección"
+            tvDireccion.requestFocus()
+            return false
+        }
+        if (!validarCedulaEcuatoriana(cedula)) {
+            tvCedula.error = "Cédula ecuatoriana inválida"
+            tvCedula.requestFocus()
+            return false
+        }
+        return true
+    }
+
+    // Validación de cédula ecuatoriana
+    private fun validarCedulaEcuatoriana(cedula: String): Boolean {
+        if (cedula.length != 10) return false
+        val region = cedula.substring(0, 2).toIntOrNull() ?: return false
+        if (region < 1 || region > 24) return false
+        val digitos = cedula.map { it.toString().toIntOrNull() ?: return false }
+
+        val ultimoDigito = digitos[9]
+        var sumaPar = 0
+        var sumaImpar = 0
+
+        for (i in 0..8 step 2) {
+            var valParcial = digitos[i] * 2
+            if (valParcial > 9) valParcial -= 9
+            sumaImpar += valParcial
+        }
+        for (i in 1..7 step 2) {
+            sumaPar += digitos[i]
+        }
+
+        val sumaTotal = sumaImpar + sumaPar
+        val decenaSuperior = ((sumaTotal + 9) / 10) * 10
+        val digitoVerificador = decenaSuperior - sumaTotal
+        val digitoFinal = if (digitoVerificador == 10) 0 else digitoVerificador
+
+        return ultimoDigito == digitoFinal
     }
 }
