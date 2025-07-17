@@ -1,11 +1,13 @@
 package com.example.app_practicas_m5a.data.dao
 
+import android.net.Uri
 import android.util.Log
 import com.example.app_practicas_m5a.data.model.EvidenciaActividad
 import java.sql.Connection
 import java.sql.PreparedStatement
 
 object EvidenciaDao {
+
 
     private fun getConexion(): Connection? = MySqlConexion.getConexion()
 
@@ -58,6 +60,7 @@ object EvidenciaDao {
             conn.close()
         }
     }
+
 
 }
 

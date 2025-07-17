@@ -3,7 +3,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
+    android:padding="16dp"
     android:background="#E3F2FD">
 
     <LinearLayout
@@ -12,24 +12,41 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
+        <!-- Preview de la cámara -->
+        <androidx.camera.view.PreviewView
+            android:id="@+id/previewView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="#000000"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Botón para capturar foto -->
+        <Button
+            android:id="@+id/btnCapturarFoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tomar Foto"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Imagen tomada -->
         <ImageView
             android:id="@+id/imgEvidencia"
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:scaleType="centerCrop"
             android:background="#CFD8DC"
-            android:contentDescription="Evidencia seleccionada" />
+            android:contentDescription="Foto capturada"
+            android:layout_marginBottom="12dp" />
 
+        <!-- Botón para seleccionar desde galería -->
         <Button
             android:id="@+id/btnSeleccionarImagen"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Seleccionar imagen"
-            android:layout_marginTop="12dp" />
+            android:text="Seleccionar Imagen de Galería"
+            android:layout_marginBottom="16dp" />
 
-
-
-
+        <!-- Campo Descripción -->
         <EditText
             android:id="@+id/etDescripcion"
             android:layout_width="match_parent"
@@ -37,23 +54,24 @@
             android:hint="Descripción de la actividad"
             android:minLines="3"
             android:inputType="textMultiLine"
-            android:layout_marginTop="16dp" />
+            android:layout_marginBottom="12dp" />
 
+        <!-- Campo Fecha -->
         <EditText
             android:id="@+id/etFecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Fecha de la actividad (YYYY-MM-DD)"
+            android:hint="Fecha (YYYY-MM-DD)"
             android:focusable="false"
             android:clickable="true"
             android:inputType="none"
-            android:layout_marginTop="12dp" />
+            android:layout_marginBottom="16dp" />
 
+        <!-- Botón Subir -->
         <Button
             android:id="@+id/btnSubir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Subir Actividad"
-            android:layout_marginTop="24dp" />
+            android:text="Subir Actividad" />
     </LinearLayout>
 </ScrollView>

@@ -1,24 +1,19 @@
 package com.example.app_practicas_m5a.presentacion.ui
 
 import android.Manifest
-import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.provider.Settings
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.*
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.app_practicas_m5a.R
 import com.example.app_practicas_m5a.data.dao.EvidenciaDao
@@ -29,51 +24,68 @@ import java.io.File
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class Subir_Actividades_Proyecto : AppCompatActivity() {
 
+    private lateinit var previewView: PreviewView
+    private lateinit var btnCapturarFoto: Button
     private lateinit var imgEvidencia: ImageView
     private lateinit var btnSeleccionarImagen: Button
     private lateinit var etDescripcion: EditText
     private lateinit var etFecha: EditText
     private lateinit var btnSubir: Button
 
-    private var imagenUri: Uri? = null
-    private var uriFoto: Uri? = null
 
-    private val SELECT_IMAGE_REQUEST = 1010
-    private val CAMERA_IMAGE_REQUEST = 1011
-    private val REQUEST_PERMISSIONS = 100
+    private var imagenUri: Uri? = null
+    private lateinit var outputDirectory: File
+    private lateinit var cameraExecutor: ExecutorService
+    private lateinit var imageCapture: ImageCapture
 
     private var actividadId: Long = -1
     private var usuarioId: Long = -1
+
+    private val REQUEST_PERMISSIONS = 100
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_subir_actividades_proyecto)
 
+        previewView = findViewById(R.id.previewView)
+        btnCapturarFoto = findViewById(R.id.btnCapturarFoto)
         imgEvidencia = findViewById(R.id.imgEvidencia)
         btnSeleccionarImagen = findViewById(R.id.btnSeleccionarImagen)
         etDescripcion = findViewById(R.id.etDescripcion)
         etFecha = findViewById(R.id.etFecha)
         btnSubir = findViewById(R.id.btnSubir)
 
+        outputDirectory = getOutputDirectory()
+        cameraExecutor = Executors.newSingleThreadExecutor()
+
         actividadId = intent.getLongExtra("actividad_id", -1)
         usuarioId = intent.getLongExtra("usuario_id", -1)
 
-        println("DEBUG -> actividadId: $actividadId | usuarioId: $usuarioId")
+        // Verificar permisos y abrir cámara al iniciar
+        if (allPermissionsGranted()) {
+            startCamera()
+        } else {
+            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_PERMISSIONS)
+        }
 
         btnSeleccionarImagen.setOnClickListener {
-            if (tienePermisos()) {
-                mostrarOpcionesSeleccion()
-            } else {
-                pedirPermisos()
-            }
+            val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, 1012)
+        }
+
+        btnCapturarFoto.setOnClickListener {
+            takePhoto()
         }
 
         etFecha.setOnClickListener {
             val calendario = Calendar.getInstance()
-            DatePickerDialog(
+            android.app.DatePickerDialog(
                 this,
                 { _, year, month, dayOfMonth ->
                     val fechaSeleccionada = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
@@ -86,172 +98,131 @@ class Subir_Actividades_Proyecto : AppCompatActivity() {
         }
 
         btnSubir.setOnClickListener {
-            val descripcion = etDescripcion.text.toString().trim()
-            val fecha = etFecha.text.toString().trim()
+            subirActividad()
+        }
+    }
 
-            if (descripcion.isEmpty() || fecha.isEmpty()) {
-                Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
+        cameraProviderFuture.addListener({
+            val cameraProvider = cameraProviderFuture.get()
+
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(previewView.surfaceProvider)
             }
 
-            if (imagenUri == null) {
-                Toast.makeText(this, "Seleccione una imagen", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            imageCapture = ImageCapture.Builder()
+                .setTargetRotation(windowManager.defaultDisplay.rotation)
+                .build()
+
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+            } catch (exc: Exception) {
+                Toast.makeText(this, "Error iniciando cámara", Toast.LENGTH_SHORT).show()
             }
+        }, ContextCompat.getMainExecutor(this))
+    }
 
-            if (actividadId == -1L) {
-                Toast.makeText(this, "No se recibió el ID de la actividad", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+    private fun takePhoto() {
+        val photoFile = File(outputDirectory, SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis()) + ".jpg")
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
-            if (usuarioId == -1L) {
-                Toast.makeText(this, "No se recibió el ID del usuario", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+        imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onError(exc: ImageCaptureException) {
+                    Toast.makeText(this@Subir_Actividades_Proyecto, "Error al guardar foto", Toast.LENGTH_SHORT).show()
+                }
 
-            val evidencia = EvidenciaActividad(
-                archivoUrl = imagenUri.toString(),
-                tipoArchivo = "jpg",
-                descripcion = descripcion,
-                fechaSubida = fecha,
-                actividadId = actividadId,
-                usuarioId = usuarioId,
-                esValida = false,
-                fechaValidacion = null,
-                validadorId = null
-            )
+                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    imagenUri = Uri.fromFile(photoFile)
+                    val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+                    imgEvidencia.setImageBitmap(bitmap)
+                    Toast.makeText(this@Subir_Actividades_Proyecto, "Foto capturada", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                val resultado = EvidenciaDao.insertarEvidencia(evidencia)
-                runOnUiThread {
-                    if (resultado) {
-                        Toast.makeText(this@Subir_Actividades_Proyecto, "Subida exitosa 🎉", Toast.LENGTH_LONG).show()
-                        finish()
-                    } else {
-                        Toast.makeText(this@Subir_Actividades_Proyecto, "Error al subir actividad", Toast.LENGTH_LONG).show()
-                    }
+    private fun subirActividad() {
+        val descripcion = etDescripcion.text.toString().trim()
+        val fecha = etFecha.text.toString().trim()
+
+        if (descripcion.isEmpty() || fecha.isEmpty()) {
+            Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (imagenUri == null) {
+            Toast.makeText(this, "Debe tomar una foto o seleccionar una imagen", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val imagenBase64 = convertirImagenABase64(imagenUri!!)
+
+        val evidencia = EvidenciaActividad(
+            archivoUrl = imagenBase64,
+            tipoArchivo = "jpg",
+            descripcion = descripcion,
+            fechaSubida = fecha,
+            actividadId = actividadId,
+            usuarioId = usuarioId,
+            esValida = false,
+            fechaValidacion = null,
+            validadorId = null
+        )
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val resultado = EvidenciaDao.insertarEvidencia(evidencia)
+            runOnUiThread {
+                if (resultado) {
+                    Toast.makeText(this@Subir_Actividades_Proyecto, "Subida exitosa 🎉", Toast.LENGTH_LONG).show()
+                    finish()
+                } else {
+                    Toast.makeText(this@Subir_Actividades_Proyecto, "Error al subir", Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
 
-    private fun tienePermisos(): Boolean {
-        val permisoCamara = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-        val permisoLectura = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
-        } else {
-            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-        }
-        return permisoCamara && permisoLectura
+    private fun convertirImagenABase64(uri: Uri): String {
+        val inputStream = contentResolver.openInputStream(uri)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+
+        val outputStream = java.io.ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream) // Calidad 75%
+        val byteArray = outputStream.toByteArray()
+
+        return android.util.Base64.encodeToString(byteArray, android.util.Base64.DEFAULT)
     }
 
-    private fun pedirPermisos() {
-        val permisos = mutableListOf(Manifest.permission.CAMERA)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permisos.add(Manifest.permission.READ_MEDIA_IMAGES)
-        } else {
-            permisos.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
 
-        ActivityCompat.requestPermissions(this, permisos.toTypedArray(), REQUEST_PERMISSIONS)
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun getOutputDirectory(): File {
+        val mediaDir = externalMediaDirs.firstOrNull()?.let {
+            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+        }
+        return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == REQUEST_PERMISSIONS) {
-            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                mostrarOpcionesSeleccion()
-            } else {
-                Toast.makeText(this, "Debe otorgar permisos para continuar", Toast.LENGTH_LONG).show()
-
-                val denegadosPermanentemente = permissions.any {
-                    !ActivityCompat.shouldShowRequestPermissionRationale(this, it)
-                }
-
-                if (denegadosPermanentemente) {
-                    AlertDialog.Builder(this)
-                        .setTitle("Permisos necesarios")
-                        .setMessage("Has denegado los permisos permanentemente. Ve a ajustes para activarlos.")
-                        .setPositiveButton("Ir a Ajustes") { _, _ ->
-                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                data = Uri.parse("package:$packageName")
-                            }
-                            startActivity(intent)
-                        }
-                        .setNegativeButton("Cancelar", null)
-                        .show()
-                }
-            }
-        }
-    }
-
-    private fun mostrarOpcionesSeleccion() {
-        val opciones = arrayOf("Seleccionar desde galería", "Tomar foto con cámara")
-        AlertDialog.Builder(this)
-            .setTitle("Seleccionar imagen")
-            .setItems(opciones) { _, which ->
-                when (which) {
-                    0 -> seleccionarDesdeGaleria()
-                    1 -> tomarFotoConCamara()
-                }
-            }
-            .show()
-    }
-
-    private fun seleccionarDesdeGaleria() {
-        val intent = Intent(Intent.ACTION_PICK).apply {
-            type = "image/*"
-        }
-        startActivityForResult(intent, SELECT_IMAGE_REQUEST)
-    }
-
-    private fun tomarFotoConCamara() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val archivoFoto = crearArchivoImagen()
-        uriFoto = FileProvider.getUriForFile(this, "${packageName}.provider", archivoFoto)
-
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriFoto)
-
-        // Agregar flags para otorgar permisos temporales al URI
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-        // Verificar que exista app cámara para manejar el intent
-        val resuelve = intent.resolveActivity(packageManager)
-        if (resuelve != null) {
-            // Otorgar permisos explícitos a la app de cámara
-            grantUriPermission(resuelve.packageName, uriFoto, Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivityForResult(intent, CAMERA_IMAGE_REQUEST)
+        if (requestCode == REQUEST_PERMISSIONS && allPermissionsGranted()) {
+            startCamera()
         } else {
-            Toast.makeText(this, "No se encontró aplicación de cámara", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Permiso de cámara requerido", Toast.LENGTH_SHORT).show()
         }
     }
 
-
-    private fun crearArchivoImagen(): File {
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val nombreArchivo = "EVID_${timestamp}_"
-        val directorio = getExternalFilesDir("Pictures")
-        return File.createTempFile(nombreArchivo, ".jpg", directorio)
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == RESULT_OK) {
-            imagenUri = when (requestCode) {
-                SELECT_IMAGE_REQUEST -> data?.data
-                CAMERA_IMAGE_REQUEST -> uriFoto
-                else -> null
-            }
-
-            imagenUri?.let {
-                val inputStream: InputStream? = contentResolver.openInputStream(it)
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-                imgEvidencia.setImageBitmap(bitmap)
-            }
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
     }
 }
