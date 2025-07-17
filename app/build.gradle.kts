@@ -57,18 +57,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-
-
-    implementation("mysql:mysql-connector-java:5.1.49")
-
-    implementation("androidx.recyclerview:recyclerview:1.3.0")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
-    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
-
     // ✅ Conector MySQL (sólo útil si realmente estás usando JDBC)
     implementation("mysql:mysql-connector-java:5.1.49")
 
@@ -88,13 +76,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.room.common.jvm)
 
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
-    implementation ("androidx.camera:camera-core:1.2.3")
-    implementation ("androidx.camera:camera-camera2:1.2.3")
-    implementation ("androidx.camera:camera-lifecycle:1.2.3")
-    implementation ("androidx.camera:camera-view:1.2.3")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -102,8 +83,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-
-
 }
 
