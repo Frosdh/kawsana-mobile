@@ -75,6 +75,11 @@
             android:exported="false" />
         -->
 
+        <activity android:name=".presentacion.ui.Proyectos_Disponibles" />
+        <activity android:name=".presentacion.ui.Detalle_Proyecto" />
+
+
+
         <activity
             android:name=".presentacion.ui.Proyecto_Actuales_Lider"
             android:exported="false" />
