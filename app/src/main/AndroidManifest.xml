@@ -4,18 +4,25 @@
     package="com.example.app_practicas_m5a">
 
     <!-- Declarar uso obligatorio de cámara -->
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
-    <!-- Permisos necesarios -->
+    <!-- Permisos -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
-    <!-- Permisos para almacenamiento, solo si el target API <= 28 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <!-- SOLO para API <= 28 -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
 
     <application
         android:allowBackup="true"
@@ -29,7 +36,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <!-- Provider para compartir archivos con la cámara -->
+        <!-- FileProvider -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -40,19 +47,20 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <!-- Declaración de actividades -->
+        <!-- Actividades -->
+        <activity
+            android:name=".presentacion.ui.Camara_IA_voluntario"
+            android:exported="false" />
+
         <activity
             android:name=".presentacion.ui.Perfil_voluntario"
             android:exported="false" />
-
         <activity
             android:name=".presentacion.ui.Pagina_principal_adm"
             android:exported="false" />
-
         <activity
             android:name=".presentacion.ui.Pagina_principal_vol"
             android:exported="false" />
-
         <activity
             android:name=".presentacion.ui.Login"
             android:exported="true">
@@ -61,42 +69,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".presentacion.ui.Perfil_Admin" android:exported="false" />
-
+        <activity
+            android:name=".presentacion.ui.Perfil_Admin"
+            android:exported="false" />
         <activity
             android:name=".presentacion.ui.Registro_voluntario"
             android:exported="false" />
-
-        <!-- Opcional: Registro de admin si se implementa -->
-        <!--
-        <activity
-            android:name=".presentacion.ui.Registro_admin"
-            android:exported="false" />
-        -->
-
         <activity
             android:name=".presentacion.ui.Proyecto_Actuales_Lider"
             android:exported="false" />
-
         <activity
             android:name=".presentacion.ui.Subir_Actividades_Proyecto"
             android:exported="false" />
-
         <activity
             android:name=".presentacion.ui.Proyectos_Disponibles_Vol"
             android:exported="false" />
-
         <activity
             android:name=".presentacion.ui.Actividades_Disponibles_Vol"
+            android:exported="false" />
+        <activity
+            android:name=".presentacion.ui.Camara_IA_lider"
             android:exported="false" />
 
         <activity
             android:name=".presentacion.ui.MainActivity"
             android:exported="false"
+
             android:label="@string/app_name"
             android:theme="@style/Theme.App_practicas_m5a" />
-
     </application>
 
 </manifest>
