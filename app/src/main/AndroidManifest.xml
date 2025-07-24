@@ -4,7 +4,9 @@
     package="com.example.app_practicas_m5a">
 
     <!-- Declarar uso obligatorio de cámara -->
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <!-- Permisos necesarios -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -14,8 +16,12 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <!-- Permisos para almacenamiento, solo si el target API <= 28 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
 
     <application
         android:allowBackup="true"
@@ -44,6 +50,9 @@
         <activity
             android:name=".presentacion.ui.Perfil_voluntario"
             android:exported="false" />
+        <activity
+            android:name=".presentacion.ui.ActividadesDeProyectoActivity"
+            android:exported="false" />
 
         <activity
             android:name=".presentacion.ui.Pagina_principal_adm"
@@ -62,7 +71,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentacion.ui.Perfil_Admin" android:exported="false" />
+        <activity
+            android:name=".presentacion.ui.Perfil_Admin"
+            android:exported="false" />
 
         <activity
             android:name=".presentacion.ui.Registro_voluntario"
@@ -74,6 +85,7 @@
             android:name=".presentacion.ui.Registro_admin"
             android:exported="false" />
         -->
+        <activity android:name=".presentacion.ui.Camara_IA_voluntario" />
 
         <activity
             android:name=".presentacion.ui.Proyecto_Actuales_Lider"
@@ -90,12 +102,21 @@
         <activity
             android:name=".presentacion.ui.Actividades_Disponibles_Vol"
             android:exported="false" />
-
+        <activity
+            android:name=".presentacion.ui.NoticiasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentacion.ui.NoticiaDetalleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentacion.ui.MostrarGraficoActivity"
+            android:exported="false" />
         <activity
             android:name=".presentacion.ui.MainActivity"
             android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.App_practicas_m5a" />
+
 
     </application>
 

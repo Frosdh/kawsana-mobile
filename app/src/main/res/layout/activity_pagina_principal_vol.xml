@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DFF0D8"
+    android:background="#001E3AD1"
     android:paddingLeft="2dp"
-    android:paddingRight="2dp"
     android:paddingTop="16dp"
+    android:paddingRight="2dp"
     android:paddingBottom="16dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp">
+        android:layout_marginRight="24dp"
+        android:paddingTop="30dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <!-- Encabezado con saludo a la izquierda y perfil a la derecha -->
         <RelativeLayout
@@ -27,7 +27,7 @@
             <TextView
                 android:id="@+id/tvSaludo"
                 android:text="👋 Bienvenido"
-                android:textSize="15sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#1D1C1C"
                 android:layout_alignParentStart="true"
@@ -35,45 +35,47 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/btnPerfil"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
-                android:background="@android:color/transparent"
-                android:src="@drawable/perfil"
-                android:contentDescription="Ver perfil" />
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_profile"
+                android:background="@drawable/bg_circle"
+                android:padding="8dp"
+                android:contentDescription="Perfil" />
         </RelativeLayout>
 
 
         <!-- Puntos e Insignias en una card horizontal -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="348dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_card_rounded"
             android:elevation="4dp"
-            android:padding="16dp"
-            android:layout_marginBottom="16dp">
+            android:orientation="horizontal"
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/tvPuntos"
-                android:text="🔥 Puntos: ..."
-                android:textSize="16sp"
-                android:textColor="#2E7D32"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/tvInsignias"
-                android:text="🏅 Insignias:"
-                android:textSize="16sp"
-                android:textColor="#2E7D32"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="end"/>
+                android:text="🔥 Puntos: ..."
+                android:textColor="#2E7D32"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvInsignias"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="🏅 Insignias:"
+                android:textColor="#2E7D32"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <!-- Dashboard tipo Grid -->
@@ -81,8 +83,8 @@
             android:id="@+id/menuGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
             android:alignmentMode="alignMargins"
+            android:columnCount="2"
             android:columnOrderPreserved="false"
             android:useDefaultMargins="true">
 
@@ -92,15 +94,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
                 android:elevation="4dp"
-                android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-                >
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="48dp"
@@ -108,13 +109,13 @@
                     android:src="@drawable/ic_projects" />
 
                 <TextView
-                    android:text="Proyectos"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#1B5E20"
-                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Proyectos"
+                    android:textColor="#1B5E20"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
 
             </LinearLayout>
@@ -125,14 +126,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
                 android:elevation="4dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="48dp"
@@ -140,13 +141,13 @@
                     android:src="@drawable/ic_activities" />
 
                 <TextView
-                    android:text="Actividades"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#1B5E20"
-                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Camara IA"
+                    android:textColor="#1B5E20"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -154,16 +155,16 @@
             <LinearLayout
                 android:id="@+id/cardNoticias"
                 android:layout_width="0dp"
-                android:layout_height="148dp"
+                android:layout_height="124dp"
                 android:layout_columnWeight="1"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp">
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="48dp"
@@ -179,12 +180,6 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvNoticias"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#4CAF50"
-                    android:textSize="14sp" />
             </LinearLayout>
 
             <!-- Avance -->
@@ -192,14 +187,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
                 android:elevation="4dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="48dp"
@@ -207,74 +202,76 @@
                     android:src="@drawable/ic_progress" />
 
                 <TextView
-                    android:text="Avance"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#1B5E20"
-                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Avance"
+                    android:textColor="#1B5E20"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <ProgressBar
                     android:id="@+id/progressBarAvance"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
-                    android:progressTint="#66BB6A"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:progressTint="#66BB6A" />
 
                 <TextView
                     android:id="@+id/tvAvance"
-                    android:text="--%"
-                    android:textSize="14sp"
-                    android:textColor="#2E7D32"
-                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="--%"
+                    android:textColor="#2E7D32"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+
+        </GridLayout>
+        <!-- Dashboard tipo Grid -->
+        <GridLayout
+            android:id="@+id/menuGrid2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alignmentMode="alignMargins"
+            android:columnCount="1"
+            android:columnOrderPreserved="false"
+            android:useDefaultMargins="true">
+
+            <!-- Noticias -->
+            <LinearLayout
+                android:id="@+id/cardGraficas"
+                android:layout_width="0dp"
+                android:layout_height="124dp"
+                android:layout_columnWeight="1"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_card_rounded"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_news" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Progreso por barrios "
+                    android:textAlignment="center"
+                    android:textColor="#1B5E20"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
         </GridLayout>
-
-        <!-- Título gráfico -->
-        <TextView
-            android:id="@+id/tvTituloGrafico"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Progreso por Barrio"
-            android:textSize="20sp"
-            android:textColor="#333"
-            android:textStyle="bold"
-            android:paddingBottom="12dp"
-            android:layout_marginTop="16dp" />
-        <Button
-            android:id="@+id/btnCamaraIA"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Abrir Cámara IA"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#4CAF50"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:padding="12dp"
-            android:textStyle="bold"
-            android:elevation="4dp"/>
-
-
-        <!-- Gráfico en CardView para borde redondeado y sombra -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardChartContainer"
-            android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:background="#00000000"
-            android:padding="8dp"
-            android:layout_marginTop="8dp">
-
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/chartBarrio"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </androidx.cardview.widget.CardView>
-
     </LinearLayout>
 </ScrollView>

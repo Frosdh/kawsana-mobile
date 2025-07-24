@@ -1,6 +1,7 @@
 package com.example.app_practicas_m5a.presentacion.ui
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -59,6 +60,10 @@ class Registro_voluntario : AppCompatActivity() {
         spinnerParroquia = findViewById(R.id.spinnerParroquia)
         spinnerBarrio = findViewById(R.id.spinnerBarrio)
         btnRegistrar = findViewById(R.id.btnRegistrar)
+
+        val arcView = findViewById<ArcTextImageView>(R.id.arcTextImageView)
+        val bmp = BitmapFactory.decodeResource(resources, R.drawable.iconofinalkawsana)
+        arcView.setImageBitmap(bmp)
 
         // Inicializar spinner de tipo usuario
         val tipos = arrayOf("VOLUNTARIO", "ADMIN")

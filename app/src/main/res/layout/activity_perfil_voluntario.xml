@@ -1,126 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8F5E9"
-    tools:context=".presentacion.ui.Perfil_voluntario">
+    android:background="#001E3AD1"
+    android:paddingLeft="20dp"
+    android:paddingTop="16dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="16dp">
 
-    <LinearLayout
-        android:id="@+id/contenedorPerfil"
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="24dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView
-            android:id="@+id/logoPerfil"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/icono_kausana"
-            android:contentDescription="Logo de Kawsana" />
-
-        <TextView
-            android:id="@+id/titlePerfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mi Perfil"
-            android:textSize="24sp"
-            android:textColor="#2E7D32"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
-
-        <EditText
-            android:id="@+id/etCedulaPerfil"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Cédula"
-            android:inputType="text"
-            android:background="@drawable/edit_text_bg"
-            android:padding="12dp"
-            android:enabled="false"
-            android:layout_marginTop="16dp" />
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingBottom="24dp"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp">
 
-        <EditText
-            android:id="@+id/etNombresPerfil"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombres"
-            android:background="@drawable/edit_text_bg"
-            android:padding="12dp"
-            android:enabled="false"
-            android:layout_marginTop="8dp" />
+            <!-- Imagen de perfil circular -->
+            <ImageView
+                android:id="@+id/logoPerfil"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/icono_kausana"
+                android:padding="12dp"
+                android:contentDescription="Foto de perfil" />
 
-        <EditText
-            android:id="@+id/etApellidosPerfil"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Apellidos"
-            android:background="@drawable/edit_text_bg"
-            android:padding="12dp"
-            android:enabled="false"
-            android:layout_marginTop="8dp" />
+            <!-- Título -->
+            <TextView
+                android:id="@+id/titlePerfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mi Perfil"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#2E7D32"
+                android:layout_marginTop="12dp" />
 
-        <EditText
-            android:id="@+id/etEmailPerfil"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:background="@drawable/edit_text_bg"
-            android:padding="12dp"
-            android:enabled="false"
-            android:layout_marginTop="8dp" />
+            <!-- Campos de perfil -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
 
-        <EditText
-            android:id="@+id/etTelefonoPerfil"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Teléfono"
-            android:inputType="phone"
-            android:background="@drawable/edit_text_bg"
-            android:padding="12dp"
-            android:enabled="false"
-            android:layout_marginTop="8dp" />
+                <TextView android:text="Cédula" style="@style/CampoLabel"/>
+                <EditText
+                    android:id="@+id/etCedulaPerfil"
+                    style="@style/CampoPerfil"
+                    android:enabled="false" />
 
-        <EditText
-            android:id="@+id/etDireccionPerfil"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Dirección"
-            android:inputType="textPostalAddress"
-            android:background="@drawable/edit_text_bg"
-            android:padding="12dp"
-            android:enabled="false"
-            android:layout_marginTop="8dp" />
+                <TextView android:text="Nombres" style="@style/CampoLabel"/>
+                <EditText
+                    android:id="@+id/etNombresPerfil"
+                    style="@style/CampoPerfil"
+                    android:enabled="false" />
 
-        <Button
-            android:id="@+id/btnVolver"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Volver"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#66BB6A"
-            android:layout_marginTop="24dp" />
+                <TextView android:text="Apellidos" style="@style/CampoLabel"/>
+                <EditText
+                    android:id="@+id/etApellidosPerfil"
+                    style="@style/CampoPerfil"
+                    android:enabled="false" />
 
-        <Button
-            android:id="@+id/btnModificar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Modificar"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#388E3C"
-            android:layout_marginTop="12dp" />
+                <TextView android:text="Email" style="@style/CampoLabel"/>
+                <EditText
+                    android:id="@+id/etEmailPerfil"
+                    style="@style/CampoPerfil"
+                    android:inputType="textEmailAddress"
+                    android:enabled="false" />
 
-    </LinearLayout>
+                <TextView android:text="Teléfono" style="@style/CampoLabel"/>
+                <EditText
+                    android:id="@+id/etTelefonoPerfil"
+                    style="@style/CampoPerfil"
+                    android:inputType="phone"
+                    android:enabled="false" />
+
+                <TextView android:text="Dirección" style="@style/CampoLabel"/>
+                <EditText
+                    android:id="@+id/etDireccionPerfil"
+                    style="@style/CampoPerfil"
+                    android:inputType="textPostalAddress"
+                    android:enabled="false" />
+            </LinearLayout>
+
+            <!-- Botones -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="24dp">
+
+                <Button
+                    android:id="@+id/btnVolver"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Volver"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#66BB6A"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnModificar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Modificar"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#388E3C"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

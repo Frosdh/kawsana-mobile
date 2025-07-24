@@ -10,11 +10,6 @@ android {
     namespace = "com.example.app_practicas_m5a"
     compileSdk = 35
 
-    aaptOptions {
-        var noCompress = "tflite"
-
-    }
-
     defaultConfig {
         applicationId = "com.example.app_practicas_m5a"
         minSdk = 35
@@ -48,12 +43,12 @@ android {
         compose = true
         mlModelBinding = true
         viewBinding = true
-
     }
+
+    // ✅ Solo un bloque aaptOptions
     aaptOptions {
-        noCompress += "tflite" // Evita compresión del modelo
+        noCompress += "tflite" // Evita compresión del modelo TFLite
     }
-
 }
 
 dependencies {
@@ -66,53 +61,32 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-
-
     implementation("mysql:mysql-connector-java:5.1.49")
 
     implementation("androidx.recyclerview:recyclerview:1.3.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
-    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-
-    // ✅ Conector MySQL (sólo útil si realmente estás usando JDBC)
-    implementation("mysql:mysql-connector-java:5.1.49")
-
-    // ❌ Se recomienda eliminar esto si no usas Flutter embebido
-    // implementation(project(":flutter"))
-
-    implementation ("androidx.recyclerview:recyclerview:1.3.0")
-    implementation ("androidx.cardview:cardview:1.0.0")
-
-    // ✅ TensorFlow Lite
-    implementation("org.tensorflow:tensorflow-lite:2.13.0")
-    // TensorFlow Lite
+    // ✅ TensorFlow Lite y soporte
     implementation("org.tensorflow:tensorflow-lite:2.14.0")
     implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
     implementation("org.tensorflow:tensorflow-lite-metadata:0.4.4")
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.14.0")
+
+    implementation("at.favre.lib:bcrypt:0.9.0")
+
+    implementation ("com.google.android.material:material:1.9.0") // o la versión más reciente
 
 
-    implementation ("at.favre.lib:bcrypt:0.9.0")
-    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
-    implementation ("androidx.camera:camera-core:1.2.3")
-    implementation ("androidx.camera:camera-camera2:1.2.3")
-    implementation ("androidx.camera:camera-lifecycle:1.2.3")
-
-    // CameraX core
-    val def = null
-
-    val camerax_version = ""
-    implementation ("androidx.camera:camera-core:$camerax_version")
-    implementation ("androidx.camera:camera-camera2:$camerax_version")
-    implementation ("androidx.camera:camera-lifecycle:$camerax_version")
-    // Para mostrar preview en un View
-    implementation ("androidx.camera:camera-view:$camerax_version")
-    implementation ("androidx.camera:camera-view:1.3.3")
+    // ✅ CameraX
+    val camerax_version = "1.3.3"
+    implementation("androidx.camera:camera-core:$camerax_version")
+    implementation("androidx.camera:camera-camera2:$camerax_version")
+    implementation("androidx.camera:camera-lifecycle:$camerax_version")
+    implementation("androidx.camera:camera-view:$camerax_version")
 
     implementation(libs.libreria.pcs)
     implementation(libs.androidx.appcompat)
@@ -120,17 +94,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.room.common.jvm)
-    implementation(libs.tensorflow.lite.support)
-    implementation(libs.tensorflow.lite.metadata)
-    implementation(libs.tensorflow.lite.gpu)
 
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
-    implementation ("androidx.camera:camera-core:1.2.3")
-    implementation ("androidx.camera:camera-camera2:1.2.3")
-    implementation ("androidx.camera:camera-lifecycle:1.2.3")
-    implementation ("androidx.camera:camera-view:1.2.3")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -138,7 +102,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-
-
 }

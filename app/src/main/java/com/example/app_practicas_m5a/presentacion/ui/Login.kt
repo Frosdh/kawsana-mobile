@@ -2,6 +2,7 @@ package com.example.app_practicas_m5a.presentacion.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
@@ -25,11 +26,15 @@ class Login : AppCompatActivity() {
     private lateinit var btnRegistrar: Button
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
+        val arcView = findViewById<ArcTextImageView>(R.id.arcTextImageView)
+        val bmp = BitmapFactory.decodeResource(resources, R.drawable.iconofinalkawsana)
+        arcView.setImageBitmap(bmp)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
