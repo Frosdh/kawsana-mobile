@@ -40,71 +40,41 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <!-- Declaración de actividades -->
-        <activity
-            android:name=".presentacion.ui.Perfil_voluntario"
-            android:exported="false" />
-
-        <activity
-            android:name=".presentacion.ui.Pagina_principal_adm"
-            android:exported="false" />
-
-        <activity
-            android:name=".presentacion.ui.Pagina_principal_vol"
-            android:exported="false" />
-
-        <activity
-            android:name=".presentacion.ui.Login"
-            android:exported="true">
+        <!-- Actividades -->
+        <activity android:name=".presentacion.ui.Perfil_voluntario" android:exported="false" />
+        <activity android:name=".presentacion.ui.ActividadesDeProyectoActivity" android:exported="false" />
+        <activity android:name=".presentacion.ui.Pagina_principal_adm" android:exported="false" />
+        <activity android:name=".presentacion.ui.Pagina_principal_vol" android:exported="false" />
+        <activity android:name=".presentacion.ui.Login" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".presentacion.ui.Perfil_Admin" android:exported="false" />
-
-        <activity
-            android:name=".presentacion.ui.Registro_voluntario"
-            android:exported="false" />
-
+        <activity android:name=".presentacion.ui.Registro_voluntario" android:exported="false" />
         <!-- Opcional: Registro de admin si se implementa -->
         <!--
-        <activity
-            android:name=".presentacion.ui.Registro_admin"
-            android:exported="false" />
+        <activity android:name=".presentacion.ui.Registro_admin" android:exported="false" />
         -->
+        <activity android:name=".presentacion.ui.Camara_IA_voluntario" android:exported="false" />
+        <activity android:name=".presentacion.ui.Proyecto_Actuales_Lider" android:exported="false" />
+        <activity android:name=".presentacion.ui.Subir_Actividades_Proyecto" android:exported="false" />
+        <activity android:name=".presentacion.ui.Proyectos_Disponibles_Vol" android:exported="false" />
+        <activity android:name=".presentacion.ui.Actividades_Disponibles_Vol" android:exported="false" />
+        <activity android:name=".presentacion.ui.NoticiasActivity" android:exported="false" />
+        <activity android:name=".presentacion.ui.NoticiaDetalleActivity" android:exported="false" />
+        <activity android:name=".presentacion.ui.MostrarGraficoActivity" android:exported="false" />
+        <activity android:name=".presentacion.ui.VoluntariosBarrio" android:exported="false" />
+        <activity android:name=".presentacion.ui.Proyectos_Disponibles" android:exported="false" />
+        <activity android:name=".presentacion.ui.Detalle_Proyecto" android:exported="false" />
 
-        <activity android:name=".presentacion.ui.NoticiasActivity"
-            android:exported="false" />
-        <activity android:name=".presentacion.ui.NoticiaDetalleActivity"
-            android:exported="false" />
-        <activity android:name=".presentacion.ui.ActividadesDeProyectoActivity"
-            android:exported="false" />
-
-
-        <activity
-            android:name=".presentacion.ui.Proyecto_Actuales_Lider"
-            android:exported="false" />
-
-        <activity
-            android:name=".presentacion.ui.Subir_Actividades_Proyecto"
-            android:exported="false" />
-
-        <activity
-            android:name=".presentacion.ui.Proyectos_Disponibles_Vol"
-            android:exported="false" />
-
-        <activity
-            android:name=".presentacion.ui.Actividades_Disponibles_Vol"
-            android:exported="false" />
 
         <activity
             android:name=".presentacion.ui.MainActivity"
             android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.App_practicas_m5a" />
-
     </application>
 
 </manifest>

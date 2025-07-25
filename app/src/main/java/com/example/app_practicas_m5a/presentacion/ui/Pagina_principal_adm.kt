@@ -21,6 +21,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.jvm.java
 
 class Pagina_principal_adm : AppCompatActivity() {
 
@@ -96,6 +97,13 @@ class Pagina_principal_adm : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val btnVoluntariosBarrios = findViewById<Button>(R.id.btnVerVoluntarios)
+
+        btnVoluntariosBarrios.setOnClickListener {
+            val intent = Intent(this, VoluntariosBarrio::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun cargarProyectoConProgreso() {

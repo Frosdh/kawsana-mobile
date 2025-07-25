@@ -8,6 +8,7 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
+
 class Clasificacion_IA(private val context: Context) {
 
     // Lista de categorías (asegúrate que coincida con el modelo TFLite)
