@@ -92,6 +92,12 @@ class Pagina_principal_adm : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val btnCamaraIA = findViewById<Button>(R.id.btnCamaraIA)
+        btnCamaraIA.setOnClickListener {
+            val intent = Intent(this, Camara_IA_lider::class.java)
+            startActivity(intent)
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainInicioAdmin)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
