@@ -29,7 +29,7 @@ class Registro_voluntario : AppCompatActivity() {
     private lateinit var etContraseña: EditText
     private lateinit var spinnerTipoUsuario: Spinner
     private lateinit var etPasswordAdmin: EditText
-    private lateinit var btnLupa: Button
+    private lateinit var btnLupa: Button // ya no se usa
     private lateinit var spinnerCiudad: Spinner
     private lateinit var spinnerParroquia: Spinner
     private lateinit var spinnerBarrio: Spinner
@@ -45,7 +45,6 @@ class Registro_voluntario : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registro_voluntario)
 
-        // Inicializar views
         etNombres = findViewById(R.id.etNombres)
         etApellidos = findViewById(R.id.etApellidos)
         etEmail = findViewById(R.id.etEmail)
@@ -55,7 +54,7 @@ class Registro_voluntario : AppCompatActivity() {
         etContraseña = findViewById(R.id.etContraseña)
         spinnerTipoUsuario = findViewById(R.id.spinnerTipoUsuario)
         etPasswordAdmin = findViewById(R.id.etPasswordAdmin)
-        btnLupa = findViewById(R.id.btnLupa)
+        btnLupa = findViewById(R.id.btnLupa) // ya no se usará
         spinnerCiudad = findViewById(R.id.spinnerCiudad)
         spinnerParroquia = findViewById(R.id.spinnerParroquia)
         spinnerBarrio = findViewById(R.id.spinnerBarrio)
@@ -65,71 +64,42 @@ class Registro_voluntario : AppCompatActivity() {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.iconofinalkawsana)
         arcView.setImageBitmap(bmp)
 
-        // Inicializar spinner de tipo usuario
         val tipos = arrayOf("VOLUNTARIO", "ADMIN")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, tipos)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerTipoUsuario.adapter = adapter
 
-        // Al seleccionar tipo usuario
         spinnerTipoUsuario.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val tipo = tipos[position]
                 if (tipo == "ADMIN") {
                     etPasswordAdmin.visibility = View.VISIBLE
-                    btnLupa.visibility = View.VISIBLE
-                    spinnerCiudad.visibility = View.GONE
-                    spinnerParroquia.visibility = View.GONE
-                    spinnerBarrio.visibility = View.GONE
                 } else {
                     etPasswordAdmin.visibility = View.GONE
-                    btnLupa.visibility = View.GONE
-                    spinnerCiudad.visibility = View.GONE
-                    spinnerParroquia.visibility = View.GONE
-                    spinnerBarrio.visibility = View.GONE
                 }
+
+                spinnerCiudad.visibility = View.VISIBLE
+                spinnerParroquia.visibility = View.VISIBLE
+                spinnerBarrio.visibility = View.VISIBLE
+                cargarUbicaciones()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        // Botón lupa para validar contraseña admin y mostrar ubicaciones
-        btnLupa.setOnClickListener {
-            val passwordAdmin = etPasswordAdmin.text.toString()
-            if (passwordAdmin == adminPasswordCorrecta) {
-                spinnerCiudad.visibility = View.VISIBLE
-                spinnerParroquia.visibility = View.VISIBLE
-                spinnerBarrio.visibility = View.VISIBLE
-
-                cargarUbicaciones()
-            } else {
-                Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        // Registrar usuario con validaciones
         btnRegistrar.setOnClickListener {
             if (validarFormulario()) {
-                val nombres = etNombres.text.toString().trim()
-                val apellidos = etApellidos.text.toString().trim()
-                val email = etEmail.text.toString().trim()
-                val cedula = etCedula.text.toString().trim()
-                val telefono = etTelefono.text.toString().trim()
-                val direccion = etDireccion.text.toString().trim()
-                val contraseña = etContraseña.text.toString()
-                val tipoUsuario = spinnerTipoUsuario.selectedItem.toString()
-
                 val usuario = CoreUsuarioModel(
-                    email = email,
-                    contraseña = contraseña,
-                    tipo_usuario = tipoUsuario,
+                    email = etEmail.text.toString().trim(),
+                    contraseña = etContraseña.text.toString(),
+                    tipo_usuario = spinnerTipoUsuario.selectedItem.toString(),
                     fecha_registro = Date(),
                     estado = true,
-                    nombres = nombres,
-                    apellidos = apellidos,
-                    cedula = cedula,
-                    telefono = telefono,
-                    direccion = direccion,
+                    nombres = etNombres.text.toString().trim(),
+                    apellidos = etApellidos.text.toString().trim(),
+                    cedula = etCedula.text.toString().trim(),
+                    telefono = etTelefono.text.toString().trim(),
+                    direccion = etDireccion.text.toString().trim(),
                     barrio_id = barrioSeleccionado?.id?.toLong()
                 )
 
@@ -140,9 +110,9 @@ class Registro_voluntario : AppCompatActivity() {
                     if (registrado) {
                         Log.d("Registro", "ID del barrio seleccionado: ${barrioSeleccionado?.id}")
                         Toast.makeText(this@Registro_voluntario, "Usuario registrado con éxito", Toast.LENGTH_LONG).show()
-                        val intent = Intent(this@Registro_voluntario, Login::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
+                        startActivity(Intent(this@Registro_voluntario, Login::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        })
                         finish()
                     } else {
                         Toast.makeText(this@Registro_voluntario, "Error al registrar usuario", Toast.LENGTH_SHORT).show()
@@ -208,8 +178,6 @@ class Registro_voluntario : AppCompatActivity() {
         }
     }
 
-    // --- VALIDACIONES ---
-
     private fun validarFormulario(): Boolean {
         val nombres = etNombres.text.toString().trim()
         val apellidos = etApellidos.text.toString().trim()
@@ -226,7 +194,7 @@ class Registro_voluntario : AppCompatActivity() {
             return false
         }
         if (!nombres.matches(Regex("^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$"))) {
-            etNombres.error = "Nombres inválidos (solo letras y espacios)"
+            etNombres.error = "Nombres inválidos"
             etNombres.requestFocus()
             return false
         }
@@ -237,40 +205,25 @@ class Registro_voluntario : AppCompatActivity() {
             return false
         }
         if (!apellidos.matches(Regex("^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$"))) {
-            etApellidos.error = "Apellidos inválidos (solo letras y espacios)"
+            etApellidos.error = "Apellidos inválidos"
             etApellidos.requestFocus()
             return false
         }
 
-        if (email.isEmpty()) {
-            etEmail.error = "Ingrese su correo electrónico"
-            etEmail.requestFocus()
-            return false
-        }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             etEmail.error = "Correo electrónico inválido"
             etEmail.requestFocus()
             return false
         }
 
-        if (cedula.isEmpty()) {
-            etCedula.error = "Ingrese su cédula"
-            etCedula.requestFocus()
-            return false
-        }
-        if (!validarCedulaEcuatoriana(cedula)) {
-            etCedula.error = "Cédula ecuatoriana inválida"
+        if (cedula.isEmpty() || !validarCedulaEcuatoriana(cedula)) {
+            etCedula.error = "Cédula inválida"
             etCedula.requestFocus()
             return false
         }
 
-        if (telefono.isEmpty()) {
-            etTelefono.error = "Ingrese su teléfono"
-            etTelefono.requestFocus()
-            return false
-        }
-        if (!telefono.matches(Regex("^\\d{7,10}\$"))) {
-            etTelefono.error = "Teléfono inválido (7 a 10 dígitos numéricos)"
+        if (telefono.isEmpty() || !telefono.matches(Regex("^\\d{7,10}\$"))) {
+            etTelefono.error = "Teléfono inválido"
             etTelefono.requestFocus()
             return false
         }
@@ -281,26 +234,21 @@ class Registro_voluntario : AppCompatActivity() {
             return false
         }
 
-        if (contraseña.isEmpty()) {
-            etContraseña.error = "Ingrese su contraseña"
-            etContraseña.requestFocus()
-            return false
-        }
-        if (!validarContraseña(contraseña)) {
-            etContraseña.error = "Contraseña débil (mínimo 8 caracteres, con letras y números)"
+        if (contraseña.isEmpty() || !validarContraseña(contraseña)) {
+            etContraseña.error = "Contraseña inválida"
             etContraseña.requestFocus()
             return false
         }
 
-        // Si es ADMIN, verificar que contraseña admin sea correcta y que haya seleccionado ubicación
+        if (ciudadSeleccionada == null || parroquiaSeleccionada == null || barrioSeleccionado == null) {
+            Toast.makeText(this, "Debe seleccionar Ciudad, Parroquia y Barrio", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
         if (tipoUsuario == "ADMIN") {
             val passAdmin = etPasswordAdmin.text.toString()
             if (passAdmin != adminPasswordCorrecta) {
                 Toast.makeText(this, "Contraseña de administrador incorrecta", Toast.LENGTH_SHORT).show()
-                return false
-            }
-            if (ciudadSeleccionada == null || parroquiaSeleccionada == null || barrioSeleccionado == null) {
-                Toast.makeText(this, "Debe seleccionar Ciudad, Parroquia y Barrio", Toast.LENGTH_SHORT).show()
                 return false
             }
         }
@@ -308,7 +256,6 @@ class Registro_voluntario : AppCompatActivity() {
         return true
     }
 
-    // Validación de cédula ecuatoriana
     private fun validarCedulaEcuatoriana(cedula: String): Boolean {
         if (cedula.length != 10 || !cedula.all { it.isDigit() }) return false
 
@@ -319,9 +266,8 @@ class Registro_voluntario : AppCompatActivity() {
         val tercerDigito = digitos[2]
         if (tercerDigito >= 6) return false
 
-        val coeficientes = listOf(2,1,2,1,2,1,2,1,2)
+        val coeficientes = listOf(2, 1, 2, 1, 2, 1, 2, 1, 2)
         var suma = 0
-
         for (i in 0 until 9) {
             var valCoef = digitos[i] * coeficientes[i]
             if (valCoef >= 10) valCoef -= 9
@@ -334,7 +280,6 @@ class Registro_voluntario : AppCompatActivity() {
         return digitoVerificador == digitos[9]
     }
 
-    // Validación simple de contraseña
     private fun validarContraseña(password: String): Boolean {
         val regex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
         return regex.matches(password)

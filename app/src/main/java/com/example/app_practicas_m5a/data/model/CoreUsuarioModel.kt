@@ -7,7 +7,7 @@ data class CoreUsuarioModel(
     var email: String,
     var contraseña: String,
     var tipo_usuario: String,
-    var fecha_registro: Date,
+    var fecha_registro: Date?,
     var estado: Boolean,
     var nombres: String,
     var apellidos: String,
@@ -15,6 +15,6 @@ data class CoreUsuarioModel(
     var telefono: String,
     var direccion: String,
     var fecha_nacimiento: Date? = null,
-    val barrio_id: Long? = null
+    var barrio_id: Long? = null
 
 )

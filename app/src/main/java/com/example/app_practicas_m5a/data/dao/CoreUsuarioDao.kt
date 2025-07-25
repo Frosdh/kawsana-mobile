@@ -1,13 +1,12 @@
 package com.example.app_practicas_m5a.data.dao
 
+import PerfilCompletoModel
 import android.util.Log
 import com.example.app_practicas_m5a.data.model.CoreUsuarioModel
-import com.example.app_practicas_m5a.data.model.InfoVoluntario
 import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.PreparedStatement
 import java.sql.Date
-import java.util.*
+import java.sql.PreparedStatement
+import java.sql.Types
 
 object CoreUsuarioDao {
 
@@ -17,18 +16,19 @@ object CoreUsuarioDao {
         val conn = getConexion() ?: return false
 
         val sql = """
-        INSERT INTO core_usuario
-        (email, contraseña, tipo_usuario, fecha_registro, estado, nombres, apellidos, cedula, telefono, direccion, barrio_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """.trimIndent()
+            INSERT INTO core_usuario
+            (email, contraseña, tipo_usuario, fecha_registro, estado, nombres, apellidos, cedula, telefono, direccion, barrio_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """.trimIndent()
 
         var ps: PreparedStatement? = null
+
         return try {
             ps = conn.prepareStatement(sql)
             ps.setString(1, usuario.email)
             ps.setString(2, usuario.contraseña)
             ps.setString(3, usuario.tipo_usuario)
-            ps.setDate(4, java.sql.Date(usuario.fecha_registro.time))
+            ps.setDate(4, usuario.fecha_registro?.let { Date(it.time) })
             ps.setBoolean(5, usuario.estado)
             ps.setString(6, usuario.nombres)
             ps.setString(7, usuario.apellidos)
@@ -36,15 +36,13 @@ object CoreUsuarioDao {
             ps.setString(9, usuario.telefono)
             ps.setString(10, usuario.direccion)
 
-            // Asignar barrio_id, si no hay valor se inserta NULL
             if (usuario.barrio_id != null) {
                 ps.setLong(11, usuario.barrio_id!!)
             } else {
-                ps.setNull(11, java.sql.Types.BIGINT)
+                ps.setNull(11, Types.BIGINT)
             }
 
-            val res = ps.executeUpdate()
-            res > 0
+            ps.executeUpdate() > 0
         } catch (ex: Exception) {
             Log.e("CoreUsuarioDao", "Error al registrar usuario: ${ex.message}")
             false
@@ -57,12 +55,14 @@ object CoreUsuarioDao {
     fun login(cedula: String, password: String): CoreUsuarioModel? {
         val conn = getConexion()
         var user: CoreUsuarioModel? = null
+
         try {
             val sql = "SELECT * FROM core_usuario WHERE cedula = ? AND contraseña = ? AND estado = 1 LIMIT 1"
             val ps = conn?.prepareStatement(sql)
             ps?.setString(1, cedula)
             ps?.setString(2, password)
             val rs = ps?.executeQuery()
+
             if (rs != null && rs.next()) {
                 user = CoreUsuarioModel(
                     id = rs.getLong("id"),
@@ -80,131 +80,27 @@ object CoreUsuarioDao {
                     barrio_id = rs.getLong("barrio_id")
                 )
             }
+
             rs?.close()
             ps?.close()
             conn?.close()
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
+
         return user
     }
 
-
-
-    object InfoVoluntarioDao {
-
-        private const val URL = "jdbc:mysql://<tu_host>:<puerto>/<tu_bd>"
-        private const val USER = "<usuario>"
-        private const val PASSWORD = "<password>"
-
-        private fun getConnection(): Connection? {
-            return try {
-                DriverManager.getConnection(URL, USER, PASSWORD)
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-                null
-            }
-        }
-
-        fun obtenerInfoPorCedula(cedula: String): InfoVoluntario? {
-            val conn = getConnection() ?: return null
-
-            try {
-                // 1. Obtener nombre completo y barrio_id
-                val psUser = conn.prepareStatement(
-                    "SELECT nombres, apellidos, barrio_id FROM core_usuario WHERE cedula = ? AND estado = 1"
-                )
-                psUser.setString(1, cedula)
-                val rsUser = psUser.executeQuery()
-                if (!rsUser.next()) return null
-                val nombreCompleto = "${rsUser.getString("nombres")} ${rsUser.getString("apellidos")}"
-                val barrioId = rsUser.getLong("barrio_id")
-                rsUser.close()
-                psUser.close()
-
-                // 2. Obtener puntos totales (ejemplo simplificado: suma puntos actividades activas)
-                val psPuntos = conn.prepareStatement(
-                    "SELECT SUM(puntos) as total_puntos FROM core_actividad WHERE estado = 1"
-                )
-                val rsPuntos = psPuntos.executeQuery()
-                val puntosTotales = if (rsPuntos.next()) rsPuntos.getInt("total_puntos") else 0
-                rsPuntos.close()
-                psPuntos.close()
-
-                // 3. Obtener insignias
-                val psInsignias = conn.prepareStatement(
-                    """SELECT i.nombre FROM core_usuarioinsignia ui
-                   JOIN core_insignia i ON ui.insignia_id = i.id
-                   JOIN core_usuario u ON ui.usuario_id = u.id
-                   WHERE u.cedula = ?"""
-                )
-                psInsignias.setString(1, cedula)
-                val rsInsignias = psInsignias.executeQuery()
-                val insignias = mutableListOf<String>()
-                while (rsInsignias.next()) {
-                    insignias.add(rsInsignias.getString("nombre"))
-                }
-                rsInsignias.close()
-                psInsignias.close()
-
-                // 4. Próximas actividades
-                val psActividades = conn.prepareStatement(
-                    "SELECT nombre FROM core_actividad WHERE estado = 1 AND fecha_inicio >= CURDATE() ORDER BY fecha_inicio LIMIT 5"
-                )
-                val rsActividades = psActividades.executeQuery()
-                val actividades = mutableListOf<String>()
-                while (rsActividades.next()) {
-                    actividades.add(rsActividades.getString("nombre"))
-                }
-                rsActividades.close()
-                psActividades.close()
-
-                // 5. Noticias recientes
-                val psNoticias = conn.prepareStatement(
-                    "SELECT titulo FROM core_noticia ORDER BY actualizados_en DESC LIMIT 5"
-                )
-                val rsNoticias = psNoticias.executeQuery()
-                val noticias = mutableListOf<String>()
-                while (rsNoticias.next()) {
-                    noticias.add(rsNoticias.getString("titulo"))
-                }
-                rsNoticias.close()
-                psNoticias.close()
-
-                // 6. Avance del barrio
-                val psAvance = conn.prepareStatement(
-                    "SELECT progreso FROM core_progresobarrio WHERE barrio_id = ? ORDER BY ultima_actualizacion DESC LIMIT 1"
-                )
-                psAvance.setLong(1, barrioId)
-                val rsAvance = psAvance.executeQuery()
-                val avance = if (rsAvance.next()) rsAvance.getDouble("progreso") else 0.0
-                rsAvance.close()
-                psAvance.close()
-
-                conn.close()
-
-                return InfoVoluntario(
-                    nombreCompleto = nombreCompleto,
-                    puntosTotales = puntosTotales,
-                    insignias = insignias,
-                    proximasActividades = actividades,
-                    noticias = noticias,
-                    avancePorcentaje = avance
-                )
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-                return null
-            }
-        }
-    }
     fun obtenerUsuarioPorCedula(cedula: String): CoreUsuarioModel? {
         val conn = getConexion()
         var user: CoreUsuarioModel? = null
+
         try {
             val sql = "SELECT * FROM core_usuario WHERE cedula = ? AND estado = 1 LIMIT 1"
             val ps = conn?.prepareStatement(sql)
             ps?.setString(1, cedula)
             val rs = ps?.executeQuery()
+
             if (rs != null && rs.next()) {
                 user = CoreUsuarioModel(
                     id = rs.getLong("id"),
@@ -222,25 +118,25 @@ object CoreUsuarioDao {
                     barrio_id = rs.getLong("barrio_id")
                 )
             }
+
             rs?.close()
             ps?.close()
             conn?.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
         return user
     }
+
     fun actualizarPerfil(usuario: CoreUsuarioModel): Boolean {
-        val conn = getConexion() ?: run {
-            Log.e("CoreUsuarioDao", "No se pudo obtener conexión a la BD")
-            return false
-        }
+        val conn = getConexion() ?: return false
 
         val sql = """
-        UPDATE core_usuario
-        SET nombres = ?, apellidos = ?, email = ?, telefono = ?, direccion = ?
-        WHERE cedula = ? AND estado = 1
-    """.trimIndent()
+            UPDATE core_usuario
+            SET nombres = ?, apellidos = ?, email = ?, telefono = ?, direccion = ?, barrio_id = ?
+            WHERE cedula = ? AND estado = 1
+        """.trimIndent()
 
         var ps: PreparedStatement? = null
 
@@ -251,19 +147,139 @@ object CoreUsuarioDao {
             ps.setString(3, usuario.email)
             ps.setString(4, usuario.telefono)
             ps.setString(5, usuario.direccion)
-            ps.setString(6, usuario.cedula)
 
-            Log.d("CoreUsuarioDao", "Ejecutando update perfil para cédula: ${usuario.cedula} con nombres: ${usuario.nombres}, apellidos: ${usuario.apellidos}, email: ${usuario.email}, teléfono: ${usuario.telefono}, dirección: ${usuario.direccion}")
-            val res = ps.executeUpdate()
-            Log.d("CoreUsuarioDao", "Filas afectadas: $res")
-            res > 0
+            if (usuario.barrio_id != null) {
+                ps.setLong(6, usuario.barrio_id!!)
+            } else {
+                ps.setNull(6, Types.BIGINT)
+            }
+
+            ps.setString(7, usuario.cedula)
+
+            ps.executeUpdate() > 0
         } catch (ex: Exception) {
             Log.e("CoreUsuarioDao", "Error al actualizar perfil: ${ex.message}")
-            ex.printStackTrace()
             false
         } finally {
             ps?.close()
             conn.close()
         }
+    }
+
+    fun obtenerVoluntariosPorCedulaLider(cedulaLider: String): List<CoreUsuarioModel> {
+        val conn = getConexion() ?: return emptyList()
+        val voluntarios = mutableListOf<CoreUsuarioModel>()
+
+        try {
+            val psBarrio = conn.prepareStatement(
+                "SELECT barrio_id FROM core_usuario WHERE cedula = ? AND estado = 1"
+            )
+            psBarrio.setString(1, cedulaLider)
+            val rsBarrio = psBarrio.executeQuery()
+
+            if (!rsBarrio.next()) {
+                rsBarrio.close()
+                psBarrio.close()
+                return emptyList()
+            }
+
+            val barrioId = rsBarrio.getLong("barrio_id")
+            rsBarrio.close()
+            psBarrio.close()
+
+            val psVoluntarios = conn.prepareStatement(
+                "SELECT email, nombres, apellidos, telefono FROM core_usuario WHERE barrio_id = ? AND tipo_usuario = 'Voluntario' AND estado = 1"
+            )
+            psVoluntarios.setLong(1, barrioId)
+            val rsVoluntarios = psVoluntarios.executeQuery()
+
+            while (rsVoluntarios.next()) {
+                val voluntario = CoreUsuarioModel(
+                    id = 0L,
+                    email = rsVoluntarios.getString("email"),
+                    contraseña = "",
+                    tipo_usuario = "Voluntario",
+                    fecha_registro = Date(0),
+                    estado = true,
+                    nombres = rsVoluntarios.getString("nombres"),
+                    apellidos = rsVoluntarios.getString("apellidos"),
+                    cedula = "",
+                    telefono = rsVoluntarios.getString("telefono"),
+                    direccion = "",
+                    fecha_nacimiento = null,
+                    barrio_id = barrioId
+                )
+                voluntarios.add(voluntario)
+            }
+
+            rsVoluntarios.close()
+            psVoluntarios.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            conn.close()
+        }
+
+        return voluntarios
+    }
+
+    fun obtenerPerfilCompletoPorCedula(cedula: String): PerfilCompletoModel? {
+        val conn = getConexion() ?: return null
+        var perfil: PerfilCompletoModel? = null
+
+        try {
+            val sql = """
+                SELECT 
+                    u.id AS usuario_id,
+                    u.nombres,
+                    u.apellidos,
+                    u.cedula,
+                    u.email,
+                    u.telefono,
+                    u.direccion,
+                    u.tipo_usuario,
+                    b.nombre AS nombre_barrio,
+                    p.nombre AS nombre_parroquia,
+                    c.nombre AS nombre_ciudad
+                FROM 
+                    core_usuario u
+                JOIN 
+                    core_barrio b ON u.barrio_id = b.id
+                JOIN 
+                    core_parroquia p ON b.parroquia_id = p.id
+                JOIN 
+                    core_ciudad c ON p.ciudad_id = c.id
+                WHERE u.cedula = ? AND u.estado = 1
+                LIMIT 1
+            """.trimIndent()
+
+            val ps = conn.prepareStatement(sql)
+            ps.setString(1, cedula)
+            val rs = ps.executeQuery()
+
+            if (rs.next()) {
+                perfil = PerfilCompletoModel(
+                    id = rs.getLong("usuario_id"),
+                    nombres = rs.getString("nombres"),
+                    apellidos = rs.getString("apellidos"),
+                    cedula = rs.getString("cedula"),
+                    email = rs.getString("email"),
+                    telefono = rs.getString("telefono"),
+                    direccion = rs.getString("direccion"),
+                    tipo_usuario = rs.getString("tipo_usuario"),
+                    nombreBarrio = rs.getString("nombre_barrio"),
+                    nombreParroquia = rs.getString("nombre_parroquia"),
+                    nombreCiudad = rs.getString("nombre_ciudad")
+                )
+            }
+
+            rs.close()
+            ps.close()
+            conn.close()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+
+        return perfil
     }
 }
