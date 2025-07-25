@@ -75,6 +75,14 @@
             android:exported="false" />
         -->
 
+        <activity android:name=".presentacion.ui.NoticiasActivity"
+            android:exported="false" />
+        <activity android:name=".presentacion.ui.NoticiaDetalleActivity"
+            android:exported="false" />
+        <activity android:name=".presentacion.ui.ActividadesDeProyectoActivity"
+            android:exported="false" />
+
+
         <activity
             android:name=".presentacion.ui.Proyecto_Actuales_Lider"
             android:exported="false" />

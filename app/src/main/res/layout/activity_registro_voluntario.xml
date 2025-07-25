@@ -6,7 +6,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8F5E9"
+    android:background="#E6F0E6"
+    android:paddingTop="35dp"
     tools:context=".presentacion.ui.Registro_voluntario">
 
     <androidx.core.widget.NestedScrollView
@@ -14,177 +15,148 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
-            android:id="@+id/contenedor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
             android:padding="24dp">
 
-            <ImageView
-                android:id="@+id/logo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/icono_kausana"
-                android:contentDescription="Logo de Kawsana" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Registrar Usuario"
-                android:textSize="24sp"
-                android:textColor="#2E7D32"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp" />
-
-            <EditText
-                android:id="@+id/etNombres"
+            <!-- Card principal del formulario -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nombres"
-                android:inputType="textPersonName"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:layout_marginTop="16dp" />
+                android:orientation="vertical"
+                android:paddingTop="30dp"
+                android:background="@drawable/bg_card_rounded_elevated"
+                android:padding="24dp">
 
-            <EditText
-                android:id="@+id/etApellidos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Apellidos"
-                android:inputType="textPersonName"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:layout_marginTop="8dp" />
+                <com.example.app_practicas_m5a.presentacion.ui.ArcTextImageView
+                    android:id="@+id/arcTextImageView"
+                    android:layout_width="320dp"
+                    android:layout_height="224dp"
+                    android:layout_marginBottom="5dp" />
 
-            <EditText
-                android:id="@+id/etEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:layout_marginTop="8dp" />
+                <!-- Título -->
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Registro de Usuario"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#2E7D32"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="sans-serif-medium" />
 
-            <EditText
-                android:id="@+id/etCedula"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Cédula"
-                android:inputType="text"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:layout_marginTop="8dp" />
+                <!-- Campos del formulario -->
+                <EditText
+                    android:id="@+id/etNombres"
+                    style="@style/Widget.App.EditText"
+                    android:hint="Nombres"
+                    android:inputType="textPersonName"
+                    android:layout_marginTop="16dp" />
 
-            <EditText
-                android:id="@+id/etTelefono"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Teléfono"
-                android:inputType="phone"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:layout_marginTop="8dp" />
+                <EditText
+                    android:id="@+id/etApellidos"
+                    style="@style/Widget.App.EditText"
+                    android:hint="Apellidos"
+                    android:inputType="textPersonName"
+                    android:layout_marginTop="12dp" />
 
-            <EditText
-                android:id="@+id/etDireccion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Dirección"
-                android:inputType="textPostalAddress"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:layout_marginTop="8dp" />
+                <EditText
+                    android:id="@+id/etEmail"
+                    style="@style/Widget.App.EditText"
+                    android:hint="Correo electrónico"
+                    android:inputType="textEmailAddress"
+                    android:layout_marginTop="12dp" />
 
-            <EditText
-                android:id="@+id/etContraseña"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Contraseña"
-                android:inputType="textPassword"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:layout_marginTop="12dp" />
+                <EditText
+                    android:id="@+id/etCedula"
+                    style="@style/Widget.App.EditText"
+                    android:hint="Cédula"
+                    android:inputType="number"
+                    android:layout_marginTop="12dp" />
 
-            <Spinner
-                android:id="@+id/spinnerTipoUsuario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp" />
+                <EditText
+                    android:id="@+id/etTelefono"
+                    style="@style/Widget.App.EditText"
+                    android:hint="Teléfono"
+                    android:inputType="phone"
+                    android:layout_marginTop="12dp" />
 
-            <EditText
-                android:id="@+id/etPasswordAdmin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Contraseña Admin"
-                android:inputType="textPassword"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:visibility="gone"
-                android:layout_marginTop="12dp" />
+                <EditText
+                    android:id="@+id/etDireccion"
+                    style="@style/Widget.App.EditText"
+                    android:hint="Dirección"
+                    android:inputType="textPostalAddress"
+                    android:layout_marginTop="12dp" />
 
-            <Button
-                android:id="@+id/btnLupa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginTop="8dp"
-                android:text="Buscar"
-                android:drawableStart="@drawable/lupa"
-                android:contentDescription="Buscar" />
+                <EditText
+                    android:id="@+id/etContraseña"
+                    style="@style/Widget.App.EditText"
+                    android:hint="Contraseña"
+                    android:inputType="textPassword"
+                    android:layout_marginTop="12dp" />
 
-            <Spinner
-                android:id="@+id/spinnerCiudad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edit_text_bg"
-                android:contentDescription="ciudad"
-                android:padding="12dp"
-                android:visibility="gone" />
+                <Spinner
+                    android:id="@+id/spinnerTipoUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_spinner_rounded"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp" />
 
-            <Spinner
-                android:id="@+id/spinnerParroquia"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:visibility="gone" />
+                <!-- Campo opcional: Contraseña Admin -->
+                <EditText
+                    android:id="@+id/etPasswordAdmin"
+                    style="@style/EstiloEditText"
+                    android:hint="Contraseña Admin"
+                    android:inputType="textPassword"
+                    android:visibility="gone" />
 
-            <Spinner
-                android:id="@+id/spinnerBarrio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:visibility="gone" />
+                <!-- Botón Lupa -->
+                <Button
+                    android:id="@+id/btnLupa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buscar"
+                    android:drawableStart="@drawable/lupa"
+                    android:visibility="gone"
+                    android:layout_marginTop="12dp" />
 
-            <Button
-                android:id="@+id/btnRegistrar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Registrar Usuario"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#66BB6A"
-                android:layout_marginTop="24dp" />
+                <!-- Spinners ocultos -->
+                <Spinner
+                    android:id="@+id/spinnerCiudad"
+                    style="@style/EstiloSpinnerOculto" />
 
+                <Spinner
+                    android:id="@+id/spinnerParroquia"
+                    style="@style/EstiloSpinnerOculto" />
+
+                <Spinner
+                    android:id="@+id/spinnerBarrio"
+                    style="@style/EstiloSpinnerOculto" />
+
+                <!-- Botón de registro -->
+                <Button
+                    android:id="@+id/btnRegistrar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="24dp"
+                    android:text="Registrar"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#43A047"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

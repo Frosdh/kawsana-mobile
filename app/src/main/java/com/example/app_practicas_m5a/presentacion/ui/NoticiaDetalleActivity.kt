@@ -29,6 +29,7 @@ class NoticiaDetalleActivity : AppCompatActivity() {
         tvContenido.text = contenido
         tvFecha.text = fecha
 
+
         Glide.with(this)
             .load(imagenUrl)
             .placeholder(R.drawable.placeholder)

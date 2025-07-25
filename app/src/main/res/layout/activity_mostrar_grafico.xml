@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutGrafico"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Contenedor con sombra y bordes redondeados -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/image_placeholder"
+        android:backgroundTint="#FFFFFF"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:radius="16dp"
+        android:shape="rectangle">
+
+        <!-- Título gráfico -->
+        <TextView
+            android:id="@+id/tvTituloGrafico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif-medium"
+            android:paddingBottom="16dp"
+            android:text="Progreso por Barrio"
+            android:textColor="#2E7D32"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Gráfico de barras -->
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/image_placeholder"
+            android:clipToOutline="true"
+            android:padding="12dp"
+            android:radius="12dp" />
+    </LinearLayout>
+</LinearLayout>

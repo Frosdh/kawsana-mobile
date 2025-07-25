@@ -17,8 +17,8 @@ object MySqlConexion {
             Class.forName("com.mysql.jdbc.Driver")
             DriverManager.getConnection(
                 "jdbc:mysql://10.0.2.2:3306/kawsana_db", // IP correcta para emulador Android
-                "Frosdh",
-                "blancoss"
+                "root",
+                "1234"
             )
         } catch (e: ClassNotFoundException) {
             Log.e("MySqlConexion", "Error: Driver JDBC no encontrado - ${e.message}")

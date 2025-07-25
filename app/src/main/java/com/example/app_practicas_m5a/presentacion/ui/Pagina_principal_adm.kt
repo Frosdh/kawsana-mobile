@@ -30,6 +30,7 @@ class Pagina_principal_adm : AppCompatActivity() {
     private lateinit var imgPerfil: ImageView
     private lateinit var btnVerPerfil: Button
     private lateinit var btnFinal: Button
+    private lateinit var btnCamaraIA: Button
     private lateinit var tvProgresoProyecto: TextView
     private lateinit var barChartProgreso: BarChart
 
@@ -41,16 +42,16 @@ class Pagina_principal_adm : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_pagina_principal_adm)
 
-        // Vincular UI
+        // ✅ Vincular UI con findViewById
         tvTituloAdmin = findViewById(R.id.tvTituloAdmin)
         tvNombreAdmin = findViewById(R.id.tvNombreAdmin)
         tvCorreoAdmin = findViewById(R.id.tvCorreoAdmin)
         imgPerfil = findViewById(R.id.imgPerfil)
         btnVerPerfil = findViewById(R.id.btnVerPerfil)
         btnFinal = findViewById(R.id.btnFinal)
+        btnCamaraIA = findViewById(R.id.btnCamaraIA) // ✅ Asegurado
         tvProgresoProyecto = findViewById(R.id.tvProgresoProyecto)
         barChartProgreso = findViewById(R.id.barChartProgreso)
-
 
         cedula = intent.getStringExtra("cedula") ?: ""
 
@@ -91,6 +92,12 @@ class Pagina_principal_adm : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // ✅ Listener para el botón de Cámara IA
+        btnCamaraIA.setOnClickListener {
+            val intent = Intent(this, Camara_IA_lider::class.java)
+            startActivity(intent)
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainInicioAdmin)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -105,11 +112,8 @@ class Pagina_principal_adm : AppCompatActivity() {
             }
 
             if (proyectos.isNotEmpty()) {
-                // Mostrar progreso del primer proyecto en TextView
                 val primerProyecto = proyectos[0]
                 tvProgresoProyecto.text = "Progreso: ${primerProyecto.progreso}%"
-
-                // Mostrar gráfico de barras con todos los proyectos
                 mostrarGraficoBarras(proyectos)
             } else {
                 tvProgresoProyecto.text = "No hay proyectos disponibles"

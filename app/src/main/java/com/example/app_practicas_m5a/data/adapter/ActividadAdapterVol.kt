@@ -28,7 +28,7 @@ class ActividadAdapterVol(
         val actividad = actividades[position]
         holder.tvNombre.text = actividad.nombre
         holder.tvFechas.text = "Desde: ${actividad.fecha_inicio} - Hasta: ${actividad.fecha_fin ?: "No especificada"}"
-        holder.tvPuntos.text = "⭐ Puntos: ${actividad.puntos}"
+        holder.tvPuntos.text = "Puntos: ${actividad.puntos}"
 
         holder.itemView.setOnClickListener {
             onClick(actividad)
