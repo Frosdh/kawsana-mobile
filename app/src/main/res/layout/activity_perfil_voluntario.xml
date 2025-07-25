@@ -10,123 +10,154 @@
     android:paddingRight="20dp"
     android:paddingBottom="16dp">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:paddingBottom="24dp"
-            android:paddingRight="20dp"
-            android:paddingLeft="20dp">
+            android:orientation="vertical"
+            android:padding="24dp">
 
-            <!-- Imagen de perfil circular -->
-            <ImageView
-                android:id="@+id/logoPerfil"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/icono_kausana"
-                android:padding="12dp"
-                android:contentDescription="Foto de perfil" />
-
-            <!-- Título -->
-            <TextView
-                android:id="@+id/titlePerfil"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mi Perfil"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#2E7D32"
-                android:layout_marginTop="12dp" />
-
-            <!-- Campos de perfil -->
+            <!-- Card principal del formulario -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_rounded_elevated"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp">
+                android:padding="24dp"
+                android:paddingTop="30dp">
 
-                <TextView android:text="Cédula" style="@style/CampoLabel"/>
-                <EditText
-                    android:id="@+id/etCedulaPerfil"
-                    style="@style/CampoPerfil"
-                    android:enabled="false" />
+                <!-- Imagen de perfil circular -->
+                <ImageView
+                    android:id="@+id/logoPerfil"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="Foto de perfil"
+                    android:padding="12dp"
 
-                <TextView android:text="Nombres" style="@style/CampoLabel"/>
-                <EditText
-                    android:id="@+id/etNombresPerfil"
-                    style="@style/CampoPerfil"
-                    android:enabled="false" />
+                    android:src="@drawable/icono_kausana" />
 
-                <TextView android:text="Apellidos" style="@style/CampoLabel"/>
-                <EditText
-                    android:id="@+id/etApellidosPerfil"
-                    style="@style/CampoPerfil"
-                    android:enabled="false" />
-
-                <TextView android:text="Email" style="@style/CampoLabel"/>
-                <EditText
-                    android:id="@+id/etEmailPerfil"
-                    style="@style/CampoPerfil"
-                    android:inputType="textEmailAddress"
-                    android:enabled="false" />
-
-                <TextView android:text="Teléfono" style="@style/CampoLabel"/>
-                <EditText
-                    android:id="@+id/etTelefonoPerfil"
-                    style="@style/CampoPerfil"
-                    android:inputType="phone"
-                    android:enabled="false" />
-
-                <TextView android:text="Dirección" style="@style/CampoLabel"/>
-                <EditText
-                    android:id="@+id/etDireccionPerfil"
-                    style="@style/CampoPerfil"
-                    android:inputType="textPostalAddress"
-                    android:enabled="false" />
-            </LinearLayout>
-
-            <!-- Botones -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginTop="24dp">
-
-                <Button
-                    android:id="@+id/btnVolver"
-                    android:layout_width="0dp"
+                <!-- Título -->
+                <TextView
+                    android:id="@+id/titlePerfil"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Volver"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#66BB6A"
-                    android:layout_marginEnd="8dp" />
+                    android:layout_marginTop="12dp"
+                    android:text="Mi Perfil"
+                    android:textColor="#2E7D32"
+                    android:layout_gravity="center"
 
-                <Button
-                    android:id="@+id/btnModificar"
-                    android:layout_width="0dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Campos de perfil -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Modificar"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#388E3C"
-                    android:layout_marginStart="8dp" />
-            </LinearLayout>
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
 
+                    <TextView
+                        style="@style/CampoLabel"
+                        android:text="Cédula" />
+
+                    <EditText
+                        android:id="@+id/etCedulaPerfil"
+                        style="@style/CampoPerfil"
+                        android:enabled="false" />
+
+                    <TextView
+                        style="@style/CampoLabel"
+                        android:text="Nombres" />
+
+                    <EditText
+                        android:id="@+id/etNombresPerfil"
+                        style="@style/CampoPerfil"
+                        android:enabled="false" />
+
+                    <TextView
+                        style="@style/CampoLabel"
+                        android:text="Apellidos" />
+
+                    <EditText
+                        android:id="@+id/etApellidosPerfil"
+                        style="@style/CampoPerfil"
+                        android:enabled="false" />
+
+                    <TextView
+                        style="@style/CampoLabel"
+                        android:text="Email" />
+
+                    <EditText
+                        android:id="@+id/etEmailPerfil"
+                        style="@style/CampoPerfil"
+                        android:enabled="false"
+                        android:inputType="textEmailAddress" />
+
+                    <TextView
+                        style="@style/CampoLabel"
+                        android:text="Teléfono" />
+
+                    <EditText
+                        android:id="@+id/etTelefonoPerfil"
+                        style="@style/CampoPerfil"
+                        android:enabled="false"
+                        android:inputType="phone" />
+
+                    <TextView
+                        style="@style/CampoLabel"
+                        android:text="Dirección" />
+
+                    <EditText
+                        android:id="@+id/etDireccionPerfil"
+                        style="@style/CampoPerfil"
+                        android:enabled="false"
+                        android:inputType="textPostalAddress" />
+                </LinearLayout>
+
+                <!-- Botones -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnVolver"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#66BB6A"
+                        android:text="Volver"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btnModificar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#388E3C"
+                        android:text="Modificar"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_practicas_m5a.R
@@ -21,6 +22,8 @@ class ProyectoAdapterVol(
         val tvNombre: TextView = itemView.findViewById(R.id.tvNombreProyecto)
         val tvFechas: TextView = itemView.findViewById(R.id.tvFechasProyecto)
         val tvDescripcion: TextView = itemView.findViewById(R.id.tvDescripcionProyecto)
+        val btnVerDetalles: Button = itemView.findViewById(R.id.btnVerDetalles) // <- agregar
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProyectoViewHolder {
@@ -31,6 +34,7 @@ class ProyectoAdapterVol(
     override fun onBindViewHolder(holder: ProyectoViewHolder, position: Int) {
         val proyecto = proyectos[position]
         val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val contexto = holder.itemView.context   // <--- aquí el contexto
 
         val fechaInicio = formato.format(proyecto.fechaInicio)
         val fechaFin = proyecto.fechaFin?.let { formato.format(it) } ?: "No especificada"
@@ -39,16 +43,14 @@ class ProyectoAdapterVol(
         holder.tvFechas.text = "Desde: $fechaInicio - Hasta: $fechaFin"
         holder.tvDescripcion.text = proyecto.descripcion.ifBlank { "Sin descripción" }
 
-        holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, ActividadesDeProyectoActivity::class.java)
+        // Click en el botón "Ver detalles"
+        holder.btnVerDetalles.setOnClickListener {
+            val intent = Intent(contexto, ActividadesDeProyectoActivity::class.java)
             intent.putExtra("proyecto_id", proyecto.id)
             intent.putExtra("proyecto_nombre", proyecto.nombre)
-            context.startActivity(intent)
-
-            // Si quieres llamar también onClick, lo puedes hacer así:
-            // onClick(proyecto)
+            contexto.startActivity(intent)
         }
+
     }
 
 

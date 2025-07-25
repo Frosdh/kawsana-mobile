@@ -17,8 +17,6 @@ class NoticiaAdapter(
 
     class NoticiaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titulo: TextView = view.findViewById(R.id.tvTitulo)
-        val contenido: TextView = view.findViewById(R.id.tvContenido)
-        val fecha: TextView = view.findViewById(R.id.tvFecha)
         val imagen: ImageView = view.findViewById(R.id.imgNoticia)
     }
 
@@ -30,8 +28,7 @@ class NoticiaAdapter(
     override fun onBindViewHolder(holder: NoticiaViewHolder, position: Int) {
         val noticia = noticias[position]
         holder.titulo.text = noticia.titulo
-        holder.contenido.text = noticia.contenido
-        holder.fecha.text = noticia.actualizadosEn
+
 
         Glide.with(holder.itemView.context)
             .load(noticia.imagenUrl)

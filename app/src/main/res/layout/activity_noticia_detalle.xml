@@ -3,45 +3,70 @@
     android:id="@+id/scrollDetalle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="#F0F0F0"
+    android:padding="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@drawable/card_background"
+        android:elevation="3dp"
+        android:orientation="vertical"
+        android:padding="14dp">
 
+        <!-- Imagen destacada -->
         <ImageView
             android:id="@+id/imgNoticiaDetalle"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="160dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/image_placeholder"
+            android:clipToOutline="true"
+            android:contentDescription="Imagen de la noticia"
             android:scaleType="centerCrop"
-            android:contentDescription="Imagen de la noticia" />
+            android:transitionName="imagenDetalle" />
 
+        <!-- Título -->
         <TextView
             android:id="@+id/tvTituloDetalle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.01"
             android:text="Título de la Noticia"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="8dp" />
+            android:textColor="#1B5E20"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
+        <!-- Fecha -->
         <TextView
             android:id="@+id/tvFechaDetalle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fecha"
-            android:textSize="12sp"
-            android:textColor="#888888"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="10dp"
+            android:fontFamily="sans-serif"
+            android:text="🗓️ 24 julio 2025"
+            android:textColor="#666666"
+            android:textSize="12sp" />
 
+        <!-- Separador -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="12dp"
+            android:background="#DDDDDD" />
+
+        <!-- Contenido -->
         <TextView
             android:id="@+id/tvContenidoDetalle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:letterSpacing="0.005"
+            android:lineSpacingExtra="6dp"
             android:text="Contenido completo de la noticia..."
-            android:textSize="16sp" />
-
+            android:textColor="#333333"
+            android:textSize="14sp" />
     </LinearLayout>
 </ScrollView>
