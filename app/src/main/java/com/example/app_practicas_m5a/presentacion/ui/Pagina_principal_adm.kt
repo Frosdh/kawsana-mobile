@@ -101,6 +101,7 @@ class Pagina_principal_adm : AppCompatActivity() {
 
         btnVoluntariosBarrios.setOnClickListener {
             val intent = Intent(this, VoluntariosBarrio::class.java)
+            intent.putExtra("cedula", cedula)
             startActivity(intent)
         }
 
