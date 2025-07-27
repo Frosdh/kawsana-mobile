@@ -52,14 +52,15 @@ object CoreUsuarioDao {
         }
     }
 
-    fun login(cedula: String, password: String): CoreUsuarioModel? {
+    fun login(usuario: String, password: String): CoreUsuarioModel? {
         val conn = getConexion()
         var user: CoreUsuarioModel? = null
 
         try {
-            val sql = "SELECT * FROM core_usuario WHERE cedula = ? AND contraseña = ? AND estado = 1 LIMIT 1"
+            val sql =
+                "SELECT * FROM core_usuario WHERE usuario = ? AND contraseña = ? AND estado = 1 LIMIT 1"
             val ps = conn?.prepareStatement(sql)
-            ps?.setString(1, cedula)
+            ps?.setString(1, usuario)
             ps?.setString(2, password)
             val rs = ps?.executeQuery()
 
@@ -77,7 +78,8 @@ object CoreUsuarioDao {
                     telefono = rs.getString("telefono"),
                     direccion = rs.getString("direccion"),
                     fecha_nacimiento = rs.getDate("fecha_nacimiento"),
-                    barrio_id = rs.getLong("barrio_id")
+                    barrio_id = rs.getLong("barrio_id"),
+                    usuario = rs.getString("usuario")
                 )
             }
 
@@ -91,14 +93,14 @@ object CoreUsuarioDao {
         return user
     }
 
-    fun obtenerUsuarioPorCedula(cedula: String): CoreUsuarioModel? {
+    fun obtenerUsuarioPorCedula(usuario: String): CoreUsuarioModel? {
         val conn = getConexion()
         var user: CoreUsuarioModel? = null
 
         try {
-            val sql = "SELECT * FROM core_usuario WHERE cedula = ? AND estado = 1 LIMIT 1"
+            val sql = "SELECT * FROM core_usuario WHERE usuario = ? AND estado = 1 LIMIT 1"
             val ps = conn?.prepareStatement(sql)
-            ps?.setString(1, cedula)
+            ps?.setString(1, usuario)
             val rs = ps?.executeQuery()
 
             if (rs != null && rs.next()) {
@@ -115,7 +117,8 @@ object CoreUsuarioDao {
                     telefono = rs.getString("telefono"),
                     direccion = rs.getString("direccion"),
                     fecha_nacimiento = rs.getDate("fecha_nacimiento"),
-                    barrio_id = rs.getLong("barrio_id")
+                    barrio_id = rs.getLong("barrio_id"),
+                    usuario = rs.getString("usuario")
                 )
             }
 
@@ -166,15 +169,15 @@ object CoreUsuarioDao {
         }
     }
 
-    fun obtenerVoluntariosPorCedulaLider(cedulaLider: String): List<CoreUsuarioModel> {
+    fun obtenerVoluntariosPorUsuarioLider(usuarioLider: String): List<CoreUsuarioModel> {
         val conn = getConexion() ?: return emptyList()
         val voluntarios = mutableListOf<CoreUsuarioModel>()
 
         try {
             val psBarrio = conn.prepareStatement(
-                "SELECT barrio_id FROM core_usuario WHERE cedula = ? AND estado = 1"
+                "SELECT barrio_id FROM core_usuario WHERE usuario = ? AND estado = 1"
             )
-            psBarrio.setString(1, cedulaLider)
+            psBarrio.setString(1, usuarioLider)
             val rsBarrio = psBarrio.executeQuery()
 
             if (!rsBarrio.next()) {
@@ -188,7 +191,7 @@ object CoreUsuarioDao {
             psBarrio.close()
 
             val psVoluntarios = conn.prepareStatement(
-                "SELECT email, nombres, apellidos, telefono FROM core_usuario WHERE barrio_id = ? AND tipo_usuario = 'Voluntario' AND estado = 1"
+                "SELECT email, nombres, apellidos, telefono, usuario FROM core_usuario WHERE barrio_id = ? AND tipo_usuario = 'ciudadano' AND estado = 1"
             )
             psVoluntarios.setLong(1, barrioId)
             val rsVoluntarios = psVoluntarios.executeQuery()
@@ -207,7 +210,8 @@ object CoreUsuarioDao {
                     telefono = rsVoluntarios.getString("telefono"),
                     direccion = "",
                     fecha_nacimiento = null,
-                    barrio_id = barrioId
+                    barrio_id = barrioId,
+                    usuario = rsVoluntarios.getString("usuario")
                 )
                 voluntarios.add(voluntario)
             }
@@ -223,38 +227,40 @@ object CoreUsuarioDao {
         return voluntarios
     }
 
-    fun obtenerPerfilCompletoPorCedula(cedula: String): PerfilCompletoModel? {
+
+    fun obtenerPerfilCompletoPorUsuario(usuario: String): PerfilCompletoModel? {
         val conn = getConexion() ?: return null
         var perfil: PerfilCompletoModel? = null
 
         try {
             val sql = """
-                SELECT 
-                    u.id AS usuario_id,
-                    u.nombres,
-                    u.apellidos,
-                    u.cedula,
-                    u.email,
-                    u.telefono,
-                    u.direccion,
-                    u.tipo_usuario,
-                    b.nombre AS nombre_barrio,
-                    p.nombre AS nombre_parroquia,
-                    c.nombre AS nombre_ciudad
-                FROM 
-                    core_usuario u
-                JOIN 
-                    core_barrio b ON u.barrio_id = b.id
-                JOIN 
-                    core_parroquia p ON b.parroquia_id = p.id
-                JOIN 
-                    core_ciudad c ON p.ciudad_id = c.id
-                WHERE u.cedula = ? AND u.estado = 1
-                LIMIT 1
-            """.trimIndent()
+            SELECT 
+                u.id AS usuario_id,
+                u.nombres,
+                u.apellidos,
+                u.cedula,
+                u.email,
+                u.telefono,
+                u.direccion,
+                u.tipo_usuario,
+                u.usuario,
+                b.nombre AS nombre_barrio,
+                p.nombre AS nombre_parroquia,
+                c.nombre AS nombre_ciudad
+            FROM 
+                core_usuario u
+            JOIN 
+                core_barrio b ON u.barrio_id = b.id
+            JOIN 
+                core_parroquia p ON b.parroquia_id = p.id
+            JOIN 
+                core_ciudad c ON p.ciudad_id = c.id
+            WHERE u.usuario = ? AND u.estado = 1
+            LIMIT 1
+        """.trimIndent()
 
             val ps = conn.prepareStatement(sql)
-            ps.setString(1, cedula)
+            ps.setString(1, usuario)
             val rs = ps.executeQuery()
 
             if (rs.next()) {
@@ -269,7 +275,8 @@ object CoreUsuarioDao {
                     tipo_usuario = rs.getString("tipo_usuario"),
                     nombreBarrio = rs.getString("nombre_barrio"),
                     nombreParroquia = rs.getString("nombre_parroquia"),
-                    nombreCiudad = rs.getString("nombre_ciudad")
+                    nombreCiudad = rs.getString("nombre_ciudad"),
+                    usuario = rs.getString("usuario")
                 )
             }
 

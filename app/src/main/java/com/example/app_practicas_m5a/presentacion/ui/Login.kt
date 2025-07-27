@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +21,7 @@ import kotlinx.coroutines.withContext
 
 class Login : AppCompatActivity() {
 
-    private lateinit var etCedula: EditText
+    private lateinit var etUsuario:  EditText
     private lateinit var etPassword: EditText
     private lateinit var btnIniciar: Button
     private lateinit var btnRegistrar: Button
@@ -42,23 +43,23 @@ class Login : AppCompatActivity() {
             insets
         }
 
-        etCedula = findViewById(R.id.etCedula)
+        etUsuario = findViewById(R.id.etUsuario)
         etPassword = findViewById(R.id.etPassword)
         btnIniciar = findViewById(R.id.btnIniciar)
         btnRegistrar = findViewById(R.id.btnRegistrar)
 
         btnIniciar.setOnClickListener {
-            val cedula = etCedula.text.toString().trim()
+            val usuario = etUsuario.text.toString().trim()
             val contraseña = etPassword.text.toString().trim()
 
-            if (cedula.isEmpty() || contraseña.isEmpty()) {
+            if (usuario.isEmpty() || contraseña.isEmpty()) {
                 Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             lifecycleScope.launch {
                 val user = withContext(Dispatchers.IO) {
-                    CoreUsuarioDao.login(cedula, contraseña)
+                    CoreUsuarioDao.login(usuario, contraseña)
                 }
 
                 if (user != null) {
@@ -66,17 +67,18 @@ class Login : AppCompatActivity() {
 
                     val intent = when (user.tipo_usuario.uppercase()) {
                         "ADMIN", "LIDER" -> Intent(this@Login, Pagina_principal_adm::class.java).apply {
-                            putExtra("cedula", user.cedula)
+                            putExtra("usuario", user.usuario)
                             putExtra("usuario_id", user.id)
-                            putExtra("nombre", user.nombres) // ✅ Aquí adentro
+                            putExtra("nombre", user.nombres)
                         }
                         "VOLUNTARIO" -> Intent(this@Login, Pagina_principal_vol::class.java).apply {
-                            putExtra("cedula", user.cedula)
+                            putExtra("usuario", user.usuario)
                             putExtra("usuario_id", user.id)
-                            putExtra("nombre", user.nombres) // ✅ Aquí adentro
+                            putExtra("nombre", user.nombres)
                         }
                         else -> {
                             Toast.makeText(this@Login, "Tipo de usuario desconocido: ${user.tipo_usuario}", Toast.LENGTH_SHORT).show()
+                            Log.e("Login", "Tipo de usuario desconocido: ${user.tipo_usuario}")
                             return@launch
                         }
                     }
@@ -90,14 +92,12 @@ class Login : AppCompatActivity() {
                         prefs.edit().putLong("barrio_id", it).apply()
                     }
 
-
-
-
                     startActivity(intent)
                     finish()
 
                 } else {
                     Toast.makeText(this@Login, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
+                    Log.e("Login", "Login fallido: usuario o contraseña incorrectos para usuario='$usuario'")
                 }
             }
         }

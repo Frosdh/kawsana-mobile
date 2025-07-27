@@ -10,11 +10,13 @@ data class CoreUsuarioModel(
     var fecha_registro: Date?,
     var estado: Boolean,
     var nombres: String,
+    var usuario: String,
     var apellidos: String,
     var cedula: String,
     var telefono: String,
     var direccion: String,
     var fecha_nacimiento: Date? = null,
     var barrio_id: Long? = null
+
 
 )

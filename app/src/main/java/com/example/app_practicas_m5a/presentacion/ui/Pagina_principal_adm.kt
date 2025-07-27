@@ -21,7 +21,6 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.jvm.java
 
 class Pagina_principal_adm : AppCompatActivity() {
 
@@ -33,8 +32,9 @@ class Pagina_principal_adm : AppCompatActivity() {
     private lateinit var btnFinal: Button
     private lateinit var tvProgresoProyecto: TextView
     private lateinit var barChartProgreso: BarChart
+    private lateinit var btnVerVoluntarios: Button // <-- Nuevo botón
 
-    private lateinit var cedula: String
+    private lateinit var usuario: String
     private var usuarioId: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,13 +51,13 @@ class Pagina_principal_adm : AppCompatActivity() {
         btnFinal = findViewById(R.id.btnFinal)
         tvProgresoProyecto = findViewById(R.id.tvProgresoProyecto)
         barChartProgreso = findViewById(R.id.barChartProgreso)
+        btnVerVoluntarios = findViewById(R.id.btnVerVoluntarios) // <-- Vincular botón
 
-
-        cedula = intent.getStringExtra("cedula") ?: ""
+        usuario = intent.getStringExtra("usuario") ?: ""
 
         lifecycleScope.launch {
             val admin = withContext(Dispatchers.IO) {
-                CoreUsuarioDao.obtenerUsuarioPorCedula(cedula)
+                CoreUsuarioDao.obtenerUsuarioPorCedula(usuario)
             }
 
             if (admin != null) {
@@ -73,7 +73,7 @@ class Pagina_principal_adm : AppCompatActivity() {
 
         btnVerPerfil.setOnClickListener {
             val intent = Intent(this, Perfil_Admin::class.java)
-            intent.putExtra("cedula", cedula)
+            intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
 
@@ -87,8 +87,15 @@ class Pagina_principal_adm : AppCompatActivity() {
 
         btnFinal.setOnClickListener {
             val intent = Intent(this, Proyecto_Actuales_Lider::class.java)
-            intent.putExtra("cedula", cedula)
+            intent.putExtra("usuario", usuario)
             intent.putExtra("usuario_id", usuarioId)
+            startActivity(intent)
+        }
+
+        // 👉 NUEVO: Ir a VoluntariosBarrio con la cédula
+        btnVerVoluntarios.setOnClickListener {
+            val intent = Intent(this, VoluntariosBarrio::class.java)
+            intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
 
@@ -97,13 +104,6 @@ class Pagina_principal_adm : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val btnVoluntariosBarrios = findViewById<Button>(R.id.btnVerVoluntarios)
-
-        btnVoluntariosBarrios.setOnClickListener {
-            val intent = Intent(this, VoluntariosBarrio::class.java)
-            startActivity(intent)
-        }
-
     }
 
     private fun cargarProyectoConProgreso() {
@@ -113,17 +113,22 @@ class Pagina_principal_adm : AppCompatActivity() {
             }
 
             if (proyectos.isNotEmpty()) {
-                // Mostrar progreso del primer proyecto en TextView
+                // Asegurar que progreso sea válido (0 a 100)
                 val primerProyecto = proyectos[0]
-                tvProgresoProyecto.text = "Progreso: ${primerProyecto.progreso}%"
+                val progresoSeguro = primerProyecto.progreso.coerceIn(0, 100)
+                tvProgresoProyecto.text = "Progreso: $progresoSeguro%"
 
-                // Mostrar gráfico de barras con todos los proyectos
-                mostrarGraficoBarras(proyectos)
+                // Filtrar lista con progreso seguro para el gráfico
+                val proyectosConProgresoSeguro = proyectos.map {
+                    it.copy(progreso = it.progreso.coerceIn(0, 100))
+                }
+                mostrarGraficoBarras(proyectosConProgresoSeguro)
             } else {
                 tvProgresoProyecto.text = "No hay proyectos disponibles"
             }
         }
     }
+
 
     private fun mostrarGraficoBarras(proyectos: List<Proyectos>) {
         val entries = ArrayList<BarEntry>()
