@@ -78,7 +78,8 @@ dependencies {
 
     implementation("at.favre.lib:bcrypt:0.9.0")
 
-    implementation ("com.google.android.material:material:1.9.0") // o la versión más reciente
+    implementation ("com.google.android.material:material:1.9.0")
+    implementation(libs.protolite.well.known.types) // o la versión más reciente
 
 
     // ✅ CameraX

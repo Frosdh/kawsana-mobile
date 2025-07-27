@@ -21,7 +21,6 @@ import java.util.*
 class Registro_voluntario : AppCompatActivity() {
 
     private lateinit var etNombres: EditText
-    private lateinit var etUsuario: EditText
     private lateinit var etApellidos: EditText
     private lateinit var etEmail: EditText
     private lateinit var etCedula: EditText
@@ -47,7 +46,6 @@ class Registro_voluntario : AppCompatActivity() {
         setContentView(R.layout.activity_registro_voluntario)
 
         etNombres = findViewById(R.id.etNombres)
-        etUsuario = findViewById(R.id.etUsuario)
         etApellidos = findViewById(R.id.etApellidos)
         etEmail = findViewById(R.id.etEmail)
         etCedula = findViewById(R.id.etCedula)
@@ -104,9 +102,10 @@ class Registro_voluntario : AppCompatActivity() {
                     direccion = etDireccion.text.toString().trim(),
                     barrio_id = barrioSeleccionado?.id?.toLong(),
                     id = 0L, // ← Asignar 0L si es autogenerado por la base de datos
-                    usuario = etUsuario.text.toString().trim(), // ← Asegúrate de tener este EditText en el layout
+                    usuario = etNombres.text.toString().trim(), // ← Asegúrate de tener este EditText en el layout
                     fecha_nacimiento = null // ← O usa un Date si lo estás obteniendo de un DatePicker
                 )
+
 
                 CoroutineScope(Dispatchers.Main).launch {
                     val registrado = withContext(Dispatchers.IO) {

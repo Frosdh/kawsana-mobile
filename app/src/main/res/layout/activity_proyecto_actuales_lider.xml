@@ -3,26 +3,70 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
+    android:orientation="vertical"
     android:background="#E8F5E9"
-    android:orientation="vertical">
+    android:padding="16dp">
 
+    <!-- Contenido desplazable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/layoutProyectos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical">
+
+            <!-- Título Actividades Pendientes -->
+            <TextView
+                android:id="@+id/tvTituloActividades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actividades pendientes por subir"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#2E7D32"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp" />
+
+            <!-- Contenedor de actividades pendientes -->
+            <LinearLayout
+                android:id="@+id/layoutProyectos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!-- Separador -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BDBDBD"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Título Actividades Subidas -->
+            <TextView
+                android:id="@+id/tvTituloActividadesSubidas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actividades ya subidas"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#1565C0"
+                android:paddingBottom="8dp" />
+
+            <!-- Contenedor de actividades subidas -->
+            <LinearLayout
+                android:id="@+id/layoutProyectosSubidos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/btnSubirActividad"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Subir actividad"
-        android:layout_marginTop="12dp" />
+
+
 </LinearLayout>

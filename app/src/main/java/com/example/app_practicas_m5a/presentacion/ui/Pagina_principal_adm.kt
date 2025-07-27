@@ -21,7 +21,6 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.jvm.java
 
 class Pagina_principal_adm : AppCompatActivity() {
 
@@ -34,7 +33,7 @@ class Pagina_principal_adm : AppCompatActivity() {
     private lateinit var tvProgresoProyecto: TextView
     private lateinit var barChartProgreso: BarChart
 
-    private lateinit var cedula: String
+    private lateinit var usuario: String
     private var usuarioId: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,12 +51,64 @@ class Pagina_principal_adm : AppCompatActivity() {
         tvProgresoProyecto = findViewById(R.id.tvProgresoProyecto)
         barChartProgreso = findViewById(R.id.barChartProgreso)
 
+        // Recibir datos del login
+        usuario = intent.getStringExtra("usuario") ?: ""
 
-        cedula = intent.getStringExtra("cedula") ?: ""
+        if (usuario.isEmpty()) {
+            Toast.makeText(this, "Error: Usuario no válido", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
+        cargarDatosAdministrador()
+        cargarProyectoConProgreso()
+
+        // Botón ver perfil
+        btnVerPerfil.setOnClickListener {
+            val intent = Intent(this, Perfil_Admin::class.java)
+            intent.putExtra("usuario", usuario)
+            startActivity(intent)
+        }
+
+        // Botón ver proyectos
+        val btnVerProyecto = findViewById<Button>(R.id.btnVerProyecto)
+        btnVerProyecto.setOnClickListener {
+            startActivity(Intent(this, Proyectos_Disponibles::class.java))
+        }
+
+        // Botón proyectos actuales del líder
+        btnFinal.setOnClickListener {
+            val intent = Intent(this, Proyecto_Actuales_Lider::class.java)
+            intent.putExtra("usuario", usuario)
+            intent.putExtra("usuario_id", usuarioId)
+            startActivity(intent)
+        }
+
+        // Botón cámara IA
+        val btnCamaraIA = findViewById<Button>(R.id.btnCamaraIA)
+        btnCamaraIA.setOnClickListener {
+            startActivity(Intent(this, Camara_IA_lider::class.java))
+        }
+
+        // Botón ver voluntarios
+        val btnVoluntariosBarrios = findViewById<Button>(R.id.btnVerVoluntarios)
+        btnVoluntariosBarrios.setOnClickListener {
+            val intent = Intent(this, VoluntariosBarrio::class.java)
+            intent.putExtra("usuario", usuario)
+            startActivity(intent)
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainInicioAdmin)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+
+    private fun cargarDatosAdministrador() {
         lifecycleScope.launch {
             val admin = withContext(Dispatchers.IO) {
-                CoreUsuarioDao.obtenerUsuarioPorCedula(cedula)
+                CoreUsuarioDao.obtenerUsuarioPorUsuario(usuario)
             }
 
             if (admin != null) {
@@ -68,42 +119,6 @@ class Pagina_principal_adm : AppCompatActivity() {
                 Toast.makeText(this@Pagina_principal_adm, "No se encontró el administrador", Toast.LENGTH_SHORT).show()
             }
         }
-
-        cargarProyectoConProgreso()
-
-        btnVerPerfil.setOnClickListener {
-            val intent = Intent(this, Perfil_Admin::class.java)
-            intent.putExtra("cedula", cedula)
-            startActivity(intent)
-        }
-
-        val btnVerProyecto = findViewById<Button>(R.id.btnVerProyecto)
-        btnVerProyecto.setOnClickListener {
-            val intent = Intent(this, Proyectos_Disponibles::class.java)
-            intent.putExtra("titulo", "Proyecto Kausana")
-            intent.putExtra("descripcion", "Plataforma de apoyo social para comunidades rurales.")
-            startActivity(intent)
-        }
-
-        btnFinal.setOnClickListener {
-            val intent = Intent(this, Proyecto_Actuales_Lider::class.java)
-            intent.putExtra("cedula", cedula)
-            intent.putExtra("usuario_id", usuarioId)
-            startActivity(intent)
-        }
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainInicioAdmin)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-        val btnVoluntariosBarrios = findViewById<Button>(R.id.btnVerVoluntarios)
-
-        btnVoluntariosBarrios.setOnClickListener {
-            val intent = Intent(this, VoluntariosBarrio::class.java)
-            startActivity(intent)
-        }
-
     }
 
     private fun cargarProyectoConProgreso() {
@@ -113,11 +128,8 @@ class Pagina_principal_adm : AppCompatActivity() {
             }
 
             if (proyectos.isNotEmpty()) {
-                // Mostrar progreso del primer proyecto en TextView
                 val primerProyecto = proyectos[0]
                 tvProgresoProyecto.text = "Progreso: ${primerProyecto.progreso}%"
-
-                // Mostrar gráfico de barras con todos los proyectos
                 mostrarGraficoBarras(proyectos)
             } else {
                 tvProgresoProyecto.text = "No hay proyectos disponibles"
@@ -130,7 +142,13 @@ class Pagina_principal_adm : AppCompatActivity() {
         val labels = ArrayList<String>()
 
         proyectos.forEachIndexed { index, proyecto ->
-            entries.add(BarEntry(index.toFloat(), proyecto.progreso.toFloat()))
+            val progresoRaw = proyecto.progreso?.lowercase()?.trim() ?: ""
+            val progresoNumerico = when {
+                progresoRaw.contains("terminado") -> 100
+                progresoRaw.contains("en progreso") || progresoRaw.contains("en_progreso") -> 50
+                else -> proyecto.progreso?.filter { it.isDigit() }?.toIntOrNull() ?: 0
+            }
+            entries.add(BarEntry(index.toFloat(), progresoNumerico.toFloat()))
             labels.add(proyecto.nombre)
         }
 

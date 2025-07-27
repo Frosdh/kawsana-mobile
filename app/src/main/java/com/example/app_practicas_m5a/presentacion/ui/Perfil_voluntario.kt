@@ -27,6 +27,7 @@ class Perfil_voluntario : AppCompatActivity() {
     private lateinit var btnVolver: Button
 
     private var usuario: CoreUsuarioModel? = null
+    private lateinit var nombreUsuario: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +53,11 @@ class Perfil_voluntario : AppCompatActivity() {
         // La cédula nunca se edita
         etCedula.isEnabled = false
 
-        // Recibir cédula
-        val cedula = intent.getStringExtra("cedula") ?: return
+        // Recibir nombre de usuario (clave principal)
+        nombreUsuario = intent.getStringExtra("usuario") ?: return
 
-        // Cargar datos
-        cargarDatos(cedula)
+        // Cargar datos desde la base
+        cargarDatos(nombreUsuario)
 
         btnModificar.setOnClickListener {
             val estaEditable = etEmail.isEnabled
@@ -87,15 +88,12 @@ class Perfil_voluntario : AppCompatActivity() {
             }
         }
 
-
         btnVolver.setOnClickListener {
             val intent = Intent(this, Pagina_principal_vol::class.java)
-            intent.putExtra("cedula", usuario?.cedula) // Puedes enviar la cédula si es necesario
-            intent.putExtra("nombre", usuario?.nombres) // Si quieres mostrar el nombre en el saludo
+            intent.putExtra("usuario", nombreUsuario)
             startActivity(intent)
-            finish() // Finaliza esta pantalla para que no se apile
+            finish()
         }
-
     }
 
     private fun setEditable(habilitar: Boolean) {
@@ -106,10 +104,10 @@ class Perfil_voluntario : AppCompatActivity() {
         etDireccion.isEnabled = habilitar
     }
 
-    private fun cargarDatos(cedula: String) {
+    private fun cargarDatos(nombreUsuario: String) {
         lifecycleScope.launch {
             usuario = withContext(Dispatchers.IO) {
-                CoreUsuarioDao.obtenerUsuarioPorCedula(cedula)
+                CoreUsuarioDao.obtenerUsuarioPorUsuario(nombreUsuario)
             }
 
             usuario?.let {

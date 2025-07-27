@@ -1,20 +1,24 @@
 package com.example.app_practicas_m5a.presentacion.ui
 
-import PerfilCompletoModel
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.app_practicas_m5a.R
+import com.example.app_practicas_m5a.data.PerfilCompletoModel.PerfilCompletoModel
 import com.example.app_practicas_m5a.data.dao.CoreUsuarioDao
 import com.example.app_practicas_m5a.data.dao.ubicacion
-import com.example.app_practicas_m5a.data.model.*
+import com.example.app_practicas_m5a.data.model.CoreUsuarioModel
+import com.example.app_practicas_m5a.data.model.Ciudad
+import com.example.app_practicas_m5a.data.model.Parroquia
+import com.example.app_practicas_m5a.data.model.Barrio
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Date
 
 class Perfil_Admin : AppCompatActivity() {
 
@@ -35,14 +39,20 @@ class Perfil_Admin : AppCompatActivity() {
     private var parroquiaSeleccionada: Parroquia? = null
     private var barrioSeleccionado: Barrio? = null
 
+    private var ciudadesList: List<Ciudad> = emptyList()
+    private var parroquiasList: List<Parroquia> = emptyList()
+    private var barriosList: List<Barrio> = emptyList()
+
     private var perfil: PerfilCompletoModel? = null
-    private var usuario: CoreUsuarioModel? = null
+    private var usuarioModel: CoreUsuarioModel? = null
+
+    private lateinit var usuario: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil_admin)
-        Log.d("Perfil_Admin", "Pantalla cargada correctamente")
 
+        // Vincular vistas
         tvCedula = findViewById(R.id.tvCedula)
         tvNombres = findViewById(R.id.tvNombres)
         tvApellidos = findViewById(R.id.tvApellidos)
@@ -57,24 +67,51 @@ class Perfil_Admin : AppCompatActivity() {
         btnEditarPerfil = findViewById(R.id.btnEditarPerfil)
         btnVolver = findViewById(R.id.btnVolver)
 
-        tvCedula.isEnabled = false
+        tvCedula.isEnabled = false // La cédula se muestra, no se edita
         setEditable(false)
 
-        val username = intent.getStringExtra("usuario")
-        Log.d("Perfil_Admin", "Usuario recibido por intent: $username")
-
-        if (username == null) {
-            Log.e("Perfil_Admin", "No se recibió el nombre de usuario por intent")
+        usuario = intent.getStringExtra("usuario") ?: ""
+        if (usuario.isEmpty()) {
+            Toast.makeText(this, "Error: usuario no válido", Toast.LENGTH_SHORT).show()
+            finish()
             return
         }
 
-        cargarDatos(username)
+        cargarDatosPorUsuario(usuario)
+
+        // Listeners para los Spinners
+        spinnerCiudad.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                ciudadSeleccionada = ciudadesList.getOrNull(position)
+                ciudadSeleccionada?.let {
+                    cargarParroquias(it.id, null, null)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) { ciudadSeleccionada = null }
+        }
+
+        spinnerParroquia.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                parroquiaSeleccionada = parroquiasList.getOrNull(position)
+                parroquiaSeleccionada?.let {
+                    cargarBarrios(it.id, null)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) { parroquiaSeleccionada = null }
+        }
+
+        spinnerBarrio.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                barrioSeleccionado = barriosList.getOrNull(position)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) { barrioSeleccionado = null }
+        }
 
         btnEditarPerfil.setOnClickListener {
             if (tvEmail.isEnabled) {
                 if (!validarCampos()) return@setOnClickListener
 
-                usuario?.let {
+                usuarioModel?.let {
                     it.nombres = tvNombres.text.toString().trim()
                     it.apellidos = tvApellidos.text.toString().trim()
                     it.email = tvEmail.text.toString().trim()
@@ -87,12 +124,10 @@ class Perfil_Admin : AppCompatActivity() {
                             CoreUsuarioDao.actualizarPerfil(it)
                         }
                         if (actualizado) {
-                            Log.d("Perfil_Admin", "Perfil actualizado correctamente")
                             Toast.makeText(this@Perfil_Admin, "Perfil actualizado", Toast.LENGTH_SHORT).show()
                             setEditable(false)
                             btnEditarPerfil.text = "Editar Perfil"
                         } else {
-                            Log.e("Perfil_Admin", "Error al actualizar el perfil")
                             Toast.makeText(this@Perfil_Admin, "Error al actualizar", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -106,113 +141,101 @@ class Perfil_Admin : AppCompatActivity() {
         btnVolver.setOnClickListener { finish() }
     }
 
-    private fun cargarDatos(usuarioStr: String) {
-        Log.d("Perfil_Admin", "Cargando datos para: $usuarioStr")
-
+    private fun cargarDatosPorUsuario(usuario: String) {
         lifecycleScope.launch {
-            perfil = withContext(Dispatchers.IO) {
-                Log.d("Perfil_Admin", "Consultando DAO para perfil completo por usuario...")
-                CoreUsuarioDao.obtenerPerfilCompletoPorUsuario(usuarioStr)
+            val perfil = withContext(Dispatchers.IO) {
+                CoreUsuarioDao.obtenerPerfilCompletoPorUsuario(usuario)
             }
 
             if (perfil == null) {
-                Log.e("Perfil_Admin", "Perfil no encontrado para: $usuarioStr")
-                Toast.makeText(this@Perfil_Admin, "No se encontró el perfil", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Perfil_Admin, "Perfil no encontrado", Toast.LENGTH_SHORT).show()
+                finish()
                 return@launch
             }
 
-            Log.d("Perfil_Admin", "Perfil cargado: ${perfil!!.nombres} ${perfil!!.apellidos}")
-
-            usuario = CoreUsuarioModel(
-                id = perfil!!.id,
-                nombres = perfil!!.nombres,
-                apellidos = perfil!!.apellidos,
-                cedula = perfil!!.cedula,
-                email = perfil!!.email,
-                telefono = perfil!!.telefono,
-                direccion = perfil!!.direccion,
-                tipo_usuario = perfil!!.tipo_usuario,
-                barrio_id = null,
+            usuarioModel = CoreUsuarioModel(
+                id = perfil.id,
+                nombres = perfil.nombres,
+                apellidos = perfil.apellidos,
+                cedula = perfil.cedula,
+                email = perfil.email,
+                telefono = perfil.telefono,
+                direccion = perfil.direccion,
+                tipo_usuario = perfil.tipo_usuario,
+                barrio_id = perfil.barrio_id?.toLong(),
                 contraseña = "",
                 estado = true,
-                fecha_nacimiento = null,
-                fecha_registro = null,
-                usuario = perfil!!.usuario
+                fecha_nacimiento = Date(),
+                fecha_registro = Date(),
+                usuario = perfil.usuario,
+                puntos = perfil.puntos ?: 0
             )
 
-            tvCedula.setText(perfil!!.cedula)
-            tvNombres.setText(perfil!!.nombres)
-            tvApellidos.setText(perfil!!.apellidos)
-            tvEmail.setText(perfil!!.email)
-            tvTelefono.setText(perfil!!.telefono)
-            tvDireccion.setText(perfil!!.direccion)
+            withContext(Dispatchers.Main) {
+                tvCedula.setText(perfil.cedula)
+                tvNombres.setText(perfil.nombres)
+                tvApellidos.setText(perfil.apellidos)
+                tvEmail.setText(perfil.email)
+                tvTelefono.setText(perfil.telefono)
+                tvDireccion.setText(perfil.direccion)
 
-            cargarUbicaciones(perfil!!.nombreCiudad, perfil!!.nombreParroquia, perfil!!.nombreBarrio)
+                cargarUbicaciones(perfil.nombreCiudad, perfil.nombreParroquia, perfil.nombreBarrio)
+            }
         }
     }
 
-    private fun cargarUbicaciones(ciudadNombre: String, parroquiaNombre: String, barrioNombre: String) {
-        Log.d("Perfil_Admin", "Cargando ubicaciones: $ciudadNombre, $parroquiaNombre, $barrioNombre")
-
+    private fun cargarUbicaciones(ciudadNombre: String?, parroquiaNombre: String?, barrioNombre: String?) {
         lifecycleScope.launch {
-            val ciudades = withContext(Dispatchers.IO) { ubicacion.obtenerCiudades() }
-            Log.d("Perfil_Admin", "Ciudades obtenidas: ${ciudades.size}")
+            ciudadesList = withContext(Dispatchers.IO) { ubicacion.obtenerCiudades() }
 
-            val adapterCiudad = ArrayAdapter(this@Perfil_Admin, android.R.layout.simple_spinner_item, ciudades.map { it.nombre })
+            val adapterCiudad = ArrayAdapter(this@Perfil_Admin, android.R.layout.simple_spinner_item, ciudadesList.map { it.nombre })
             adapterCiudad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerCiudad.adapter = adapterCiudad
 
-            val indexCiudad = ciudades.indexOfFirst { it.nombre == ciudadNombre }
-            if (indexCiudad != -1) {
-                spinnerCiudad.setSelection(indexCiudad)
-                ciudadSeleccionada = ciudades[indexCiudad]
-                cargarParroquias(ciudadSeleccionada!!.id, parroquiaNombre, barrioNombre)
-            } else {
-                Log.e("Perfil_Admin", "Ciudad '$ciudadNombre' no encontrada en la lista")
+            ciudadNombre?.let {
+                val indexCiudad = ciudadesList.indexOfFirst { it.nombre == ciudadNombre }
+                if (indexCiudad != -1) {
+                    spinnerCiudad.setSelection(indexCiudad)
+                    ciudadSeleccionada = ciudadesList[indexCiudad]
+                    cargarParroquias(ciudadSeleccionada!!.id, parroquiaNombre, barrioNombre)
+                }
             }
         }
     }
 
-    private fun cargarParroquias(ciudadId: Int, parroquiaNombre: String, barrioNombre: String) {
-        Log.d("Perfil_Admin", "Cargando parroquias para ciudad ID: $ciudadId")
-
+    private fun cargarParroquias(ciudadId: Int, parroquiaNombre: String?, barrioNombre: String?) {
         lifecycleScope.launch {
-            val parroquias = withContext(Dispatchers.IO) { ubicacion.obtenerParroquiasPorCiudad(ciudadId) }
-            Log.d("Perfil_Admin", "Parroquias obtenidas: ${parroquias.size}")
+            parroquiasList = withContext(Dispatchers.IO) { ubicacion.obtenerParroquiasPorCiudad(ciudadId) }
 
-            val adapterParroquia = ArrayAdapter(this@Perfil_Admin, android.R.layout.simple_spinner_item, parroquias.map { it.nombre })
+            val adapterParroquia = ArrayAdapter(this@Perfil_Admin, android.R.layout.simple_spinner_item, parroquiasList.map { it.nombre })
             adapterParroquia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerParroquia.adapter = adapterParroquia
 
-            val indexParroquia = parroquias.indexOfFirst { it.nombre == parroquiaNombre }
-            if (indexParroquia != -1) {
-                spinnerParroquia.setSelection(indexParroquia)
-                parroquiaSeleccionada = parroquias[indexParroquia]
-                cargarBarrios(parroquiaSeleccionada!!.id, barrioNombre)
-            } else {
-                Log.e("Perfil_Admin", "Parroquia '$parroquiaNombre' no encontrada")
+            parroquiaNombre?.let {
+                val indexParroquia = parroquiasList.indexOfFirst { it.nombre == parroquiaNombre }
+                if (indexParroquia != -1) {
+                    spinnerParroquia.setSelection(indexParroquia)
+                    parroquiaSeleccionada = parroquiasList[indexParroquia]
+                    cargarBarrios(parroquiaSeleccionada!!.id, barrioNombre)
+                }
             }
         }
     }
 
-    private fun cargarBarrios(parroquiaId: Int, barrioNombre: String) {
-        Log.d("Perfil_Admin", "Cargando barrios para parroquia ID: $parroquiaId")
-
+    private fun cargarBarrios(parroquiaId: Int, barrioNombre: String?) {
         lifecycleScope.launch {
-            val barrios = withContext(Dispatchers.IO) { ubicacion.obtenerBarriosPorParroquia(parroquiaId) }
-            Log.d("Perfil_Admin", "Barrios obtenidos: ${barrios.size}")
+            barriosList = withContext(Dispatchers.IO) { ubicacion.obtenerBarriosPorParroquia(parroquiaId) }
 
-            val adapterBarrio = ArrayAdapter(this@Perfil_Admin, android.R.layout.simple_spinner_item, barrios.map { it.nombre })
+            val adapterBarrio = ArrayAdapter(this@Perfil_Admin, android.R.layout.simple_spinner_item, barriosList.map { it.nombre })
             adapterBarrio.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerBarrio.adapter = adapterBarrio
 
-            val indexBarrio = barrios.indexOfFirst { it.nombre == barrioNombre }
-            if (indexBarrio != -1) {
-                spinnerBarrio.setSelection(indexBarrio)
-                barrioSeleccionado = barrios[indexBarrio]
-                Log.d("Perfil_Admin", "Barrio seleccionado: $barrioNombre")
-            } else {
-                Log.e("Perfil_Admin", "Barrio '$barrioNombre' no encontrado")
+            barrioNombre?.let {
+                val indexBarrio = barriosList.indexOfFirst { it.nombre == barrioNombre }
+                if (indexBarrio != -1) {
+                    spinnerBarrio.setSelection(indexBarrio)
+                    barrioSeleccionado = barriosList[indexBarrio]
+                }
             }
         }
     }
@@ -236,63 +259,36 @@ class Perfil_Admin : AppCompatActivity() {
         val email = tvEmail.text.toString().trim()
         val telefono = tvTelefono.text.toString().trim()
         val direccion = tvDireccion.text.toString().trim()
-        val cedula = tvCedula.text.toString().trim()
 
         if (nombres.isEmpty()) {
             tvNombres.error = "Ingrese nombres"
-            tvNombres.requestFocus(); return false
+            tvNombres.requestFocus()
+            return false
         }
         if (apellidos.isEmpty()) {
             tvApellidos.error = "Ingrese apellidos"
-            tvApellidos.requestFocus(); return false
+            tvApellidos.requestFocus()
+            return false
         }
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             tvEmail.error = "Correo inválido"
-            tvEmail.requestFocus(); return false
+            tvEmail.requestFocus()
+            return false
         }
         if (telefono.isEmpty() || telefono.length < 7) {
             tvTelefono.error = "Teléfono inválido"
-            tvTelefono.requestFocus(); return false
+            tvTelefono.requestFocus()
+            return false
         }
         if (direccion.isEmpty()) {
             tvDireccion.error = "Ingrese dirección"
-            tvDireccion.requestFocus(); return false
-        }
-        if (!validarCedulaEcuatoriana(cedula)) {
-            tvCedula.error = "Cédula ecuatoriana inválida"
-            tvCedula.requestFocus(); return false
+            tvDireccion.requestFocus()
+            return false
         }
         if (ciudadSeleccionada == null || parroquiaSeleccionada == null || barrioSeleccionado == null) {
             Toast.makeText(this, "Seleccione ciudad, parroquia y barrio", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
-    }
-
-    private fun validarCedulaEcuatoriana(cedula: String): Boolean {
-        if (cedula.length != 10) return false
-        val region = cedula.substring(0, 2).toIntOrNull() ?: return false
-        if (region < 1 || region > 24) return false
-        val digitos = cedula.map { it.toString().toIntOrNull() ?: return false }
-
-        val ultimoDigito = digitos[9]
-        var sumaPar = 0
-        var sumaImpar = 0
-
-        for (i in 0..8 step 2) {
-            var valParcial = digitos[i] * 2
-            if (valParcial > 9) valParcial -= 9
-            sumaImpar += valParcial
-        }
-        for (i in 1..7 step 2) {
-            sumaPar += digitos[i]
-        }
-
-        val sumaTotal = sumaImpar + sumaPar
-        val decenaSuperior = ((sumaTotal + 9) / 10) * 10
-        val digitoVerificador = decenaSuperior - sumaTotal
-        val digitoFinal = if (digitoVerificador == 10) 0 else digitoVerificador
-
-        return ultimoDigito == digitoFinal
     }
 }

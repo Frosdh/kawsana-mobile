@@ -39,4 +39,35 @@ object BarrioDaoProgresoGrafico {
 
         return lista
     }
+    fun obtenerTop6Barrios(): List<BarrioProgreso> {
+        val lista = mutableListOf<BarrioProgreso>()
+        val conn = getConnection() ?: return lista
+
+        val sql = """
+        SELECT b.nombre AS barrio, pb.progreso AS progreso
+        FROM core_progresobarrio pb
+        JOIN core_barrio b ON pb.barrio_id = b.id
+        ORDER BY pb.progreso DESC
+        LIMIT 6
+    """.trimIndent()
+
+        try {
+            conn.use { connection ->
+                connection.prepareStatement(sql).use { ps ->
+                    ps.executeQuery().use { rs ->
+                        while (rs.next()) {
+                            val barrio = rs.getString("barrio")
+                            val progreso = rs.getDouble("progreso").toFloat()
+                            lista.add(BarrioProgreso(barrio, progreso))
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("BarrioDao", "Error al obtener top barrios", e)
+        }
+
+        return lista
+    }
+
 }

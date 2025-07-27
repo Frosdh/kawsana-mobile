@@ -2,9 +2,8 @@ package com.example.app_practicas_m5a.data.dao
 
 import android.util.Log
 import com.example.app_practicas_m5a.data.model.ProyectoModel
-import com.example.app_practicas_m5a.data.model.core_proyecto
 import java.sql.Connection
-import java.sql.Date
+import java.util.Date
 
 object ProyectosDispoVoluntarioDao {
 
@@ -12,10 +11,10 @@ object ProyectosDispoVoluntarioDao {
 
     fun obtenerProyectosDelVoluntario(cedulaVoluntario: String): List<ProyectoModel> {
         val listaProyectos = mutableListOf<ProyectoModel>()
-        val conn: Connection = MySqlConexion.getConexion() ?: return listaProyectos
+        val conn = getConnection() ?: return listaProyectos
 
         val sql = """
-            SELECT p.id, p.nombre, p.descripcion, p.fecha_inicio, p.fecha_fin, p.estado, p.progreso
+            SELECT p.id, p.nombre, p.descripcion, p.fecha_inicio, p.fecha_fin, p.estado, p.organizacion_id, p.progreso
             FROM core_proyecto p
             JOIN core_liderproyectobarrio lp ON p.id = lp.proyecto_id
             JOIN core_usuario u ON lp.usuario_id = u.id
@@ -23,7 +22,7 @@ object ProyectosDispoVoluntarioDao {
         """.trimIndent()
 
         var stmt = conn.prepareStatement(sql)
-        var rs = null as java.sql.ResultSet?
+        var rs: java.sql.ResultSet? = null
 
         try {
             stmt.setString(1, cedulaVoluntario)
@@ -34,9 +33,11 @@ object ProyectosDispoVoluntarioDao {
                     id = rs.getLong("id"),
                     nombre = rs.getString("nombre"),
                     descripcion = rs.getString("descripcion"),
-                    fechaInicio = rs.getDate("fecha_inicio") as Date,
-                    fechaFin = rs.getDate("fecha_fin") as Date,
-                    estado = rs.getInt("estado"),
+                    // Convertir java.sql.Date a java.util.Date
+                    fechaInicio = rs.getDate("fecha_inicio")?.let { Date(it.time) } ?: Date(),
+                    fechaFin = rs.getDate("fecha_fin")?.let { Date(it.time) } ?: Date(),
+                    estado = rs.getBoolean("estado"),
+                    organizacion_id = rs.getLong("organizacion_id"),
                     progreso = rs.getString("progreso")
                 )
                 listaProyectos.add(proyecto)
@@ -55,16 +56,16 @@ object ProyectosDispoVoluntarioDao {
 
     fun obtenerPuntosTotalesPorCedula(cedula: String): Int {
         var totalPuntos = 0
-        val conn = MySqlConexion.getConexion() ?: return 0
+        val conn = getConnection() ?: return 0
 
         val sql = """
-        SELECT COALESCE(SUM(a.puntos), 0) AS total_puntos
-        FROM core_proyecto p
-        JOIN core_liderproyectobarrio lp ON lp.proyecto_id = p.id
-        JOIN core_usuario u ON lp.usuario_id = u.id
-        JOIN core_actividad a ON a.proyecto_id = p.id
-        WHERE u.cedula = ? AND a.estado = 1
-    """.trimIndent()
+            SELECT COALESCE(SUM(a.puntos), 0) AS total_puntos
+            FROM core_proyecto p
+            JOIN core_liderproyectobarrio lp ON lp.proyecto_id = p.id
+            JOIN core_usuario u ON lp.usuario_id = u.id
+            JOIN core_actividad a ON a.proyecto_id = p.id
+            WHERE u.cedula = ? AND a.estado = 1
+        """.trimIndent()
 
         try {
             conn.use { c ->
@@ -78,10 +79,10 @@ object ProyectosDispoVoluntarioDao {
                 }
             }
         } catch (e: Exception) {
+            Log.e("ProyectoDao", "Error al obtener puntos totales: ${e.message}")
             e.printStackTrace()
         }
 
         return totalPuntos
     }
-
 }

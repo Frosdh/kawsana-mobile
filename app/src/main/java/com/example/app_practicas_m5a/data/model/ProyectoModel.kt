@@ -8,6 +8,7 @@ data class ProyectoModel(
     val descripcion: String,
     val fechaInicio: Date,
     val fechaFin: Date,
-    val estado: Int,
+    val estado: Boolean,
+    val organizacion_id: Long,
     val progreso: String
 )

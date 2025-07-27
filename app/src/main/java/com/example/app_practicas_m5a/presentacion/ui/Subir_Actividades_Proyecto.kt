@@ -148,44 +148,59 @@ class Subir_Actividades_Proyecto : AppCompatActivity() {
 
     private fun subirActividad() {
         val descripcion = etDescripcion.text.toString().trim()
-        val fecha = etFecha.text.toString().trim()
+        val fecha = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
 
-        if (descripcion.isEmpty() || fecha.isEmpty()) {
-            Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
+        if (descripcion.isEmpty()) {
+            Toast.makeText(this, "Complete la descripción", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (imagenUri == null) {
-            Toast.makeText(this, "Debe tomar una foto o seleccionar una imagen", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Debe tomar o seleccionar una imagen", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val imagenBase64 = convertirImagenABase64(imagenUri!!)
+        val nombreArchivo = imagenUri!!.lastPathSegment ?: "evidencia_${System.currentTimeMillis()}.jpg"
 
         val evidencia = EvidenciaActividad(
-            archivoUrl = imagenBase64,
-            tipoArchivo = "jpg",
             descripcion = descripcion,
             fechaSubida = fecha,
             actividadId = actividadId,
             usuarioId = usuarioId,
+            archivo = nombreArchivo,
+
+            // Valores por defecto para evitar problemas con la BD
             esValida = false,
-            fechaValidacion = null,
-            validadorId = null
+            fechaValidacion = "1970-01-01 00:00:00", // fecha neutra porque no está validada aún
+            validadorId = null,
+            estado = "pendiente",
+            puntos = 0
         )
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val resultado = EvidenciaDao.insertarEvidencia(evidencia)
-            runOnUiThread {
-                if (resultado) {
-                    Toast.makeText(this@Subir_Actividades_Proyecto, "Subida exitosa 🎉", Toast.LENGTH_LONG).show()
+            val resultado = EvidenciaDao.insertarNuevaEvidencia(evidencia)
+            if (resultado) {
+                val estadoActualizado = EvidenciaDao.actualizarEstadoActividad(actividadId, 1)
+                runOnUiThread {
+                    if (estadoActualizado) {
+                        Toast.makeText(this@Subir_Actividades_Proyecto, "Subida exitosa y actividad actualizada 🎉", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this@Subir_Actividades_Proyecto, "Subida exitosa pero fallo actualizar actividad", Toast.LENGTH_LONG).show()
+                    }
+                    setResult(RESULT_OK)
                     finish()
-                } else {
+                }
+            } else {
+                runOnUiThread {
                     Toast.makeText(this@Subir_Actividades_Proyecto, "Error al subir", Toast.LENGTH_LONG).show()
                 }
             }
         }
+
     }
+
+
+
 
     private fun convertirImagenABase64(uri: Uri): String {
         val inputStream = contentResolver.openInputStream(uri)

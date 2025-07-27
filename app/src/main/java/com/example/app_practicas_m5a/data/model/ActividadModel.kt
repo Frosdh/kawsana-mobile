@@ -1,12 +1,14 @@
 package com.example.app_practicas_m5a.data.model
 
-data class core_proyecto(
+import java.util.Date
+
+data class ActividadModel(
     val id: Long,
     val nombre: String,
-    val fecha_inicio: String,
-    val fecha_fin: String?,
+    val fechaInicio: Date?,
+    val fechaFin: Date?,
     val descripcion: String?,
     val estado: Boolean,
-    val organizacion_id: Long,
-    val progreso: String
+    val puntos: Int,
+    val proyectoId: Long
 )

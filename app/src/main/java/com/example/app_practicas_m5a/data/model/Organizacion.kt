@@ -5,5 +5,7 @@ data class Organizacion(
     val nombre: String,
     val direccion: String,
     val telefono_contacto: String,
-    val representante: String
+    val email_contacto: String,  // Nuevo campo
+    val representante: String,
+    val ruc: String              // Nuevo campo
 )
