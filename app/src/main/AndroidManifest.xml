@@ -3,17 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.app_practicas_m5a">
 
-    <!-- Declarar uso obligatorio de cámara -->
+    <!-- ✅ Permisos -->
     <uses-feature android:name="android.hardware.camera" android:required="true" />
-
-    <!-- Permisos necesarios -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
-    <!-- Permisos para almacenamiento, solo si el target API <= 28 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
 
@@ -29,7 +25,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <!-- Provider para compartir archivos con la cámara -->
+        <!-- ✅ Provider para compartir archivos -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -40,23 +36,24 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <!-- Actividades -->
-        <activity android:name=".presentacion.ui.Perfil_voluntario" android:exported="false" />
-        <activity android:name=".presentacion.ui.ActividadesDeProyectoActivity" android:exported="false" />
-        <activity android:name=".presentacion.ui.Pagina_principal_adm" android:exported="false" />
-        <activity android:name=".presentacion.ui.Pagina_principal_vol" android:exported="false" />
+        <!-- ✅ Pantallas principales (exported=true porque se abren desde Login) -->
+        <activity android:name=".presentacion.ui.Pagina_principal_Super_Admin" android:exported="true" />
+        <activity android:name=".presentacion.ui.Pagina_principal_adm" android:exported="true" />
+        <activity android:name=".presentacion.ui.Pagina_principal_vol" android:exported="true" />
+
+        <!-- ✅ Login como punto de entrada -->
         <activity android:name=".presentacion.ui.Login" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- ✅ Otras Activities -->
+        <activity android:name=".presentacion.ui.Perfil_voluntario" android:exported="false" />
         <activity android:name=".presentacion.ui.Perfil_Admin" android:exported="false" />
         <activity android:name=".presentacion.ui.Registro_voluntario" android:exported="false" />
-        <!-- Opcional: Registro de admin si se implementa -->
-        <!--
-        <activity android:name=".presentacion.ui.Registro_admin" android:exported="false" />
-        -->
+        <activity android:name=".presentacion.ui.Camara_IA_lider" android:exported="false" />
         <activity android:name=".presentacion.ui.Camara_IA_voluntario" android:exported="false" />
         <activity android:name=".presentacion.ui.Proyecto_Actuales_Lider" android:exported="false" />
         <activity android:name=".presentacion.ui.Subir_Actividades_Proyecto" android:exported="false" />
@@ -68,14 +65,15 @@
         <activity android:name=".presentacion.ui.VoluntariosBarrio" android:exported="false" />
         <activity android:name=".presentacion.ui.Proyectos_Disponibles" android:exported="false" />
         <activity android:name=".presentacion.ui.Detalle_Proyecto" android:exported="false" />
-        <activity android:name=".presentacion.ui.MostrarGraficoLider" android:exported="false" />
+        <activity android:name=".presentacion.ui.MainActivity" android:exported="false" />
 
+        <!-- ✅ Nuevas Activities -->
+        <activity android:name=".presentacion.ui.OrganizacionesActivity" android:exported="false" />
+        <activity android:name=".presentacion.ui.LideresActivity" android:exported="false" />
+        <activity android:name=".presentacion.ui.ActividadesActivityAdmin" android:exported="false" />
+        <activity android:name=".presentacion.ui.GraficasActivityAdmin" android:exported="false" />
+        <activity android:name=".presentacion.ui.CiudadanosDelBarrioActivity" android:exported="false" />
+        <activity android:name=".presentacion.ui.ActividadesDeProyectoActivity_Admin" android:exported="true" />
 
-        <activity
-            android:name=".presentacion.ui.MainActivity"
-            android:exported="false"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.App_practicas_m5a" />
     </application>
-
 </manifest>
