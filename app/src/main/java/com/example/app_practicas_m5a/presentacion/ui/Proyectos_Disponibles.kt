@@ -60,9 +60,9 @@ class Proyectos_Disponibles : AppCompatActivity() {
     private fun agregarProyectoAlaVista(proyecto: Proyectos) {
         val cardView = LayoutInflater.from(this).inflate(R.layout.card_proyecto, null)
 
-        val tvTitulo = cardView.findViewById<TextView>(R.id.tvTituloProyecto)
+        val tvTitulo = cardView.findViewById<TextView>(R.id.tvNombreProyecto)
         val tvDescripcion = cardView.findViewById<TextView>(R.id.tvDescripcionProyecto)
-        val btnVer = cardView.findViewById<Button>(R.id.btnVerProyecto)
+        val btnVer = cardView.findViewById<Button>(R.id.btnVerDetalles)
 
         tvTitulo.text = proyecto.nombre
         tvDescripcion.text = proyecto.descripcion

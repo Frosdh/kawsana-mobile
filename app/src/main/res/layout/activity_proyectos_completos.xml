@@ -4,31 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    android:background="#FAFAFA">
+
+    android:layout_marginTop="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@drawable/bg_card_proyecto"
+        android:elevation="8dp"
+        android:layout_margin="8dp"
+        android:layout_marginEnd="16dp">
 
+        <!-- Título del Proyecto -->
         <TextView
             android:id="@+id/tvNombreProyectoDetalle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre del Proyecto"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#2E7D32"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="16dp" />
 
         <!-- Descripción -->
         <TextView
             android:id="@+id/tvDescripcionProyectoDetalle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Descripción del proyecto"
             android:textSize="16sp"
-            android:layout_marginBottom="12dp" />
+            android:textColor="#333333"
+            android:layout_marginBottom="16dp" />
 
         <!-- Fechas -->
         <TextView
@@ -36,50 +44,60 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fecha de inicio: "
-            android:layout_marginBottom="8dp" />
+            android:textColor="#555555"
+            android:layout_marginBottom="6dp" />
 
         <TextView
             android:id="@+id/tvFechaFin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fecha de fin: "
-            android:layout_marginBottom="12dp" />
+            android:textColor="#555555"
+            android:layout_marginBottom="16dp" />
 
-        <!-- Datos de la organización -->
+        <!-- Organización -->
         <TextView
             android:id="@+id/tvNombreOrganizacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Organización: "
             android:textStyle="bold"
-            android:layout_marginTop="12dp" />
+            android:textColor="#2E7D32"
+            android:layout_marginBottom="6dp" />
 
         <TextView
             android:id="@+id/tvDireccionOrganizacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dirección: " />
+            android:text="Dirección: "
+            android:textColor="#444444"
+            android:layout_marginBottom="4dp" />
 
         <TextView
             android:id="@+id/tvTelefonoOrganizacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Teléfono: " />
+            android:text="Teléfono: "
+            android:textColor="#444444"
+            android:layout_marginBottom="4dp" />
 
         <TextView
             android:id="@+id/tvRepresentanteOrganizacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Representante: " />
+            android:text="Representante: "
+            android:textColor="#444444"
+            android:layout_marginBottom="20dp" />
 
-        <!-- Botón de registro -->
+        <!-- Botón -->
         <Button
             android:id="@+id/btnRegistrarseProyecto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Registrarse a este proyecto"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="#388E3C"
-            android:textColor="#FFFFFF" />
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/btn_green_selector"
+            android:padding="12dp" />
     </LinearLayout>
 </ScrollView>

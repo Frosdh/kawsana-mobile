@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,26 +15,55 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:paddingTop="30dp"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="30dp">
 
-        <!-- Encabezado con saludo a la izquierda y perfil a la derecha -->
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_card_rounded"
+            android:elevation="2dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tvVoluntario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.12"
+                android:shadowColor="#55000000"
+                android:shadowDx="1"
+                android:shadowDy="2"
+                android:shadowRadius="3"
+                android:text="VOLUNTARIO"
+                android:textAlignment="center"
+                android:textColor="#090909"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="346dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp">
 
             <TextView
                 android:id="@+id/tvSaludo"
-                android:text="👋 Bienvenido"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#1D1C1C"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:background="@drawable/bg_card_rounded"
+                android:elevation="2dp"
+                android:text="👋 Bienvenido"
+                android:textColor="#1D1C1C"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/btnPerfil"
@@ -41,14 +71,12 @@
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_profile"
                 android:background="@drawable/bg_circle"
+                android:contentDescription="Perfil"
                 android:padding="8dp"
-                android:contentDescription="Perfil" />
+                android:src="@drawable/ic_profile" />
         </RelativeLayout>
 
-
-        <!-- Puntos e Insignias en una card horizontal -->
         <LinearLayout
             android:layout_width="348dp"
             android:layout_height="wrap_content"
@@ -98,7 +126,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
+                android:clickable="true"
                 android:elevation="4dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="16dp">
@@ -130,7 +161,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
+                android:clickable="true"
                 android:elevation="4dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="16dp">
@@ -161,7 +195,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
+                android:clickable="true"
                 android:elevation="4dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="16dp">
@@ -191,7 +228,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
+                android:clickable="true"
                 android:elevation="4dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="16dp">
@@ -214,8 +254,10 @@
                     android:id="@+id/progressBarAvance"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="12dp"
                     android:layout_marginTop="8dp"
+                    android:backgroundTint="#D7CCC8"
+                    android:progress="60"
                     android:progressTint="#66BB6A" />
 
                 <TextView
@@ -223,9 +265,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="--%"
-                    android:textColor="#2E7D32"
-                    android:textSize="14sp" />
+                    android:text="60%"
+                    android:textColor="#388E3C"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
 
@@ -250,7 +293,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
+                android:clickable="true"
                 android:elevation="4dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="16dp">

@@ -28,6 +28,7 @@ class Pagina_principal_vol : AppCompatActivity() {
     private lateinit var btnPerfil: ImageView
     private lateinit var nombreUsuario: String
     private lateinit var cardGraficas: LinearLayout
+    private lateinit var cardNoticias: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,7 @@ class Pagina_principal_vol : AppCompatActivity() {
         cardProyectos = findViewById(R.id.cardProyectos)
         cardActividades = findViewById(R.id.cardActividades)
         btnPerfil = findViewById<ImageView>(R.id.btnPerfil)
-        val cardNoticias = findViewById<LinearLayout>(R.id.cardNoticias)
+        cardNoticias = findViewById<LinearLayout>(R.id.cardNoticias)
         cardGraficas = findViewById(R.id.cardGraficas)
 
 
@@ -52,7 +53,7 @@ class Pagina_principal_vol : AppCompatActivity() {
         nombreUsuario = intent.getStringExtra("nombre") ?: "Usuario"
 
         // Mostrar saludo personalizado
-        tvSaludo.text = "👋 Bienvenido $nombreUsuario"
+        tvSaludo.text = "👋 Bienvenido, $nombreUsuario"
 
         // Listener: Actividades
         cardActividades.setOnClickListener {

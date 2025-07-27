@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="#E3F2FD">
+    android:background="#FAFAFA">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,66 +13,115 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- Preview de la cámara -->
-        <androidx.camera.view.PreviewView
-            android:id="@+id/previewView"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:background="#000000"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Botón para capturar foto -->
-        <Button
-            android:id="@+id/btnCapturarFoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tomar Foto"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Imagen tomada -->
-        <ImageView
-            android:id="@+id/imgEvidencia"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:scaleType="centerCrop"
-            android:background="#CFD8DC"
-            android:contentDescription="Foto capturada"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Botón para seleccionar desde galería -->
-        <Button
-            android:id="@+id/btnSeleccionarImagen"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Seleccionar Imagen de Galería"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginHorizontal="4dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="8dp"
+            android:backgroundTint="#FFFFFF">
 
-        <!-- Campo Descripción -->
-        <EditText
-            android:id="@+id/etDescripcion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Descripción de la actividad"
-            android:minLines="3"
-            android:inputType="textMultiLine"
-            android:layout_marginBottom="12dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:gravity="center_horizontal">
 
-        <!-- Campo Fecha -->
-        <EditText
-            android:id="@+id/etFecha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Fecha (YYYY-MM-DD)"
-            android:focusable="false"
-            android:clickable="true"
-            android:inputType="none"
-            android:layout_marginBottom="16dp" />
+                <!-- Título -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📸 Registro de Evidencia"
+                    android:textColor="#0D47A1"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="20dp" />
 
-        <!-- Botón Subir -->
-        <Button
-            android:id="@+id/btnSubir"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Subir Actividad" />
+                <!-- Preview de la cámara -->
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/previewView"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:background="#ECEFF1"
+                    android:layout_marginBottom="16dp"
+                    android:clipToOutline="true"
+                    android:elevation="4dp" />
+
+                <!-- Botón para capturar foto -->
+                <Button
+                    android:id="@+id/btnCapturarFoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📷 Tomar Foto"
+                    android:background="@drawable/btn_rounded_green"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Imagen tomada -->
+                <ImageView
+                    android:id="@+id/imgEvidencia"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/image_placeholder"
+                    android:layout_marginBottom="16dp"
+                    android:contentDescription="Imagen de evidencia"
+                    android:elevation="6dp" />
+
+                <!-- Botón seleccionar desde galería -->
+                <Button
+                    android:id="@+id/btnSeleccionarImagen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🖼 Seleccionar desde Galería"
+                    android:background="@drawable/btn_rounded_green"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Descripción -->
+                <EditText
+                    android:id="@+id/etDescripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="✏️ Describe la actividad"
+                    android:minLines="3"
+                    android:background="@drawable/bg_edittext_rounded"
+                    android:padding="16dp"
+                    android:textColor="#212121"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Fecha -->
+                <EditText
+                    android:id="@+id/etFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="📅 Fecha (YYYY-MM-DD)"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:inputType="none"
+                    android:background="@drawable/bg_edittext_rounded"
+                    android:padding="16dp"
+                    android:textColor="#212121"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="24dp" />
+
+                <!-- Botón subir -->
+                <Button
+                    android:id="@+id/btnSubir"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🚀 Subir Actividad"
+                    android:background="@drawable/btn_rounded_green"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </ScrollView>
