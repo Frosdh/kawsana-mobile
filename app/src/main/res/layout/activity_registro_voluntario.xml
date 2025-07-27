@@ -71,6 +71,13 @@
                     android:layout_marginTop="12dp" />
 
                 <EditText
+                    android:id="@+id/etUsuario"
+                    style="@style/Widget.App.EditText"
+                    android:hint="Usuario"
+                    android:inputType="textPersonName"
+                    android:layout_marginTop="12dp" />
+
+                <EditText
                     android:id="@+id/etEmail"
                     style="@style/Widget.App.EditText"
                     android:hint="Correo electrónico"

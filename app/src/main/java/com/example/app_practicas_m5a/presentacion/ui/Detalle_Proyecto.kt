@@ -52,24 +52,39 @@ class Detalle_Proyecto : AppCompatActivity() {
         findViewById<TextView>(R.id.tvTelefonoOrganizacion).text = "Teléfono: $telefonoOrg"
         findViewById<TextView>(R.id.tvRepresentanteOrganizacion).text = "Representante: $representanteOrg"
 
-        // Botón de inscripción
         btnRegistrarse = findViewById(R.id.btnRegistrarseProyecto)
 
-        // Verificar si ya está inscrito
+        // Verificar si ya está inscrito en algún proyecto
         CoroutineScope(Dispatchers.IO).launch {
-            val yaInscrito = InscripcionProyectoDao.yaRegistrado(usuarioId, proyectoId)
+            val proyectoInscrito = InscripcionProyectoDao.obtenerProyectoInscrito(usuarioId)
             withContext(Dispatchers.Main) {
-                if (yaInscrito) {
-                    btnRegistrarse.isEnabled = false
-                    btnRegistrarse.text = "Ya inscrito"
-                    btnRegistrarse.backgroundTintList = ContextCompat.getColorStateList(
-                        this@Detalle_Proyecto, R.color.gray
-                    )
-                    Toast.makeText(
-                        this@Detalle_Proyecto,
-                        "Ya estás inscrito en este proyecto.",
-                        Toast.LENGTH_LONG
-                    ).show()
+                when {
+                    proyectoInscrito == proyectoId -> {
+                        // Ya inscrito en este proyecto
+                        btnRegistrarse.isEnabled = false
+                        btnRegistrarse.text = "Ya inscrito"
+                        btnRegistrarse.backgroundTintList = ContextCompat.getColorStateList(
+                            this@Detalle_Proyecto, R.color.gray
+                        )
+                        Toast.makeText(this@Detalle_Proyecto, "Ya estás inscrito en este proyecto.", Toast.LENGTH_LONG).show()
+                    }
+                    proyectoInscrito != null && proyectoInscrito != proyectoId -> {
+                        // Inscrito en otro proyecto
+                        btnRegistrarse.isEnabled = false
+                        btnRegistrarse.text = "Ya inscrito en otro proyecto"
+                        btnRegistrarse.backgroundTintList = ContextCompat.getColorStateList(
+                            this@Detalle_Proyecto, R.color.gray
+                        )
+                        Toast.makeText(this@Detalle_Proyecto, "Ya estás inscrito en otro proyecto.", Toast.LENGTH_LONG).show()
+                    }
+                    else -> {
+                        // No inscrito en ningún proyecto, puede registrarse
+                        btnRegistrarse.isEnabled = true
+                        btnRegistrarse.text = "Registrarse"
+                        btnRegistrarse.backgroundTintList = ContextCompat.getColorStateList(
+                            this@Detalle_Proyecto, R.color.teal_700
+                        )
+                    }
                 }
             }
         }
@@ -95,7 +110,7 @@ class Detalle_Proyecto : AppCompatActivity() {
                     } else {
                         Toast.makeText(this@Detalle_Proyecto, "Error al registrar o ya inscrito.", Toast.LENGTH_LONG).show()
                         btnRegistrarse.isEnabled = false
-                        btnRegistrarse.text = "Ya inscrito"
+                        btnRegistrarse.text = "Ya inscrito en otro proyecto"
                         btnRegistrarse.backgroundTintList = ContextCompat.getColorStateList(
                             this@Detalle_Proyecto, R.color.gray
                         )

@@ -1,6 +1,7 @@
 data class PerfilCompletoModel(
     val id: Long,
     val nombres: String,
+    val usuario: String,
     val apellidos: String,
     val cedula: String,
     val email: String,

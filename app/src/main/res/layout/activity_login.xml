@@ -37,14 +37,13 @@
             app:cardElevation="6dp">
 
             <EditText
-                android:id="@+id/etCedula"
+                android:id="@+id/etUsuario"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:drawableStart="@drawable/ic_person"
                 android:drawablePadding="10dp"
                 android:hint="Cédula"
-                android:inputType="number"
                 android:padding="14dp"
                 android:textSize="16sp" />
         </androidx.cardview.widget.CardView>

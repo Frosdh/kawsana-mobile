@@ -6,12 +6,11 @@ object InscripcionProyectoDao {
 
     fun estaInscrito(usuarioId: Long, proyectoId: Long): Boolean {
         val conexion = MySqlConexion.getConexion() ?: return false
-        val sql = "SELECT COUNT(*) FROM core_liderproyectobarrio WHERE usuario_id = ? AND proyecto_id = ?"
+        val sql = "SELECT COUNT(*) FROM core_liderproyectobarrio WHERE usuario_id = ?"
 
         return try {
             val statement = conexion.prepareStatement(sql)
             statement.setLong(1, usuarioId)
-            statement.setLong(2, proyectoId)
             val resultado = statement.executeQuery()
             val inscrito = resultado.next() && resultado.getInt(1) > 0
 
@@ -24,6 +23,7 @@ object InscripcionProyectoDao {
             false
         }
     }
+
 
     fun registrarInscripcion(usuarioId: Long, barrioId: Long, proyectoId: Long): Boolean {
         val conexion = MySqlConexion.getConexion() ?: return false
@@ -52,4 +52,26 @@ object InscripcionProyectoDao {
    suspend fun yaRegistrado(usuarioId: Long, proyectoId: Long): Boolean {
         return estaInscrito(usuarioId, proyectoId)
     }
+
+    fun obtenerProyectoInscrito(usuarioId: Long): Long? {
+        val conexion = MySqlConexion.getConexion() ?: return null
+        val sql = "SELECT proyecto_id FROM core_liderproyectobarrio WHERE usuario_id = ? LIMIT 1"
+
+        return try {
+            val statement = conexion.prepareStatement(sql)
+            statement.setLong(1, usuarioId)
+            val result = statement.executeQuery()
+
+            val proyecto = if (result.next()) result.getLong("proyecto_id") else null
+
+            result.close()
+            statement.close()
+            conexion.close()
+
+            proyecto
+        } catch (e: Exception) {
+            null
+        }
+    }
+
 }
