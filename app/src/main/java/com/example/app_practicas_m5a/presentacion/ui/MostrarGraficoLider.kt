@@ -91,7 +91,13 @@ class MostrarGraficoLider : AppCompatActivity() {
         val labels = ArrayList<String>()
 
         proyectos.forEachIndexed { index, proyecto ->
-            entries.add(BarEntry(index.toFloat(), proyecto.progreso.toFloat()))
+            val progresoRaw = proyecto.progreso?.lowercase()?.trim() ?: ""
+            val progresoNumerico = when {
+                progresoRaw.contains("terminado") -> 100
+                progresoRaw.contains("en progreso") || progresoRaw.contains("en_progreso") -> 50
+                else -> proyecto.progreso?.filter { it.isDigit() }?.toIntOrNull() ?: 0
+            }
+            entries.add(BarEntry(index.toFloat(), progresoNumerico.toFloat()))
             labels.add(proyecto.nombre)
         }
 

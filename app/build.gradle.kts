@@ -49,6 +49,14 @@ android {
     aaptOptions {
         noCompress += "tflite" // Evita compresión del modelo TFLite
     }
+
+
+    // ⚠️ ESTE BLOQUE ES EL NUEVO
+    packaging {
+        resources {
+            excludes += "META-INF/INDEX.LIST"
+        }
+    }
 }
 
 dependencies {

@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 class Proyectos_Disponibles_Vol : AppCompatActivity() {
 
     private lateinit var rvListaProyectos: RecyclerView
-    private lateinit var cedula: String
+    private lateinit var usuario: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,12 +26,12 @@ class Proyectos_Disponibles_Vol : AppCompatActivity() {
         rvListaProyectos.layoutManager = LinearLayoutManager(this)
 
         // Obtener la cédula enviada desde la pantalla anterior
-        cedula = intent.getStringExtra("cedula") ?: ""
+        usuario = intent.getStringExtra("usuario") ?: ""
 
         lifecycleScope.launch {
             val proyectos = withContext(Dispatchers.IO) {
                 // CORREGIDO: llamado al método correcto
-                ProyectosDispoVoluntarioDao.obtenerProyectosDelVoluntario(cedula)
+                ProyectosDispoVoluntarioDao.obtenerProyectosDelVoluntario(usuario)
             }
 
             if (proyectos.isNotEmpty()) {

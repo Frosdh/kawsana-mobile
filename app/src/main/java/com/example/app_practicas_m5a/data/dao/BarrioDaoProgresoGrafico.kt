@@ -8,48 +8,18 @@ object BarrioDaoProgresoGrafico {
 
     private fun getConnection(): Connection? = MySqlConexion.getConexion()
 
-    fun obtenerProgresoPorBarrio(): List<BarrioProgreso> {
-        val lista = mutableListOf<BarrioProgreso>()
-        val conn = getConnection() ?: return lista
-
-        val sql = """
-            SELECT b.nombre AS barrio, REPLACE(p.progreso, '%', '') AS progreso_str
-            FROM core_liderproyectobarrio lb
-            JOIN core_barrio b ON lb.barrio_id = b.id
-            JOIN core_proyecto p ON lb.proyecto_id = p.id
-        """.trimIndent()
-
-        try {
-            conn.use { connection ->
-                connection.prepareStatement(sql).use { ps ->
-                    ps.executeQuery().use { rs ->
-                        while (rs.next()) {
-                            val barrio = rs.getString("barrio")
-                            val progresoStr = rs.getString("progreso_str") ?: "0"
-                            val progreso = progresoStr.toFloatOrNull() ?: 0f
-
-                            lista.add(BarrioProgreso(barrio, progreso))
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("BarrioDao", "Error al obtener progreso por barrio", e)
-        }
-
-        return lista
-    }
+    // Método que obtiene el top 6 barrios con mayor progreso numérico
     fun obtenerTop6Barrios(): List<BarrioProgreso> {
         val lista = mutableListOf<BarrioProgreso>()
         val conn = getConnection() ?: return lista
 
         val sql = """
-        SELECT b.nombre AS barrio, pb.progreso AS progreso
-        FROM core_progresobarrio pb
-        JOIN core_barrio b ON pb.barrio_id = b.id
-        ORDER BY pb.progreso DESC
-        LIMIT 6
-    """.trimIndent()
+            SELECT b.nombre AS barrio, pb.progreso AS progreso
+            FROM core_progresobarrio pb
+            JOIN core_barrio b ON pb.barrio_id = b.id
+            ORDER BY pb.progreso DESC
+            LIMIT 6
+        """.trimIndent()
 
         try {
             conn.use { connection ->
@@ -70,4 +40,35 @@ object BarrioDaoProgresoGrafico {
         return lista
     }
 
+    // Nuevo método: obtener todos los barrios ordenados por promedio de progreso numérico
+    fun obtenerBarriosOrdenadosPorProgreso(): List<BarrioProgreso> {
+        val lista = mutableListOf<BarrioProgreso>()
+        val conn = getConnection() ?: return lista
+
+        val sql = """
+            SELECT b.nombre AS barrio, AVG(pb.progreso) AS progreso_promedio
+            FROM core_progresobarrio pb
+            JOIN core_barrio b ON pb.barrio_id = b.id
+            GROUP BY b.nombre
+            ORDER BY progreso_promedio DESC
+        """.trimIndent()
+
+        try {
+            conn.use { connection ->
+                connection.prepareStatement(sql).use { ps ->
+                    ps.executeQuery().use { rs ->
+                        while (rs.next()) {
+                            val barrio = rs.getString("barrio")
+                            val progreso = rs.getDouble("progreso_promedio").toFloat()
+                            lista.add(BarrioProgreso(barrio, progreso))
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("BarrioDao", "Error al obtener barrios ordenados por progreso", e)
+        }
+
+        return lista
+    }
 }

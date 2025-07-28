@@ -110,6 +110,7 @@ class Proyecto_Actuales_Lider : AppCompatActivity() {
         }
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 200 && resultCode == RESULT_OK) {

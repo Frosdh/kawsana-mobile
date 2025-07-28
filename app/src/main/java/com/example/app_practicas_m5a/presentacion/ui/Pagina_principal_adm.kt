@@ -24,14 +24,14 @@ import kotlinx.coroutines.withContext
 
 class Pagina_principal_adm : AppCompatActivity() {
 
-    private lateinit var tvTituloAdmin: TextView
-    private lateinit var tvNombreAdmin: TextView
-    private lateinit var tvCorreoAdmin: TextView
-    private lateinit var imgPerfil: ImageView
-    private lateinit var btnVerPerfil: Button
-    private lateinit var btnFinal: Button
-    private lateinit var tvProgresoProyecto: TextView
-    private lateinit var barChartProgreso: BarChart
+    private lateinit var tvSaludo: TextView
+    private lateinit var btnVerPerfil: ImageView
+    private lateinit var cardProyectos: LinearLayout
+    private lateinit var cardVerActi: LinearLayout
+    private lateinit var cardActividades: LinearLayout
+    private lateinit var cardVoluntarios: LinearLayout
+    private lateinit var cardGraficas: LinearLayout
+
 
     private lateinit var usuario: String
     private var usuarioId: Long = -1
@@ -42,14 +42,13 @@ class Pagina_principal_adm : AppCompatActivity() {
         setContentView(R.layout.activity_pagina_principal_adm)
 
         // Vincular UI
-        tvTituloAdmin = findViewById(R.id.tvTituloAdmin)
-        tvNombreAdmin = findViewById(R.id.tvNombreAdmin)
-        tvCorreoAdmin = findViewById(R.id.tvCorreoAdmin)
-        imgPerfil = findViewById(R.id.imgPerfil)
-        btnVerPerfil = findViewById(R.id.btnVerPerfil)
-        btnFinal = findViewById(R.id.btnFinal)
-        tvProgresoProyecto = findViewById(R.id.tvProgresoProyecto)
-        barChartProgreso = findViewById(R.id.barChartProgreso)
+        tvSaludo = findViewById(R.id.tvSaludo)
+        btnVerPerfil = findViewById(R.id.imgPerfil)
+        cardProyectos = findViewById(R.id.cardProyectos)
+        cardVerActi = findViewById(R.id.cardVerActi)
+        cardActividades = findViewById(R.id.cardActividades)
+        cardVoluntarios = findViewById(R.id.cardVoluntarios)
+        cardGraficas = findViewById(R.id.cardGraficas)
 
         // Recibir datos del login
         usuario = intent.getStringExtra("usuario") ?: ""
@@ -61,7 +60,6 @@ class Pagina_principal_adm : AppCompatActivity() {
         }
 
         cargarDatosAdministrador()
-        cargarProyectoConProgreso()
 
         // Botón ver perfil
         btnVerPerfil.setOnClickListener {
@@ -71,13 +69,12 @@ class Pagina_principal_adm : AppCompatActivity() {
         }
 
         // Botón ver proyectos
-        val btnVerProyecto = findViewById<Button>(R.id.btnVerProyecto)
-        btnVerProyecto.setOnClickListener {
+        cardProyectos.setOnClickListener {
             startActivity(Intent(this, Proyectos_Disponibles::class.java))
         }
 
         // Botón proyectos actuales del líder
-        btnFinal.setOnClickListener {
+        cardVerActi.setOnClickListener {
             val intent = Intent(this, Proyecto_Actuales_Lider::class.java)
             intent.putExtra("usuario", usuario)
             intent.putExtra("usuario_id", usuarioId)
@@ -85,16 +82,19 @@ class Pagina_principal_adm : AppCompatActivity() {
         }
 
         // Botón cámara IA
-        val btnCamaraIA = findViewById<Button>(R.id.btnCamaraIA)
-        btnCamaraIA.setOnClickListener {
+        cardActividades.setOnClickListener {
             startActivity(Intent(this, Camara_IA_lider::class.java))
         }
 
         // Botón ver voluntarios
-        val btnVoluntariosBarrios = findViewById<Button>(R.id.btnVerVoluntarios)
-        btnVoluntariosBarrios.setOnClickListener {
+        cardVoluntarios.setOnClickListener {
             val intent = Intent(this, VoluntariosBarrio::class.java)
             intent.putExtra("usuario", usuario)
+            startActivity(intent)
+        }
+        // Listener: Actividades
+        cardGraficas.setOnClickListener {
+            val intent = Intent(this, MostrarGraficoLider::class.java)
             startActivity(intent)
         }
 
@@ -113,65 +113,16 @@ class Pagina_principal_adm : AppCompatActivity() {
 
             if (admin != null) {
                 usuarioId = admin.id
-                tvNombreAdmin.text = "Nombre: ${admin.nombres} ${admin.apellidos}"
-                tvCorreoAdmin.text = "Correo: ${admin.email}"
+                tvSaludo.text = "👋 Bienvenido, ${admin.nombres} ${admin.apellidos}"
             } else {
-                Toast.makeText(this@Pagina_principal_adm, "No se encontró el administrador", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@Pagina_principal_adm,
+                    "No se encontró el administrador",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
-    private fun cargarProyectoConProgreso() {
-        lifecycleScope.launch {
-            val proyectos = withContext(Dispatchers.IO) {
-                ProyectoDisponobleDao.obtenerTodosLosProyectosConProgreso()
-            }
 
-            if (proyectos.isNotEmpty()) {
-                val primerProyecto = proyectos[0]
-                tvProgresoProyecto.text = "Progreso: ${primerProyecto.progreso}%"
-                mostrarGraficoBarras(proyectos)
-            } else {
-                tvProgresoProyecto.text = "No hay proyectos disponibles"
-            }
-        }
-    }
-
-    private fun mostrarGraficoBarras(proyectos: List<Proyectos>) {
-        val entries = ArrayList<BarEntry>()
-        val labels = ArrayList<String>()
-
-        proyectos.forEachIndexed { index, proyecto ->
-            val progresoRaw = proyecto.progreso?.lowercase()?.trim() ?: ""
-            val progresoNumerico = when {
-                progresoRaw.contains("terminado") -> 100
-                progresoRaw.contains("en progreso") || progresoRaw.contains("en_progreso") -> 50
-                else -> proyecto.progreso?.filter { it.isDigit() }?.toIntOrNull() ?: 0
-            }
-            entries.add(BarEntry(index.toFloat(), progresoNumerico.toFloat()))
-            labels.add(proyecto.nombre)
-        }
-
-        val dataSet = BarDataSet(entries, "Progreso de proyectos (%)")
-        dataSet.color = resources.getColor(R.color.teal_700, null)
-
-        val data = BarData(dataSet)
-        data.barWidth = 0.9f
-
-        barChartProgreso.data = data
-        barChartProgreso.setFitBars(true)
-        barChartProgreso.description.isEnabled = false
-
-        val xAxis = barChartProgreso.xAxis
-        xAxis.valueFormatter = IndexAxisValueFormatter(labels)
-        xAxis.granularity = 1f
-        xAxis.setDrawGridLines(false)
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-
-        barChartProgreso.axisLeft.axisMinimum = 0f
-        barChartProgreso.axisLeft.axisMaximum = 100f
-        barChartProgreso.axisRight.isEnabled = false
-
-        barChartProgreso.invalidate()
-    }
 }

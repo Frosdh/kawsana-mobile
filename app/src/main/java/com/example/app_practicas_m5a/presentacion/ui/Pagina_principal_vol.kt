@@ -24,7 +24,7 @@ class Pagina_principal_vol : AppCompatActivity() {
     private lateinit var progreso: ProgressBar
     private lateinit var cardActividades: LinearLayout
     private lateinit var cardProyectos: LinearLayout
-    private lateinit var cedula: String
+    private lateinit var usuario: String
     private lateinit var btnPerfil: ImageView
     private lateinit var nombreUsuario: String
     private lateinit var cardGraficas: LinearLayout
@@ -47,15 +47,14 @@ class Pagina_principal_vol : AppCompatActivity() {
         cardNoticias = findViewById<LinearLayout>(R.id.cardNoticias)
         cardGraficas = findViewById(R.id.cardGraficas)
 
-
         // Obtener datos del intent
-        cedula = intent.getStringExtra("cedula") ?: "No disponible"
+        usuario = intent.getStringExtra("usuario") ?: "No disponible"
         nombreUsuario = intent.getStringExtra("nombre") ?: "Usuario"
 
         // Mostrar saludo personalizado
         tvSaludo.text = "👋 Bienvenido, $nombreUsuario"
 
-        // Listener: Actividades
+        // Listeners
         cardActividades.setOnClickListener {
             val intent = Intent(this, Camara_IA_voluntario::class.java)
             startActivity(intent)
@@ -63,43 +62,30 @@ class Pagina_principal_vol : AppCompatActivity() {
 
         btnPerfil.setOnClickListener {
             val intent = Intent(this, Perfil_voluntario::class.java)
-            intent.putExtra("cedula", cedula)
+            intent.putExtra("usuario", usuario)
             intent.putExtra("nombre", nombreUsuario)
             startActivity(intent)
         }
 
-        // Listener: Proyectos
         cardProyectos.setOnClickListener {
             val intent = Intent(this, Proyectos_Disponibles_Vol::class.java)
-            intent.putExtra("cedula", cedula)
+            intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
-
 
         lifecycleScope.launch {
             val puntosTotales = withContext(Dispatchers.IO) {
-                ProyectosDispoVoluntarioDao.obtenerPuntosTotalesPorCedula(cedula)
+                ProyectosDispoVoluntarioDao.obtenerPuntosTotalesPorUsuario(usuario)
             }
-
-            calcularInsigniaYProgreso(puntosTotales)
-
-            // Cargar datos reales para gráfico desde DAO (en IO)
-            val progresoBarrios = withContext(Dispatchers.IO) {
-                BarrioDaoProgresoGrafico.obtenerProgresoPorBarrio()
-            }
-
-
-        }
-        cardNoticias.setOnClickListener {
-            val intent = Intent(this, NoticiasActivity::class.java)
-            startActivity(intent)
+            // Aquí defines tu máximo esperado de puntos (puedes cambiarlo)
+            val maximoPuntos = 1000
+            calcularInsigniaYProgreso(puntosTotales, maximoPuntos)
         }
 
-        // Listener: Ver gráfico completo en nueva actividad
         cardGraficas.setOnClickListener {
             lifecycleScope.launch {
                 val progresoBarrios = withContext(Dispatchers.IO) {
-                    BarrioDaoProgresoGrafico.obtenerProgresoPorBarrio()
+                    BarrioDaoProgresoGrafico.obtenerBarriosOrdenadosPorProgreso()
                 }
 
                 val nombres = ArrayList(progresoBarrios.map { it.nombreBarrio })
@@ -112,6 +98,11 @@ class Pagina_principal_vol : AppCompatActivity() {
             }
         }
 
+        cardNoticias.setOnClickListener {
+            val intent = Intent(this, NoticiasActivity::class.java)
+            startActivity(intent)
+        }
+
         // Ajustar padding por las barras del sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -120,8 +111,10 @@ class Pagina_principal_vol : AppCompatActivity() {
         }
     }
 
-    private fun calcularInsigniaYProgreso(puntos: Int) {
-        val insignia = when (puntos) {
+    private fun calcularInsigniaYProgreso(puntos: Int, maximo: Int) {
+        val puntosEscalados = calcularPorcentaje(puntos, maximo)
+
+        val insignia = when (puntosEscalados) {
             in 1..19 -> "🥉 Novato"
             in 20..39 -> "🥈 Avanzado"
             in 40..59 -> "🥇 Experto"
@@ -130,12 +123,16 @@ class Pagina_principal_vol : AppCompatActivity() {
             else -> "🔰 Sin insignia"
         }
 
-        val progresoPorcentaje = if (puntos > 100) 100 else puntos
-
-        tvPuntos.text = "🔥 Puntos: $puntos"
+        tvPuntos.text = "🔥 Puntos reales: $puntos"
         tvInsignias.text = insignia
-        tvAvance.text = "$progresoPorcentaje%"
-        progreso.progress = progresoPorcentaje
+        tvAvance.text = "$puntosEscalados%"
+        progreso.progress = puntosEscalados
+    }
+
+    private fun calcularPorcentaje(puntos: Int, maximo: Int): Int {
+        if (maximo <= 0) return 0
+        val porcentaje = (puntos.toFloat() * 100f) / maximo.toFloat()
+        return porcentaje.coerceAtMost(100f).toInt()
     }
 
 }
