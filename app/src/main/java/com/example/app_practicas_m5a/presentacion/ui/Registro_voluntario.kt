@@ -29,7 +29,7 @@ class Registro_voluntario : AppCompatActivity() {
     private lateinit var etContraseña: EditText
     private lateinit var spinnerTipoUsuario: Spinner
     private lateinit var etPasswordAdmin: EditText
-    private lateinit var btnLupa: Button // ya no se usa
+    private lateinit var btnLupa: Button
     private lateinit var spinnerCiudad: Spinner
     private lateinit var spinnerParroquia: Spinner
     private lateinit var spinnerBarrio: Spinner
@@ -54,7 +54,7 @@ class Registro_voluntario : AppCompatActivity() {
         etContraseña = findViewById(R.id.etContraseña)
         spinnerTipoUsuario = findViewById(R.id.spinnerTipoUsuario)
         etPasswordAdmin = findViewById(R.id.etPasswordAdmin)
-        btnLupa = findViewById(R.id.btnLupa) // ya no se usará
+        btnLupa = findViewById(R.id.btnLupa)
         spinnerCiudad = findViewById(R.id.spinnerCiudad)
         spinnerParroquia = findViewById(R.id.spinnerParroquia)
         spinnerBarrio = findViewById(R.id.spinnerBarrio)
@@ -72,40 +72,37 @@ class Registro_voluntario : AppCompatActivity() {
         spinnerTipoUsuario.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val tipo = tipos[position]
-                if (tipo == "ADMIN") {
-                    etPasswordAdmin.visibility = View.VISIBLE
-                } else {
-                    etPasswordAdmin.visibility = View.GONE
-                }
+                etPasswordAdmin.visibility = if (tipo == "ADMIN") View.VISIBLE else View.GONE
 
                 spinnerCiudad.visibility = View.VISIBLE
                 spinnerParroquia.visibility = View.VISIBLE
                 spinnerBarrio.visibility = View.VISIBLE
                 cargarUbicaciones()
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
         btnRegistrar.setOnClickListener {
             if (validarFormulario()) {
+                val tipoUsuarioRaw = spinnerTipoUsuario.selectedItem.toString().trim().lowercase()
+                val tipoUsuario = if (tipoUsuarioRaw == "voluntario") "ciudadano" else tipoUsuarioRaw
+
                 val usuario = CoreUsuarioModel(
-                    email = etEmail.text.toString().trim(),
+                    email = etEmail.text.toString().trim().lowercase(),
                     contraseña = etContraseña.text.toString(),
-                    tipo_usuario = spinnerTipoUsuario.selectedItem.toString(),
+                    tipo_usuario = tipoUsuario,
                     fecha_registro = Date(),
                     estado = true,
-                    nombres = etNombres.text.toString().trim(),
-                    apellidos = etApellidos.text.toString().trim(),
+                    nombres = etNombres.text.toString().trim().lowercase(),
+                    apellidos = etApellidos.text.toString().trim().lowercase(),
                     cedula = etCedula.text.toString().trim(),
-                    telefono = etTelefono.text.toString().trim(),
-                    direccion = etDireccion.text.toString().trim(),
+                    telefono = etTelefono.text.toString().trim().lowercase(),
+                    direccion = etDireccion.text.toString().trim().lowercase(),
                     barrio_id = barrioSeleccionado?.id?.toLong(),
-                    id = 0L, // ← Asignar 0L si es autogenerado por la base de datos
-                    usuario = etNombres.text.toString().trim(), // ← Asegúrate de tener este EditText en el layout
-                    fecha_nacimiento = null // ← O usa un Date si lo estás obteniendo de un DatePicker
+                    id = 0L,
+                    usuario = etNombres.text.toString().trim().lowercase(),
+                    fecha_nacimiento = null
                 )
-
 
                 CoroutineScope(Dispatchers.Main).launch {
                     val registrado = withContext(Dispatchers.IO) {
@@ -192,23 +189,13 @@ class Registro_voluntario : AppCompatActivity() {
         val contraseña = etContraseña.text.toString()
         val tipoUsuario = spinnerTipoUsuario.selectedItem.toString()
 
-        if (nombres.isEmpty()) {
-            etNombres.error = "Ingrese sus nombres"
-            etNombres.requestFocus()
-            return false
-        }
-        if (!nombres.matches(Regex("^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$"))) {
+        if (nombres.isEmpty() || !nombres.matches(Regex("^[A-Za-záéíóúÁÉÍÓÚñÑ ]+\$"))) {
             etNombres.error = "Nombres inválidos"
             etNombres.requestFocus()
             return false
         }
 
-        if (apellidos.isEmpty()) {
-            etApellidos.error = "Ingrese sus apellidos"
-            etApellidos.requestFocus()
-            return false
-        }
-        if (!apellidos.matches(Regex("^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$"))) {
+        if (apellidos.isEmpty() || !apellidos.matches(Regex("^[A-Za-záéíóúÁÉÍÓÚñÑ ]+\$"))) {
             etApellidos.error = "Apellidos inválidos"
             etApellidos.requestFocus()
             return false
@@ -285,8 +272,7 @@ class Registro_voluntario : AppCompatActivity() {
     }
 
     private fun validarContraseña(password: String): Boolean {
-        val regex = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#\$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/]).{6,}\$")
+        val regex = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#\$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/]).{6,}")
         return regex.matches(password)
     }
-
 }
