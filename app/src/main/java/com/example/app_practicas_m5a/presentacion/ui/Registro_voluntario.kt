@@ -285,7 +285,8 @@ class Registro_voluntario : AppCompatActivity() {
     }
 
     private fun validarContraseña(password: String): Boolean {
-        val regex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
+        val regex = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#\$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/]).{6,}\$")
         return regex.matches(password)
     }
+
 }

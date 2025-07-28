@@ -62,12 +62,55 @@ class Perfil_voluntario : AppCompatActivity() {
         btnModificar.setOnClickListener {
             val estaEditable = etEmail.isEnabled
             if (estaEditable) {
+                // VALIDACIONES ANTES DE GUARDAR
+                val nombres = etNombres.text.toString().trim()
+                val apellidos = etApellidos.text.toString().trim()
+                val email = etEmail.text.toString().trim()
+                val telefono = etTelefono.text.toString().trim()
+                val direccion = etDireccion.text.toString().trim()
+
+                // Validación de nombres
+                if (nombres.isEmpty() || !nombres.matches(Regex("^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$"))) {
+                    etNombres.error = "Nombres inválidos"
+                    etNombres.requestFocus()
+                    return@setOnClickListener
+                }
+
+                // Validación de apellidos
+                if (apellidos.isEmpty() || !apellidos.matches(Regex("^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$"))) {
+                    etApellidos.error = "Apellidos inválidos"
+                    etApellidos.requestFocus()
+                    return@setOnClickListener
+                }
+
+                // Validación de email
+                if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    etEmail.error = "Correo inválido"
+                    etEmail.requestFocus()
+                    return@setOnClickListener
+                }
+
+                // Validación de teléfono
+                if (telefono.isEmpty() || !telefono.matches(Regex("^\\d{7,10}$"))) {
+                    etTelefono.error = "Teléfono inválido"
+                    etTelefono.requestFocus()
+                    return@setOnClickListener
+                }
+
+                // Validación de dirección
+                if (direccion.isEmpty()) {
+                    etDireccion.error = "Dirección requerida"
+                    etDireccion.requestFocus()
+                    return@setOnClickListener
+                }
+
+                // SI TODO ESTÁ OK, ACTUALIZAR
                 usuario?.let {
-                    it.nombres = etNombres.text.toString()
-                    it.apellidos = etApellidos.text.toString()
-                    it.email = etEmail.text.toString()
-                    it.telefono = etTelefono.text.toString()
-                    it.direccion = etDireccion.text.toString()
+                    it.nombres = nombres
+                    it.apellidos = apellidos
+                    it.email = email
+                    it.telefono = telefono
+                    it.direccion = direccion
 
                     lifecycleScope.launch {
                         val actualizado = withContext(Dispatchers.IO) {

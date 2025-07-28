@@ -81,30 +81,54 @@ class Perfil_Admin : AppCompatActivity() {
 
         // Listeners para los Spinners
         spinnerCiudad.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 ciudadSeleccionada = ciudadesList.getOrNull(position)
                 ciudadSeleccionada?.let {
                     cargarParroquias(it.id, null, null)
                 }
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) { ciudadSeleccionada = null }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                ciudadSeleccionada = null
+            }
         }
 
         spinnerParroquia.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 parroquiaSeleccionada = parroquiasList.getOrNull(position)
                 parroquiaSeleccionada?.let {
                     cargarBarrios(it.id, null)
                 }
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) { parroquiaSeleccionada = null }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                parroquiaSeleccionada = null
+            }
         }
 
         spinnerBarrio.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 barrioSeleccionado = barriosList.getOrNull(position)
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) { barrioSeleccionado = null }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                barrioSeleccionado = null
+            }
         }
 
         btnEditarPerfil.setOnClickListener {
@@ -124,11 +148,19 @@ class Perfil_Admin : AppCompatActivity() {
                             CoreUsuarioDao.actualizarPerfil(it)
                         }
                         if (actualizado) {
-                            Toast.makeText(this@Perfil_Admin, "Perfil actualizado", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@Perfil_Admin,
+                                "Perfil actualizado",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             setEditable(false)
                             btnEditarPerfil.text = "Editar Perfil"
                         } else {
-                            Toast.makeText(this@Perfil_Admin, "Error al actualizar", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@Perfil_Admin,
+                                "Error al actualizar",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -184,11 +216,18 @@ class Perfil_Admin : AppCompatActivity() {
         }
     }
 
-    private fun cargarUbicaciones(ciudadNombre: String?, parroquiaNombre: String?, barrioNombre: String?) {
+    private fun cargarUbicaciones(
+        ciudadNombre: String?,
+        parroquiaNombre: String?,
+        barrioNombre: String?
+    ) {
         lifecycleScope.launch {
             ciudadesList = withContext(Dispatchers.IO) { ubicacion.obtenerCiudades() }
 
-            val adapterCiudad = ArrayAdapter(this@Perfil_Admin, android.R.layout.simple_spinner_item, ciudadesList.map { it.nombre })
+            val adapterCiudad = ArrayAdapter(
+                this@Perfil_Admin,
+                android.R.layout.simple_spinner_item,
+                ciudadesList.map { it.nombre })
             adapterCiudad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerCiudad.adapter = adapterCiudad
 
@@ -205,9 +244,13 @@ class Perfil_Admin : AppCompatActivity() {
 
     private fun cargarParroquias(ciudadId: Int, parroquiaNombre: String?, barrioNombre: String?) {
         lifecycleScope.launch {
-            parroquiasList = withContext(Dispatchers.IO) { ubicacion.obtenerParroquiasPorCiudad(ciudadId) }
+            parroquiasList =
+                withContext(Dispatchers.IO) { ubicacion.obtenerParroquiasPorCiudad(ciudadId) }
 
-            val adapterParroquia = ArrayAdapter(this@Perfil_Admin, android.R.layout.simple_spinner_item, parroquiasList.map { it.nombre })
+            val adapterParroquia = ArrayAdapter(
+                this@Perfil_Admin,
+                android.R.layout.simple_spinner_item,
+                parroquiasList.map { it.nombre })
             adapterParroquia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerParroquia.adapter = adapterParroquia
 
@@ -224,9 +267,13 @@ class Perfil_Admin : AppCompatActivity() {
 
     private fun cargarBarrios(parroquiaId: Int, barrioNombre: String?) {
         lifecycleScope.launch {
-            barriosList = withContext(Dispatchers.IO) { ubicacion.obtenerBarriosPorParroquia(parroquiaId) }
+            barriosList =
+                withContext(Dispatchers.IO) { ubicacion.obtenerBarriosPorParroquia(parroquiaId) }
 
-            val adapterBarrio = ArrayAdapter(this@Perfil_Admin, android.R.layout.simple_spinner_item, barriosList.map { it.nombre })
+            val adapterBarrio = ArrayAdapter(
+                this@Perfil_Admin,
+                android.R.layout.simple_spinner_item,
+                barriosList.map { it.nombre })
             adapterBarrio.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerBarrio.adapter = adapterBarrio
 
@@ -260,35 +307,47 @@ class Perfil_Admin : AppCompatActivity() {
         val telefono = tvTelefono.text.toString().trim()
         val direccion = tvDireccion.text.toString().trim()
 
-        if (nombres.isEmpty()) {
-            tvNombres.error = "Ingrese nombres"
+        // Validación de nombres
+        if (nombres.isEmpty() || !nombres.matches(Regex("^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$"))) {
+            tvNombres.error = "Nombres inválidos"
             tvNombres.requestFocus()
             return false
         }
-        if (apellidos.isEmpty()) {
-            tvApellidos.error = "Ingrese apellidos"
+
+        // Validación de apellidos
+        if (apellidos.isEmpty() || !apellidos.matches(Regex("^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$"))) {
+            tvApellidos.error = "Apellidos inválidos"
             tvApellidos.requestFocus()
             return false
         }
+
+        // Validación de email
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             tvEmail.error = "Correo inválido"
             tvEmail.requestFocus()
             return false
         }
-        if (telefono.isEmpty() || telefono.length < 7) {
+
+        // Validación de teléfono
+        if (telefono.isEmpty() || !telefono.matches(Regex("^\\d{7,10}$"))) {
             tvTelefono.error = "Teléfono inválido"
             tvTelefono.requestFocus()
             return false
         }
+
+        // Validación de dirección
         if (direccion.isEmpty()) {
             tvDireccion.error = "Ingrese dirección"
             tvDireccion.requestFocus()
             return false
         }
+
+        // Validación de ubicaciones
         if (ciudadSeleccionada == null || parroquiaSeleccionada == null || barrioSeleccionado == null) {
             Toast.makeText(this, "Seleccione ciudad, parroquia y barrio", Toast.LENGTH_SHORT).show()
             return false
         }
+
         return true
     }
 }
