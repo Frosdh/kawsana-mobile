@@ -1,12 +1,69 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="#FAFAFA"
+    android:padding="24dp">
 
-  <com.github.mikephil.charting.charts.BarChart
-      android:id="@+id/barChart"
+  <LinearLayout
+      android:id="@+id/layoutGrafico"
       android:layout_width="match_parent"
-      android:layout_height="400dp" />
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
 
-</LinearLayout>
+    <!-- Título para gráfica de barras -->
+    <TextView
+        android:id="@+id/tvTituloBarras"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Top 6 Barrios con más puntaje"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#2E7D32"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center_horizontal" />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Título para gráfica de pastel -->
+    <TextView
+        android:id="@+id/tvTituloPastelBarrios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distribución porcentual de ciudadanos por barrio"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#2E7D32"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center_horizontal" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChartBarrios"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Título para tercera gráfica (actividades) -->
+    <TextView
+        android:id="@+id/tvTituloActividades"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Porcentaje de actividades realizadas y no realizadas"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#2E7D32"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center_horizontal" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChartActividades"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+  </LinearLayout>
+</ScrollView>

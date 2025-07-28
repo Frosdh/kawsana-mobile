@@ -58,10 +58,11 @@ class Pagina_principal_Super_Admin : AppCompatActivity() {
             }
         }
 
-        // Botón ver perfil
-        btnVerPerfilSuper.setOnClickListener {
-            val intent = Intent(this, Perfil_Admin::class.java)
-            intent.putExtra("usuario", usuario)
+        val btnPerfilSuperAdmin: Button = findViewById(R.id.btnVerPerfilSuper)
+
+        btnPerfilSuperAdmin.setOnClickListener {
+            val intent = Intent(this, Perfil_Super_Admin::class.java)
+            intent.putExtra("usuario", usuario) // Envía el nombre de usuario actual
             startActivity(intent)
         }
 
