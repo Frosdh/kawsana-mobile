@@ -17,6 +17,8 @@ class LiderAdapter(
         val tvNombre: TextView = itemView.findViewById(R.id.tvNombreLider)
         val tvCorreo: TextView = itemView.findViewById(R.id.tvCorreoLider)
         val tvTelefono: TextView = itemView.findViewById(R.id.tvTelefonoLider)
+        val btnVerCiudadanos = itemView.findViewById<View>(R.id.btnVerProyectos) // este es tu botón
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LiderViewHolder {
@@ -31,7 +33,7 @@ class LiderAdapter(
         holder.tvCorreo.text = lider.email.ifEmpty { "Sin correo" }
         holder.tvTelefono.text = lider.telefono.ifEmpty { "Sin teléfono" }
 
-        holder.itemView.setOnClickListener {
+        holder.btnVerCiudadanos.setOnClickListener {
             onLiderClick(lider)
         }
     }

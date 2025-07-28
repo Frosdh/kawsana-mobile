@@ -29,10 +29,10 @@ class OrganizacionAdapter(
     override fun onBindViewHolder(holder: OrganizacionViewHolder, position: Int) {
         val organizacion = listaOrganizaciones[position]
         holder.tvNombre.text = organizacion.nombre
-        holder.tvDireccion.text = "Dirección: ${organizacion.direccion}"
-        holder.tvTelefono.text = "Tel: ${organizacion.telefono_contacto}"
-        holder.tvEmail.text = "Email: ${organizacion.email_contacto}"
-        holder.tvRepresentante.text = "Representante: ${organizacion.representante}"
+        holder.tvDireccion.text = organizacion.direccion
+        holder.tvTelefono.text = organizacion.telefono_contacto
+        holder.tvEmail.text = organizacion.email_contacto
+        holder.tvRepresentante.text = organizacion.representante
     }
 
     override fun getItemCount() = listaOrganizaciones.size

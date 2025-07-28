@@ -1,22 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/bg_card_rounded"
-    android:layout_marginBottom="12dp"
-    android:elevation="4dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="20dp"
+    card_view:cardCornerRadius="20dp"
+    card_view:cardElevation="10dp"
+    android:background="#FFFFFF">
 
-    <TextView
-        android:id="@+id/tvNombre"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nombre Voluntario"
-        android:textSize="18sp"
-        android:textColor="#2E7D32"
-        android:textStyle="bold" />
-</LinearLayout>
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Nombre completo con icono -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:backgroundTint="#1B5E20"
+                android:src="@android:drawable/ic_menu_myplaces" />
+
+            <TextView
+                android:id="@+id/tvNombre"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nombre Completo"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#1B5E20"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginStart="12dp" />
+        </LinearLayout>
+
+        <!-- Email con icono -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="12dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:backgroundTint="#4E586E"
+                android:src="@android:drawable/ic_dialog_email" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="email@ejemplo.com"
+                android:textSize="16sp"
+                android:textColor="#4E586E"
+                android:fontFamily="sans-serif"
+                android:layout_marginStart="12dp" />
+        </LinearLayout>
+
+        <!-- Teléfono con icono -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:backgroundTint="#4E586E"
+                android:src="@android:drawable/ic_menu_call" />
+
+            <TextView
+                android:id="@+id/tvTelefono"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="+593 9XXXXXXX"
+                android:textSize="16sp"
+                android:textColor="#4E586E"
+                android:fontFamily="sans-serif"
+                android:layout_marginStart="12dp" />
+        </LinearLayout>
+
+        <!-- Teléfono con icono -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:backgroundTint="#4E586E"
+                android:src="@drawable/ic_direccion" />
+
+            <TextView
+                android:id="@+id/tvDireccion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Av"
+                android:textSize="16sp"
+                android:textColor="#4E586E"
+                android:fontFamily="sans-serif"
+                android:layout_marginStart="12dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

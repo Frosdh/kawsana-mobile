@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_practicas_m5a.R
@@ -14,6 +15,7 @@ import com.example.app_practicas_m5a.data.model.Proyectos
 import com.example.app_practicas_m5a.presentacion.ui.ActividadesDeProyectoActivity_Admin
 import java.text.SimpleDateFormat
 import java.util.*
+
 class ProyectoAdapterAdmin(
     private var proyectos: List<Proyectos>
 ) : RecyclerView.Adapter<ProyectoAdapterAdmin.ProyectoViewHolder>() {
@@ -44,12 +46,60 @@ class ProyectoAdapterAdmin(
         holder.tvFechas.text = "Desde: $fechaInicio - Hasta: $fechaFin"
         holder.tvDescripcion.text = proyecto.descripcion.ifBlank { "Sin descripción" }
 
+        val layoutRoot = holder.itemView.findViewById<LinearLayout>(R.id.layoutRoot)
+        val viewLinea = holder.itemView.findViewById<View>(R.id.viewLinea)
+
+        // Función para cambiar el color del drawableLeft de un TextView
+        fun setDrawableLeftColor(textView: TextView, color: Int) {
+            val drawables = textView.compoundDrawables
+            drawables[0]?.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN)
+        }
+
         if (proyecto.estado) {
+            // Activo: verde
+            val verdeOscuro = Color.parseColor("#2E7D32")
+            val verdeClaro = Color.parseColor("#E6F4EA")
+            val verdeBtn = Color.parseColor("#388E3C")
+
             holder.tvEstado.text = "Activo"
-            holder.tvEstado.setTextColor(Color.parseColor("#388E3C")) // Verde
+            holder.tvEstado.setTextColor(Color.parseColor("#388E3C"))
+
+            layoutRoot.setBackgroundColor(verdeClaro)
+            holder.tvNombre.setTextColor(verdeOscuro)
+            holder.tvFechas.setTextColor(Color.parseColor("#4A4A4A"))
+            holder.tvDescripcion.setTextColor(Color.parseColor("#4A4A4A"))
+            viewLinea.setBackgroundColor(verdeOscuro)
+
+            holder.btnVerDetalles.setBackgroundResource(R.drawable.button_rounded_green)
+            holder.btnVerDetalles.setTextColor(Color.WHITE)
+
+            // Cambiar color de iconos
+            setDrawableLeftColor(holder.tvEstado, verdeBtn)
+            setDrawableLeftColor(holder.tvFechas, verdeBtn)
+            setDrawableLeftColor(holder.tvDescripcion, verdeBtn)
+
         } else {
+            // Inactivo: rojo
+            val rojoOscuro = Color.parseColor("#B00020")
+            val rojoClaro = Color.parseColor("#FDECEA")
+            val rojoBtn = Color.parseColor("#D32F2F")
+
             holder.tvEstado.text = "Inactivo"
-            holder.tvEstado.setTextColor(Color.parseColor("#D32F2F")) // Rojo
+            holder.tvEstado.setTextColor(rojoBtn)
+
+            layoutRoot.setBackgroundColor(rojoClaro)
+            holder.tvNombre.setTextColor(rojoOscuro)
+            holder.tvFechas.setTextColor(Color.parseColor("#4A4A4A"))
+            holder.tvDescripcion.setTextColor(Color.parseColor("#4A4A4A"))
+            viewLinea.setBackgroundColor(rojoOscuro)
+
+            holder.btnVerDetalles.setBackgroundResource(R.drawable.button_rounded_red)
+            holder.btnVerDetalles.setTextColor(Color.WHITE)
+
+            // Cambiar color de iconos
+            setDrawableLeftColor(holder.tvEstado, rojoBtn)
+            setDrawableLeftColor(holder.tvFechas, rojoBtn)
+            setDrawableLeftColor(holder.tvDescripcion, rojoBtn)
         }
 
         holder.btnVerDetalles.setOnClickListener {
@@ -59,6 +109,7 @@ class ProyectoAdapterAdmin(
             contexto.startActivity(intent)
         }
     }
+
 
     override fun getItemCount(): Int = proyectos.size
 

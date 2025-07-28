@@ -3,7 +3,7 @@
     android:id="@+id/mainInicioAdmin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#001E3AD1"
+    android:background="#E6F0E6"
     android:paddingLeft="2dp"
     android:paddingTop="16dp"
     android:paddingRight="2dp"
@@ -41,7 +41,7 @@
                 android:text="LIDER DE BARRIO"
                 android:textAlignment="center"
                 android:textColor="#090909"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -61,7 +61,7 @@
                 android:elevation="2dp"
                 android:text="👋 Bienvenido"
                 android:textColor="#1D1C1C"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -75,9 +75,7 @@
                 android:padding="8dp"
                 android:src="@drawable/ic_profile" />
         </RelativeLayout>
-        <!-- Puntos e Insignias en una card horizontal -->
 
-        <!-- Dashboard tipo Grid -->
         <GridLayout
             android:id="@+id/menuGrid"
             android:layout_width="match_parent"
@@ -168,7 +166,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_news" />
+                    android:src="@drawable/ic_voluntarios" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -200,7 +198,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_news" />
+                    android:src="@drawable/ic_actividades" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -244,7 +242,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_news" />
+                    android:src="@drawable/ic_progreso_proyectos" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -257,6 +255,45 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
+
+        </GridLayout>
+
+        <GridLayout
+            android:id="@+id/menuGrid3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alignmentMode="alignMargins"
+            android:columnCount="1"
+            android:columnOrderPreserved="false"
+            android:useDefaultMargins="true">
+
+            <!-- Noticias -->
+            <LinearLayout
+                android:id="@+id/cardNosotros"
+                android:layout_width="58dp"
+                android:layout_height="124dp"
+                android:layout_columnWeight="1"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_card_rounded"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="EQUIPO KAWSANA"
+                    android:textAlignment="center"
+                    android:textColor="#1B5E20"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
 
         </GridLayout>
     </LinearLayout>

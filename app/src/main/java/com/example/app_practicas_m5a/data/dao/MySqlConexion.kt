@@ -17,8 +17,8 @@ object MySqlConexion {
             Class.forName("com.mysql.jdbc.Driver")
             DriverManager.getConnection(
                 "jdbc:mysql://10.0.2.2:3306/kawsana_db?useSSL=false&serverTimezone=UTC",
-                "Frosdh",
-                "blancoss"
+                "root",
+                "1234"
             )
 
         } catch (e: ClassNotFoundException) {

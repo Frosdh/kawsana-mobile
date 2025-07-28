@@ -3,48 +3,82 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="8dp"
-    card_view:cardElevation="4dp"
-    android:layout_margin="8dp">
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="6dp"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="5dp"
+    android:backgroundTint="#E6F4EA"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:background="@android:color/white">
 
         <TextView
             android:id="@+id/tvNombreLider"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#000"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre del Líder" />
+            android:text="Nombre del Líder"
+            android:textColor="#2E7D32"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="2dp"
+            android:background="#2E7D32"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="start" />
 
         <TextView
             android:id="@+id/tvCorreoLider"
-            android:textSize="14sp"
-            android:textColor="#666"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="correo@ejemplo.com" />
+            android:layout_marginBottom="4dp"
+            android:text="correo@ejemplo.com"
+            android:textColor="#4A4A4A"
+            android:textSize="13sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:drawableLeft="@android:drawable/ic_dialog_email"
+            android:drawablePadding="6dp" />
 
         <TextView
             android:id="@+id/tvTelefonoLider"
-            android:textSize="14sp"
-            android:textColor="#666"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Teléfono del Líder"
-            android:layout_marginTop="4dp"/>
+            android:textColor="#4A4A4A"
+            android:textSize="13sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:drawableLeft="@android:drawable/ic_menu_call"
+            android:drawablePadding="6dp" />
+
 
         <Button
             android:id="@+id/btnVerProyectos"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ver Proyectos"
-            android:layout_marginTop="8dp"/>
-
+            android:layout_height="36dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/button_rounded_shadow"
+            android:drawableLeft="@android:drawable/ic_menu_info_details"
+            android:drawablePadding="8dp"
+            android:elevation="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp"
+            android:stateListAnimator="@null"
+            android:text="Ver Voluntarios"
+            android:textAllCaps="false"
+            android:textColor="#fff" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

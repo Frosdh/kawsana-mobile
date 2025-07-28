@@ -1,63 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:padding="16dp"
-    android:background="#F9F9F9">
+    android:background="#E6F0E6"
+    android:paddingLeft="8dp"
+    android:paddingTop="30dp"
+    android:paddingRight="8dp"
+    android:paddingBottom="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvTitulo"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="359dp"
             android:layout_height="wrap_content"
-            android:text="Gestión de Actividades"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:paddingVertical="8dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_card_rounded"
+            android:elevation="4dp"
             android:gravity="center"
-            android:layout_marginBottom="16dp" />
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-        <TextView
-            android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvVoluntario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.12"
+                android:shadowColor="#55000000"
+                android:shadowDx="1"
+                android:shadowDy="2"
+                android:shadowRadius="3"
+                android:text="Proyectos Activos e Inactivos"
+                android:textAlignment="center"
+                android:textColor="#090909"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Sección Proyectos Activos -->
+        <LinearLayout
+            android:layout_width="359dp"
             android:layout_height="wrap_content"
-            android:text="🟢 Proyectos Activos"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingVertical="4dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#4CAF50"
+                android:src="@drawable/ic_check_circle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Proyectos Activos"
+                android:textColor="#2E7D32"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerActivos"
-            android:layout_width="match_parent"
+            android:layout_width="359dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp"
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never" />
 
-        <TextView
-            android:layout_width="match_parent"
+        <!-- Sección Proyectos Inactivos -->
+        <LinearLayout
+            android:layout_width="359dp"
             android:layout_height="wrap_content"
-            android:text="🔴 Proyectos Inactivos"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingVertical="4dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#E53935"
+                android:src="@drawable/ic_cancel_circle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Proyectos Inactivos"
+                android:textColor="#B71C1C"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerInactivos"
-            android:layout_width="match_parent"
+            android:layout_width="359dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never" />
-
     </LinearLayout>
 </ScrollView>

@@ -3,7 +3,7 @@
     android:id="@+id/layoutGrafico"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
+    android:background="#E6F0E6"
     android:orientation="vertical"
     android:padding="24dp">
 
@@ -18,18 +18,32 @@
         android:elevation="8dp"
         android:padding="20dp">
 
-        <!-- Título gráfico -->
-        <TextView
-            android:id="@+id/tvTituloGrafico"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="sans-serif-medium"
-            android:paddingBottom="8dp"
-            android:text="Progreso por Barrio"
-            android:textColor="#2E7D32"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_card_rounded"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvTituloActividadesAdmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.12"
+                android:shadowColor="#55000000"
+                android:shadowDx="1"
+                android:shadowDy="2"
+                android:shadowRadius="3"
+                android:text="PROGRESO POR BARRIO"
+                android:textAlignment="center"
+                android:textColor="#090909"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <!-- Texto del progreso (desde Kotlin) -->
         <TextView

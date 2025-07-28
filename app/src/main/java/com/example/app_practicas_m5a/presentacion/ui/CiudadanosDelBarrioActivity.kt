@@ -23,7 +23,7 @@ class CiudadanosDelBarrioActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()  // Opcional, para edge-to-edge si quieres
+        enableEdgeToEdge()
 
         setContentView(R.layout.activity_ciudadanos_del_barrio)
 

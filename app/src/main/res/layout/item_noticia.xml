@@ -4,41 +4,42 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="6dp">
+    android:layout_margin="6dp"
+    android:background="#E6F0E6"
+    card_view:cardCornerRadius="10dp"
+    card_view:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="8dp">
 
         <!-- Título "NOTICIAS" -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_card_rounded"
-            android:elevation="2dp"
+            android:elevation="1dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp">
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:id="@+id/tvTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.12"
+                android:letterSpacing="0.08"
                 android:shadowColor="#55000000"
                 android:shadowDx="1"
-                android:shadowDy="2"
-                android:shadowRadius="3"
+                android:shadowDy="1"
+                android:shadowRadius="2"
                 android:text="NOTICIAS"
                 android:textAlignment="center"
                 android:textColor="#090909"
-                android:textSize="22sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -47,12 +48,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="4dp">
 
             <ImageView
                 android:id="@+id/imgNoticia"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="90dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/placeholder"
                 android:contentDescription="Imagen de la noticia" />

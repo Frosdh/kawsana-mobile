@@ -14,10 +14,9 @@ import kotlinx.coroutines.withContext
 
 class Pagina_principal_Super_Admin : AppCompatActivity() {
 
-    private lateinit var tvNombreSuperAdmin: TextView
-    private lateinit var tvCorreoSuperAdmin: TextView
+
     private lateinit var imgPerfilSuper: ImageView
-    private lateinit var btnVerPerfilSuper: Button
+    private lateinit var tvsaludo: TextView
 
     // Cards
     private lateinit var cardOrganizaciones: LinearLayout
@@ -32,15 +31,14 @@ class Pagina_principal_Super_Admin : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_pagina_principal_super_admin)
 
-        // Referencias
-        tvNombreSuperAdmin = findViewById(R.id.tvNombreSuperAdmin)
-        tvCorreoSuperAdmin = findViewById(R.id.tvCorreoSuperAdmin)
+
         imgPerfilSuper = findViewById(R.id.imgPerfilSuper)
-        btnVerPerfilSuper = findViewById(R.id.btnVerPerfilSuper)
+        tvsaludo = findViewById(R.id.tvSaludo)
+
 
         // Cards
         cardOrganizaciones = findViewById(R.id.cardOrganizaciones)
-        cardLideres = findViewById(R.id.cardLideres)
+        cardLideres = findViewById(R.id.cardlideres)
         cardActividades = findViewById(R.id.cardActividades)
         cardGraficas = findViewById(R.id.cardGraficas)
 
@@ -53,16 +51,13 @@ class Pagina_principal_Super_Admin : AppCompatActivity() {
             }
 
             if (admin != null) {
-                tvNombreSuperAdmin.text = "Nombre: ${admin.nombres} ${admin.apellidos}"
-                tvCorreoSuperAdmin.text = "Correo: ${admin.email}"
+                tvsaludo.text = "👋 Bienvenido, ${admin.nombres} ${admin.apellidos}"
             }
         }
 
 
 
-        val btnPerfilSuperAdmin: Button = findViewById(R.id.btnVerPerfilSuper)
-
-        btnPerfilSuperAdmin.setOnClickListener {
+        imgPerfilSuper.setOnClickListener {
             val intent = Intent(this, Perfil_Super_Admin::class.java)
             intent.putExtra("usuario", usuario) // Envía el nombre de usuario actual
             startActivity(intent)

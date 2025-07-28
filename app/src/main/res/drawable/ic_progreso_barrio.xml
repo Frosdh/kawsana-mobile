@@ -1,0 +1,44 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Casa izquierda -->
+    <path
+        android:fillColor="#A5D6A7"
+        android:pathData="M3 14l3-3 3 3v4H3z"/>
+    <path
+        android:fillColor="#66BB6A"
+        android:pathData="M4 18h4v-3H4z"/>
+
+    <!-- Casa central -->
+    <path
+        android:fillColor="#A5D6A7"
+        android:pathData="M10 12l3-3 3 3v6h-6z"/>
+    <path
+        android:fillColor="#43A047"
+        android:pathData="M11 18h4v-4h-4z"/>
+
+    <!-- Casa derecha -->
+    <path
+        android:fillColor="#A5D6A7"
+        android:pathData="M17 14l3-3 3 3v4h-6z"/>
+    <path
+        android:fillColor="#388E3C"
+        android:pathData="M18 18h4v-2h-4z"/>
+
+    <!-- Flechas hacia arriba sobre cada casa (simbolizan progreso) -->
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M4.5 10l1.5-2 1.5 2H6.5v2h-1v-2z"/>
+
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M11.5 8l1.5-2 1.5 2h-1.5v2h-1v-2z"/>
+
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M18.5 10l1.5-2 1.5 2h-1.5v2h-1v-2z"/>
+
+</vector>

@@ -3,105 +3,107 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1F8E9"
-    android:padding="16dp">
+    android:background="#E6F0E6"
+    android:paddingLeft="2dp"
+    android:paddingTop="16dp"
+    android:paddingRight="2dp"
+    android:paddingBottom="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:paddingTop="30dp">
 
-        <!-- Título -->
-        <TextView
-            android:id="@+id/tvTituloSuperAdmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Panel Super Administrador"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#2E7D32"
-            android:layout_marginBottom="20dp" />
-
-        <!-- Perfil Super Admin -->
         <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_card_rounded"
+            android:elevation="2dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tvVoluntario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.12"
+                android:shadowColor="#55000000"
+                android:shadowDx="1"
+                android:shadowDy="2"
+                android:shadowRadius="3"
+                android:text="SUPER ADMINISTRADOR"
+                android:textAlignment="center"
+                android:textColor="#090909"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:background="@drawable/bg_card_rounded"
-            android:padding="16dp"
-            android:elevation="6dp">
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/tvSaludo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_card_rounded"
+                android:elevation="2dp"
+                android:text="👋 Bienvenido"
+                android:textColor="#1D1C1C"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/imgPerfilSuper"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/icono_kausana"
-                android:layout_marginBottom="8dp" />
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_circle"
+                android:contentDescription="Perfil"
+                android:padding="8dp"
+                android:src="@drawable/ic_profile" />
+        </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tvNombreSuperAdmin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nombre: Super Admin"
-                android:textSize="16sp"
-                android:textColor="#000000" />
-
-            <TextView
-                android:id="@+id/tvCorreoSuperAdmin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Correo: superadmin@ejemplo.com"
-                android:textSize="16sp"
-                android:textColor="#000000"
-                android:layout_marginBottom="12dp" />
-
-            <Button
-                android:id="@+id/btnVerPerfilSuper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ver perfil completo"
-                android:backgroundTint="#66BB6A"
-                android:textColor="#FFFFFF" />
-        </LinearLayout>
-
-        <!-- Título Dashboard -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opciones del Administrador"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#1B5E20"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Dashboard con opciones -->
         <GridLayout
             android:id="@+id/menuGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alignmentMode="alignMargins"
             android:columnCount="2"
+            android:columnOrderPreserved="false"
             android:useDefaultMargins="true">
 
-            <!-- Gestionar Organizaciones -->
+            <!-- Proyectos -->
             <LinearLayout
                 android:id="@+id/cardOrganizaciones"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
-                android:elevation="4dp">
+                android:elevation="4dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    />
+                    android:src="@drawable/ic_organizaciones" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -111,87 +113,140 @@
                     android:textColor="#1B5E20"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
+
             </LinearLayout>
 
-            <!-- Ver Líderes -->
+            <!-- Actividades -->
             <LinearLayout
-                android:id="@+id/cardLideres"
+                android:id="@+id/cardlideres"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
-                android:elevation="4dp">
+                android:elevation="4dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                     />
+                    android:src="@drawable/ic_lideres" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Líderes"
+                    android:text="Lideres"
                     android:textColor="#1B5E20"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
 
-            <!-- Ver Actividades -->
+            <!-- Noticias -->
             <LinearLayout
                 android:id="@+id/cardActividades"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="124dp"
                 android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
-                android:elevation="4dp">
+                android:elevation="4dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                     />
+                    android:src="@drawable/ic_actividades" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Actividades"
+                    android:text="Proyectos Activos e Inactivos"
+                    android:textAlignment="center"
                     android:textColor="#1B5E20"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
 
-            <!-- Ver Estadísticas -->
+            <!-- Avance -->
             <LinearLayout
                 android:id="@+id/cardGraficas"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="124dp"
                 android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/bg_card_rounded"
-                android:elevation="4dp">
+                android:elevation="4dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                     />
+                    android:src="@drawable/ic_progress" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Gráficas"
+                    android:text="Graficas"
+                    android:textAlignment="center"
                     android:textColor="#1B5E20"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
+            </LinearLayout>
+        </GridLayout>
+
+        <GridLayout
+            android:id="@+id/menuGrid3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alignmentMode="alignMargins"
+            android:columnCount="1"
+            android:columnOrderPreserved="false"
+            android:useDefaultMargins="true">
+
+            <!-- Noticias -->
+            <LinearLayout
+                android:id="@+id/cardNosotros"
+                android:layout_width="58dp"
+                android:layout_height="124dp"
+                android:layout_columnWeight="1"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_card_rounded"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="EQUIPO KAWSANA"
+                    android:textAlignment="center"
+                    android:textColor="#1B5E20"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
 

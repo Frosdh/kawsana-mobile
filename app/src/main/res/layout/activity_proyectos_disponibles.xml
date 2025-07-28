@@ -3,24 +3,54 @@
     android:id="@+id/scrollViewProyectos"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1F8E9"
+    android:background="#E6F0E6"
     android:padding="16dp">
 
+    <!-- CONTENEDOR PRINCIPAL -->
     <LinearLayout
-        android:id="@+id/layoutProyectos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingBottom="24dp">
 
-        <TextView
-            android:id="@+id/tvTituloLista"
-            android:layout_width="wrap_content"
+        <!-- CARD DE TÍTULO -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Proyectos registrados"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#2E7D32"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_card_rounded"
+            android:elevation="6dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="24dp">
 
+            <TextView
+                android:id="@+id/tvTituloProyectosLider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.12"
+                android:shadowColor="#55000000"
+                android:shadowDx="1"
+                android:shadowDy="2"
+                android:shadowRadius="3"
+                android:text="PROYECTOS REGISTRADOS"
+                android:textAlignment="center"
+                android:textColor="#090909"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- TEXTO ENCIMA DE LA LISTA -->
+
+        <!-- CONTENEDOR DINÁMICO DE TARJETAS -->
+        <LinearLayout
+            android:id="@+id/layoutProyectos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp" />
     </LinearLayout>
 </ScrollView>

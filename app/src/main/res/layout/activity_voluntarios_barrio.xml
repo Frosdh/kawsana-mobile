@@ -1,34 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layoutVoluntarios"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#FFFFFF"
-    android:padding="16dp">
+    android:background="#E6F0E6"
+    android:paddingLeft="8dp"
+    android:paddingTop="30dp"
+    android:paddingRight="8dp"
+    android:paddingBottom="16dp">
 
-    <!-- Título centrado con fondo blanco, borde y sombra -->
-    <TextView
-        android:id="@+id/tvTitulo"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="🤝 Voluntarios de tu barrio"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="#2E7D32"
-        android:gravity="center"
-        android:background="@drawable/bg_card_rounded"
-        android:padding="16dp"
-        android:layout_marginBottom="16dp"
-        android:elevation="6dp" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-    <!-- RecyclerView que ocupa todo el espacio restante -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvVoluntarios"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingBottom="20dp"
-        android:scrollbars="vertical" />
+        <LinearLayout
+            android:layout_width="359dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_card_rounded"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.12"
+                android:shadowColor="#55000000"
+                android:shadowDx="1"
+                android:shadowDy="2"
+                android:shadowRadius="3"
+                android:text="VOLUNTARIOS DE TU BARRIO"
+                android:textAlignment="center"
+                android:textColor="#090909"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- RecyclerView con altura fija o wrap_content -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvVoluntarios"
+            android:layout_width="352dp"
+            android:layout_height="600dp"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp"
+            android:scrollbars="vertical" />
+    </LinearLayout>
 </LinearLayout>

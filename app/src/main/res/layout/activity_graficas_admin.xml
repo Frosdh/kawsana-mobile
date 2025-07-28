@@ -3,67 +3,87 @@
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
-    android:padding="24dp">
+    android:background="#F5F5F5"
+    android:padding="20dp">
 
   <LinearLayout
       android:id="@+id/layoutGrafico"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical">
+      android:orientation="vertical"
+      android:background="@android:color/white"
+      android:padding="16dp"
+      android:layout_gravity="center"
+      android:elevation="4dp">
 
-    <!-- Título para gráfica de barras -->
+    <!-- Título Gráfica de Barras -->
     <TextView
         android:id="@+id/tvTituloBarras"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Top 6 Barrios con más puntaje"
-        android:textSize="20sp"
+        android:text="📊 Top 6 Barrios con más puntaje"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="#2E7D32"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center_horizontal" />
+        android:gravity="center"
+        android:layout_marginBottom="12dp"
+        android:paddingTop="8dp" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="280dp"
+        android:layout_marginBottom="24dp" />
 
-    <!-- Título para gráfica de pastel -->
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#BDBDBD"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Título Gráfica de Pastel (Barrios) -->
     <TextView
         android:id="@+id/tvTituloPastelBarrios"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Distribución porcentual de ciudadanos por barrio"
-        android:textSize="20sp"
+        android:text="🥧 Distribución de ciudadanos por barrio"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="#2E7D32"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center_horizontal" />
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChartBarrios"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="280dp"
+        android:layout_marginBottom="24dp" />
 
-    <!-- Título para tercera gráfica (actividades) -->
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#BDBDBD"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Título Gráfica Actividades -->
     <TextView
         android:id="@+id/tvTituloActividades"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Porcentaje de actividades realizadas y no realizadas"
-        android:textSize="20sp"
+        android:text="✅ Actividades realizadas vs no realizadas"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="#2E7D32"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center_horizontal" />
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChartActividades"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="280dp"
+        android:layout_marginBottom="16dp" />
 
   </LinearLayout>
 </ScrollView>

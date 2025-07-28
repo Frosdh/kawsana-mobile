@@ -68,7 +68,8 @@ class Proyectos_Disponibles : AppCompatActivity() {
         tvDescripcion.text = proyecto.descripcion
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val organizacion = ProyectoDisponobleDao.obtenerOrganizacionPorId(proyecto.organizacion_id)
+            val organizacion =
+                ProyectoDisponobleDao.obtenerOrganizacionPorId(proyecto.organizacion_id)
 
             withContext(Dispatchers.Main) {
                 btnVer.setOnClickListener {
@@ -90,8 +91,16 @@ class Proyectos_Disponibles : AppCompatActivity() {
                     detalleProyectoLauncher.launch(intent)
                 }
 
+                // Ajustar LayoutParams para el espacio entre tarjetas
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                layoutParams.setMargins(16, 8, 16, 24)  // Izquierda, arriba, derecha, abajo
+                cardView.layoutParams = layoutParams
+
                 layoutProyectos.addView(cardView)
-                cardView.tag = proyecto.id // asignamos un tag para identificar el card
+                cardView.tag = proyecto.id
             }
         }
     }

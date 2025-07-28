@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Persona izquierda -->
+    <path
+        android:fillColor="#66BB6A"
+        android:pathData="M5 14c-1.1 0-2 0.9-2 2v4h2v-4h1v4h2v-4c0-1.1-0.9-2-2-2zM5 13c0.83 0 1.5-0.67 1.5-1.5S5.83 10 5 10s-1.5 0.67-1.5 1.5S4.17 13 5 13z"/>
+
+    <!-- Persona derecha -->
+    <path
+        android:fillColor="#66BB6A"
+        android:pathData="M19 14c-1.1 0-2 0.9-2 2v4h2v-4h1v4h2v-4c0-1.1-0.9-2-2-2zM19 13c0.83 0 1.5-0.67 1.5-1.5S19.83 10 19 10s-1.5 0.67-1.5 1.5S18.17 13 19 13z"/>
+
+    <!-- Corazón entre los voluntarios -->
+    <path
+        android:fillColor="#388E3C"
+        android:pathData="M12 8.6l-1.45-1.32C9.4 6.36 8 5.28 8 3.75 8 2.5 9 1.5 10.25 1.5c0.83 0 1.54 0.4 2 1.03C12.21 1.9 13.01 1.5 13.75 1.5 15 1.5 16 2.5 16 3.75c0 1.53-1.4 2.61-2.55 3.53L12 8.6z"/>
+</vector>

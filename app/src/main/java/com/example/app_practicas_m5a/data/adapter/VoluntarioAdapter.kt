@@ -13,6 +13,10 @@ class VoluntarioAdapter(private val lista: List<CoreUsuarioModel>) :
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvNombre: TextView = view.findViewById(R.id.tvNombre)
+        val tvEmail: TextView = view.findViewById(R.id.tvEmail)
+        val tvTelefono: TextView = view.findViewById(R.id.tvTelefono)
+        val tvDireccion: TextView = view.findViewById(R.id.tvDireccion)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,7 +27,11 @@ class VoluntarioAdapter(private val lista: List<CoreUsuarioModel>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val voluntario = lista[position]
-        holder.tvNombre.text = "${voluntario.nombres} ${voluntario.apellidos} | Email: ${voluntario.email} | Tel: ${voluntario.telefono}"
+        holder.tvNombre.text = "${voluntario.nombres} ${voluntario.apellidos}"
+        holder.tvEmail.text = voluntario.email
+        holder.tvTelefono.text = voluntario.telefono
+        holder.tvDireccion.text=voluntario.direccion
+
     }
 
     override fun getItemCount(): Int = lista.size

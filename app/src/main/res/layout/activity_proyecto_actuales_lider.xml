@@ -1,72 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#E8F5E9"
+    android:background="#F1F8E9"
     android:padding="16dp">
 
     <!-- Contenido desplazable -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="@drawable/bg_card_rounded">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:layout_marginBottom="24dp">
 
             <!-- Título Actividades Pendientes -->
             <TextView
                 android:id="@+id/tvTituloActividades"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Actividades pendientes por subir"
+                android:text="🟢 Actividades pendientes por subir"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#2E7D32"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp" />
+                android:textColor="#33691E"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp"
+                android:layout_marginBottom="8dp" />
 
-            <!-- Contenedor de actividades pendientes -->
+            <!-- Tarjeta de actividad pendiente (ejemplo) -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="335dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="#FFFFFF"
+                android:layout_gravity="center"
+                card_view:cardCornerRadius="16dp"
+                card_view:cardElevation="6dp">
+
+                <LinearLayout
+                    android:layout_width="333dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Título de la actividad"
+                        android:textColor="#2E7D32"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Descripción breve de la actividad pendiente por entregar."
+                        android:textColor="#555555"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Contenedor de más actividades pendientes -->
             <LinearLayout
                 android:id="@+id/layoutProyectos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:layout_marginBottom="24dp" />
 
             <!-- Separador -->
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#BDBDBD"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_height="2dp"
+                android:background="#B0BEC5"
+                android:layout_marginBottom="24dp" />
 
             <!-- Título Actividades Subidas -->
             <TextView
                 android:id="@+id/tvTituloActividadesSubidas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Actividades ya subidas"
+                android:text="🔵 Actividades ya subidas"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#1565C0"
-                android:paddingBottom="8dp" />
+                android:textColor="#0D47A1"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp"
+                android:layout_marginBottom="8dp" />
 
-            <!-- Contenedor de actividades subidas -->
+            <!-- Tarjeta de actividad subida (ejemplo) -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="335dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                card_view:cardCornerRadius="16dp"
+                card_view:cardElevation="6dp"
+                android:layout_gravity="center"
+
+                android:background="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Título de la actividad subida"
+                        android:textColor="#1565C0"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Resumen de la actividad que ya fue entregada correctamente."
+                        android:textSize="15sp"
+                        android:textColor="#555555"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Contenedor de más actividades subidas -->
             <LinearLayout
                 android:id="@+id/layoutProyectosSubidos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
-
         </LinearLayout>
     </ScrollView>
-
-
-
 </LinearLayout>
