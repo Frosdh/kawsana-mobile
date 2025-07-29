@@ -93,7 +93,7 @@ class Login : AppCompatActivity() {
                         Toast.makeText(this@Login, "Bienvenido ${user.nombres}", Toast.LENGTH_LONG).show()
 
                         val intent = when (user.tipo_usuario.lowercase()) {
-                            "super_admin" -> Intent(this@Login, Pagina_principal_Super_Admin::class.java)
+                            "admin" -> Intent(this@Login, Pagina_principal_Super_Admin::class.java)
                             "lider" -> Intent(this@Login, Pagina_principal_adm::class.java)
                             "ciudadano" -> Intent(this@Login, Pagina_principal_vol::class.java)
                             else -> {
