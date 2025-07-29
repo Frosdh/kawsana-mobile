@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#E6F0E6"
     android:paddingLeft="2dp"
-    android:paddingTop="16dp"
+    android:paddingTop="10dp"
     android:paddingRight="2dp"
     android:paddingBottom="16dp">
 
@@ -47,10 +47,31 @@
 
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="346dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:id="@+id/btnSalir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#C62828"
+            android:elevation="2dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="Salir"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_gravity="start"
+            android:layout_marginBottom="8dp" />
+
         <RelativeLayout
             android:layout_width="346dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:id="@+id/tvSaludo"
@@ -76,15 +97,17 @@
                 android:padding="8dp"
                 android:src="@drawable/ic_profile" />
         </RelativeLayout>
+    </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="348dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/bg_card_rounded"
             android:elevation="4dp"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:padding="12dp">
 
             <TextView
                 android:id="@+id/tvPuntos"
@@ -282,7 +305,7 @@
             <LinearLayout
                 android:id="@+id/cardGraficas"
                 android:layout_width="0dp"
-                android:layout_height="124dp"
+                android:layout_height="116dp"
                 android:layout_columnWeight="1"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
@@ -344,8 +367,8 @@
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPagerNosotros"
-                    android:layout_width="210dp"
-                    android:layout_height="119dp"
+                    android:layout_width="200dp"
+                    android:layout_height="110dp"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:paddingLeft="16dp"
@@ -360,7 +383,7 @@
                     android:text="Somos el equipo Kawsana, comprometidos con brindar soluciones innovadoras para el desarrollo comunitario y tecnológico sostenible."
                     android:textAlignment="center"
                     android:textColor="#1B5E20"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
         </GridLayout>

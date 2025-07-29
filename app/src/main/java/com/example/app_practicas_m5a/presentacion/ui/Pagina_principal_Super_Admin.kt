@@ -55,6 +55,13 @@ class Pagina_principal_Super_Admin : AppCompatActivity() {
             }
         }
 
+        val btnSalir: Button = findViewById(R.id.btnSalir)
+        btnSalir.setOnClickListener {
+            val intent = Intent(this, Login::class.java) // Cambia por el nombre de tu actividad de login si es diferente
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
 
 
         imgPerfilSuper.setOnClickListener {

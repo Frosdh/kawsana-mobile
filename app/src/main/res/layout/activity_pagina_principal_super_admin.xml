@@ -46,35 +46,58 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="346dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvSaludo"
+            <Button
+                android:id="@+id/btnSalir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="6dp"
-                android:background="@drawable/bg_card_rounded"
+                android:layout_gravity="start"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#C62828"
                 android:elevation="2dp"
-                android:text="👋 Bienvenido"
-                android:textColor="#1D1C1C"
-                android:textSize="16sp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:text="Salir"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/imgPerfilSuper"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/bg_circle"
-                android:contentDescription="Perfil"
-                android:padding="8dp"
-                android:src="@drawable/ic_profile" />
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tvSaludo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_card_rounded"
+                    android:elevation="2dp"
+                    android:text="👋 Bienvenido"
+                    android:textColor="#1D1C1C"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imgPerfilSuper"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/bg_circle"
+                    android:contentDescription="Perfil"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_profile" />
+            </RelativeLayout>
+        </LinearLayout>
+
 
         <GridLayout
             android:id="@+id/menuGrid"
@@ -211,45 +234,6 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
-        </GridLayout>
-
-        <GridLayout
-            android:id="@+id/menuGrid3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:alignmentMode="alignMargins"
-            android:columnCount="1"
-            android:columnOrderPreserved="false"
-            android:useDefaultMargins="true">
-
-            <!-- Noticias -->
-            <LinearLayout
-                android:id="@+id/cardNosotros"
-                android:layout_width="58dp"
-                android:layout_height="124dp"
-                android:layout_columnWeight="1"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/bg_card_rounded"
-                android:elevation="4dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="EQUIPO KAWSANA"
-                    android:textAlignment="center"
-                    android:textColor="#1B5E20"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-
         </GridLayout>
     </LinearLayout>
 </ScrollView>

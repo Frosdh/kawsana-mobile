@@ -56,16 +56,10 @@ object ProyectosDispoVoluntarioDao {
     fun obtenerPuntosTotalesPorUsuario(usuario: String): Int {
         var totalPuntos = 0
         val conn = getConnection() ?: return 0
-
         val sql = """
-            SELECT COALESCE(SUM(a.puntos), 0) AS total_puntos
-            FROM core_proyecto p
-            JOIN core_liderproyectobarrio lp ON lp.proyecto_id = p.id
-            JOIN core_usuario u ON lp.usuario_id = u.id
-            JOIN core_actividad a ON a.proyecto_id = p.id
-            WHERE u.usuario = ? AND a.estado = 1
-        """.trimIndent()
-
+        SELECT SUM(puntos) AS total_puntos FROM core_usuario 
+        WHERE usuario = ? AND tipo_usuario = 'ciudadano' AND estado = 1
+    """.trimIndent()
         try {
             conn.use { c ->
                 c.prepareStatement(sql).use { ps ->
@@ -84,4 +78,5 @@ object ProyectosDispoVoluntarioDao {
 
         return totalPuntos
     }
+
 }
