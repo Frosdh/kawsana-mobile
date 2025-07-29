@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.app_practicas_m5a.data.model.ActividadResumen
 import com.example.app_practicas_m5a.data.model.BarrioProgreso
 import com.example.app_practicas_m5a.data.model.BarrioUsuariosLideres
+import com.example.app_practicas_m5a.data.model.ResumenActividades
 import java.sql.Connection
 
 object BarrioDaoProgresoGrafico {
@@ -112,16 +113,17 @@ object BarrioDaoProgresoGrafico {
     }
     // En BarrioDaoProgresoGrafico.kt
 
-    fun obtenerResumenActividades(): ActividadResumen {
-        val conn = getConnection() ?: return ActividadResumen(0, 0)
-        var realizadas = 0
-        var noRealizadas = 0
+    fun obtenerResumenActividades(): ResumenActividades {
+        val conn = getConnection() ?: return ResumenActividades(0, 0)
+        var aprobadas = 0
+        var noAprobadas = 0
 
         val sql = """
-        SELECT 
-            SUM(CASE WHEN estado = 1 THEN 1 ELSE 0 END) AS realizadas,
-            SUM(CASE WHEN estado = 0 THEN 1 ELSE 0 END) AS no_realizadas
-        FROM core_actividad
+        SELECT
+            COUNT(DISTINCT CASE WHEN ea.estado = 'aprobado' THEN a.id END) AS aprobadas,
+            COUNT(DISTINCT CASE WHEN ea.estado != 'aprobado' OR ea.estado IS NULL THEN a.id END) AS no_aprobadas
+        FROM core_actividad a
+        LEFT JOIN core_evidenciaactividad ea ON a.id = ea.actividad_id
     """.trimIndent()
 
         try {
@@ -129,17 +131,21 @@ object BarrioDaoProgresoGrafico {
                 connection.prepareStatement(sql).use { ps ->
                     ps.executeQuery().use { rs ->
                         if (rs.next()) {
-                            realizadas = rs.getInt("realizadas")
-                            noRealizadas = rs.getInt("no_realizadas")
+                            aprobadas = rs.getInt("aprobadas")
+                            noAprobadas = rs.getInt("no_aprobadas")
                         }
                     }
                 }
             }
         } catch (e: Exception) {
-            android.util.Log.e("BarrioDaoProgresoGrafico", "Error al obtener resumen de actividades", e)
+            android.util.Log.e(
+                "BarrioDaoProgresoGrafico",
+                "Error al obtener resumen de actividades",
+                e
+            )
         }
 
-        return ActividadResumen(realizadas, noRealizadas)
+        return ResumenActividades(aprobadas, noAprobadas)
     }
 
 }

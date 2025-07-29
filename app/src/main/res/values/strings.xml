@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">App_practicas_m5a</string>
+    <string name="imagen">Imagen del carrusel</string>
+
 </resources>

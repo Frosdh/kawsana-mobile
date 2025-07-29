@@ -238,4 +238,44 @@ object ProyectoDisponobleDao {
         }
         return Pair(proyectosActivos, proyectosInactivos)
     }
+    fun obtenerProyectosPorEstadoYProgreso(): Triple<List<Proyectos>, List<Proyectos>, List<Proyectos>> {
+        val conexion = MySqlConexion.getConexion() ?: return Triple(emptyList(), emptyList(), emptyList())
+        val activos = mutableListOf<Proyectos>()
+        val inactivos = mutableListOf<Proyectos>()
+        val pendientes = mutableListOf<Proyectos>()
+
+        val query = """
+        SELECT id, nombre, descripcion, fecha_inicio, fecha_fin, estado, organizacion_id, progreso
+        FROM core_proyecto
+        ORDER BY fecha_inicio DESC
+    """.trimIndent()
+
+        conexion.use { conn ->
+            conn.prepareStatement(query).use { statement ->
+                statement.executeQuery().use { resultado ->
+                    while (resultado.next()) {
+                        val proyecto = Proyectos(
+                            id = resultado.getLong("id"),
+                            nombre = resultado.getString("nombre"),
+                            descripcion = resultado.getString("descripcion"),
+                            fecha_inicio = resultado.getDate("fecha_inicio"),
+                            fecha_fin = resultado.getDate("fecha_fin"),
+                            estado = resultado.getBoolean("estado"),
+                            organizacion_id = resultado.getLong("organizacion_id"),
+                            progreso = resultado.getString("progreso")
+                        )
+
+                        when {
+                            proyecto.progreso.equals("pendiente", ignoreCase = true) -> pendientes.add(proyecto)
+                            proyecto.estado -> activos.add(proyecto)
+                            else -> inactivos.add(proyecto)
+                        }
+                    }
+                }
+            }
+        }
+
+        return Triple(activos, inactivos, pendientes)
+    }
+
 }

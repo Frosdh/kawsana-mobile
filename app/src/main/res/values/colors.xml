@@ -8,5 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#CCCCCC</color>
-
+    <color name="verde_suave">#C8E6C9</color>    <!-- Verde claro -->
+    <color name="amarillo_suave">#FFF9C4</color>  <!-- Amarillo claro -->
+    <color name="rojo_suave">#EF9A9A</color>      <!-- Rojo claro -->
 </resources>
