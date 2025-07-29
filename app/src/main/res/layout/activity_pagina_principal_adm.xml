@@ -86,6 +86,8 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
+
+
                 <ImageView
                     android:id="@+id/imgPerfil"
                     android:layout_width="40dp"
@@ -97,6 +99,36 @@
                     android:padding="8dp"
                     android:src="@drawable/ic_profile" />
             </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="348dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_card_rounded"
+                android:elevation="4dp"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/tvPuntos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="🔥 Puntos: ..."
+                    android:textColor="#2E7D32"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvInsignias"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="🏅 Insignias:"
+                    android:textColor="#2E7D32"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
 

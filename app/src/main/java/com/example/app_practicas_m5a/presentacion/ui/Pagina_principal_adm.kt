@@ -14,14 +14,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.app_practicas_m5a.R
 import com.example.app_practicas_m5a.data.adapter.CarruselAdapter
 import com.example.app_practicas_m5a.data.dao.CoreUsuarioDao
-import com.example.app_practicas_m5a.data.dao.ProyectoDisponobleDao
-import com.example.app_practicas_m5a.data.model.Proyectos
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -35,12 +27,16 @@ class Pagina_principal_adm : AppCompatActivity() {
     private lateinit var cardActividades: LinearLayout
     private lateinit var cardVoluntarios: LinearLayout
     private lateinit var cardGraficas: LinearLayout
-
     private lateinit var viewPagerNosotros: ViewPager2
     private lateinit var carruselAdapter: CarruselAdapter
+    private lateinit var tvPuntos: TextView
+    private lateinit var tvInsignias: TextView
+
+    private lateinit var usuario: String
+    private var usuarioId: Long = -1
 
     private val handler = Handler(Looper.getMainLooper())
-    private val slideInterval: Long = 4000 // 4 segundos
+    private val slideInterval: Long = 4000
 
     private val slideRunnable = object : Runnable {
         override fun run() {
@@ -48,12 +44,8 @@ class Pagina_principal_adm : AppCompatActivity() {
             val totalItems = carruselAdapter.itemCount
             val nextItem = if (currentItem == totalItems - 1) 0 else currentItem + 1
             viewPagerNosotros.setCurrentItem(nextItem, true)
-            // No programar postDelayed aquí para evitar acumulaciones
         }
     }
-
-    private lateinit var usuario: String
-    private var usuarioId: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,8 +61,9 @@ class Pagina_principal_adm : AppCompatActivity() {
         cardVoluntarios = findViewById(R.id.cardVoluntarios)
         cardGraficas = findViewById(R.id.cardGraficas)
         viewPagerNosotros = findViewById(R.id.viewPagerNosotros)
+        tvPuntos = findViewById(R.id.tvPuntos)
+        tvInsignias = findViewById(R.id.tvInsignias)
 
-        // Recibir datos del login
         usuario = intent.getStringExtra("usuario") ?: ""
 
         if (usuario.isEmpty()) {
@@ -81,7 +74,6 @@ class Pagina_principal_adm : AppCompatActivity() {
 
         cargarDatosAdministrador()
 
-        // Imagenes carrusel
         val imagenesCarrusel = listOf(
             R.drawable.wendy,
             R.drawable.adri,
@@ -93,7 +85,6 @@ class Pagina_principal_adm : AppCompatActivity() {
         carruselAdapter = CarruselAdapter(imagenesCarrusel)
         viewPagerNosotros.adapter = carruselAdapter
 
-        // Registrar callback para reiniciar temporizador al cambiar página
         viewPagerNosotros.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 handler.removeCallbacks(slideRunnable)
@@ -101,19 +92,16 @@ class Pagina_principal_adm : AppCompatActivity() {
             }
         })
 
-        // Botón ver perfil
         btnVerPerfil.setOnClickListener {
             val intent = Intent(this, Perfil_Admin::class.java)
             intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
 
-        // Botón ver proyectos
         cardProyectos.setOnClickListener {
             startActivity(Intent(this, Proyectos_Disponibles::class.java))
         }
 
-        // Botón proyectos actuales del líder
         cardVerActi.setOnClickListener {
             val intent = Intent(this, Proyecto_Actuales_Lider::class.java)
             intent.putExtra("usuario", usuario)
@@ -121,18 +109,16 @@ class Pagina_principal_adm : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Botón cámara IA
         cardActividades.setOnClickListener {
             startActivity(Intent(this, Camara_IA_lider::class.java))
         }
 
-        // Botón ver voluntarios
         cardVoluntarios.setOnClickListener {
             val intent = Intent(this, VoluntariosBarrio::class.java)
             intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
-        // Listener: Actividades
+
         cardGraficas.setOnClickListener {
             val intent = Intent(this, MostrarGraficoLider::class.java)
             startActivity(intent)
@@ -140,12 +126,11 @@ class Pagina_principal_adm : AppCompatActivity() {
 
         val btnSalir: Button = findViewById(R.id.btnSalir)
         btnSalir.setOnClickListener {
-            val intent = Intent(this, Login::class.java) // Cambia por el nombre de tu actividad de login si es diferente
+            val intent = Intent(this, Login::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
         }
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainInicioAdmin)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -178,6 +163,14 @@ class Pagina_principal_adm : AppCompatActivity() {
             if (admin != null) {
                 usuarioId = admin.id
                 tvSaludo.text = "👋 Bienvenido, ${admin.nombres} ${admin.apellidos}"
+
+                val puntos = withContext(Dispatchers.IO) {
+                    CoreUsuarioDao.obtenerPuntosPorUsuario(usuario)
+                }
+
+                val puntosVal = puntos ?: 0
+                calcularInsigniaYProgreso(puntosVal, 100)
+
             } else {
                 Toast.makeText(
                     this@Pagina_principal_adm,
@@ -188,5 +181,24 @@ class Pagina_principal_adm : AppCompatActivity() {
         }
     }
 
+    private fun calcularInsigniaYProgreso(puntos: Int, maximo: Int) {
+        val porcentaje = calcularPorcentaje(puntos, maximo)
+        val insignia = when (porcentaje) {
+            in 1..19 -> "🥉 Novato"
+            in 20..39 -> "🥈 Avanzado"
+            in 40..59 -> "🥇 Experto"
+            in 60..79 -> "🏅 Líder"
+            in 80..100 -> "🏆 Leyenda"
+            else -> "🔰 Sin insignia"
+        }
 
+        tvPuntos.text = "🔥 Puntos: $puntos"
+        tvInsignias.text = insignia
+    }
+
+    private fun calcularPorcentaje(puntos: Int, maximo: Int): Int {
+        if (maximo <= 0) return 0
+        val porcentaje = (puntos.toFloat() * 100f) / maximo.toFloat()
+        return porcentaje.coerceAtMost(100f).toInt()
+    }
 }
