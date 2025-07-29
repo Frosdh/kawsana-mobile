@@ -10,14 +10,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.app_practicas_m5a.R
 import com.example.app_practicas_m5a.data.dao.CoreUsuarioDao
-import com.example.app_practicas_m5a.data.dao.ProyectoDisponobleDao
-import com.example.app_practicas_m5a.data.model.Proyectos
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,13 +17,13 @@ import kotlinx.coroutines.withContext
 class Pagina_principal_adm : AppCompatActivity() {
 
     private lateinit var tvSaludo: TextView
+    private lateinit var tvPuntos: TextView
     private lateinit var btnVerPerfil: ImageView
     private lateinit var cardProyectos: LinearLayout
     private lateinit var cardVerActi: LinearLayout
     private lateinit var cardActividades: LinearLayout
     private lateinit var cardVoluntarios: LinearLayout
     private lateinit var cardGraficas: LinearLayout
-
 
     private lateinit var usuario: String
     private var usuarioId: Long = -1
@@ -43,6 +35,7 @@ class Pagina_principal_adm : AppCompatActivity() {
 
         // Vincular UI
         tvSaludo = findViewById(R.id.tvSaludo)
+        tvPuntos = findViewById(R.id.tvPuntos) // Este debe existir en tu XML
         btnVerPerfil = findViewById(R.id.imgPerfil)
         cardProyectos = findViewById(R.id.cardProyectos)
         cardVerActi = findViewById(R.id.cardVerActi)
@@ -92,7 +85,8 @@ class Pagina_principal_adm : AppCompatActivity() {
             intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
-        // Listener: Actividades
+
+        // Botón gráficas
         cardGraficas.setOnClickListener {
             val intent = Intent(this, MostrarGraficoLider::class.java)
             startActivity(intent)
@@ -114,6 +108,17 @@ class Pagina_principal_adm : AppCompatActivity() {
             if (admin != null) {
                 usuarioId = admin.id
                 tvSaludo.text = "👋 Bienvenido, ${admin.nombres} ${admin.apellidos}"
+
+                val puntos = withContext(Dispatchers.IO) {
+                    CoreUsuarioDao.obtenerPuntosPorUsuario(usuario)
+                }
+
+                if (puntos != null) {
+                    tvPuntos.text = "Puntos: $puntos"
+                } else {
+                    tvPuntos.text = "Puntos: 0"
+                }
+
             } else {
                 Toast.makeText(
                     this@Pagina_principal_adm,
@@ -123,6 +128,4 @@ class Pagina_principal_adm : AppCompatActivity() {
             }
         }
     }
-
-
 }

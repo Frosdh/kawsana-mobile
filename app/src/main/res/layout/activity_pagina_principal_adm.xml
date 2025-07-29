@@ -51,6 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp">
 
+            <!-- Saludo -->
             <TextView
                 android:id="@+id/tvSaludo"
                 android:layout_width="wrap_content"
@@ -59,11 +60,29 @@
                 android:layout_marginStart="6dp"
                 android:background="@drawable/bg_card_rounded"
                 android:elevation="2dp"
+                android:padding="8dp"
                 android:text="👋 Bienvenido"
                 android:textColor="#1D1C1C"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <!-- Puntos -->
+            <TextView
+                android:id="@+id/tvPuntos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvSaludo"
+                android:layout_alignStart="@id/tvSaludo"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_card_rounded"
+                android:elevation="2dp"
+                android:padding="8dp"
+                android:text=" ⭐ Puntos: 0"
+                android:textColor="#1B5E20"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <!-- Imagen de perfil -->
             <ImageView
                 android:id="@+id/imgPerfil"
                 android:layout_width="40dp"
@@ -75,6 +94,7 @@
                 android:padding="8dp"
                 android:src="@drawable/ic_profile" />
         </RelativeLayout>
+
 
         <GridLayout
             android:id="@+id/menuGrid"

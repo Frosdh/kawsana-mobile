@@ -352,4 +352,28 @@ object CoreUsuarioDao {
         return lista
     }
 
+
+    fun obtenerPuntosPorUsuario(usuario: String): Int? {
+        val conn = getConexion() ?: return null
+        val sql = """
+        SELECT puntos FROM core_usuario 
+        WHERE usuario = ? AND tipo_usuario = 'lider' AND estado = 1
+    """.trimIndent()
+
+        return try {
+            conn.prepareStatement(sql).use { ps ->
+                ps.setString(1, usuario)
+                ps.executeQuery().use { rs ->
+                    if (rs.next()) rs.getInt("puntos") else null
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        } finally {
+            conn.close()
+        }
+    }
+
+
 }
