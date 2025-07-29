@@ -51,93 +51,122 @@ object ActividadDao {
 
         return listaActividades
     }
-    fun obtenerActividadesSinEvidencia(usuario: String): List<ActividadModel> {
+    fun obtenerActividadesSinEvidencia(usuarioId: Long): List<ActividadModel> {
         val lista = mutableListOf<ActividadModel>()
         val conn = MySqlConexion.getConexion() ?: return lista
 
         val sql = """
-        SELECT a.id, a.nombre, a.fecha_inicio, a.fecha_fin, a.descripcion, a.estado, a.puntos, a.proyecto_id
+        SELECT DISTINCT a.id, a.nombre, a.fecha_inicio, a.fecha_fin, a.descripcion, a.estado, a.puntos, a.proyecto_id
         FROM core_actividad a
         JOIN core_proyecto p ON a.proyecto_id = p.id
         JOIN core_liderproyectobarrio lp ON p.id = lp.proyecto_id
         JOIN core_usuario u ON lp.usuario_id = u.id
-        WHERE u.usuario = ? AND a.estado = 0
+        LEFT JOIN core_evidenciaactividad ea ON a.id = ea.actividad_id AND ea.usuario_id = u.id
+        WHERE u.id = ?
+          AND a.estado = 1
+          AND (ea.id IS NULL OR ea.estado = 'rechazado')
         ORDER BY a.fecha_inicio DESC
     """.trimIndent()
 
-        val stmt = conn.prepareStatement(sql)
-        var rs: ResultSet? = null
-
-        try {
-            stmt.setString(1, usuario)
-            rs = stmt.executeQuery()
-            while (rs.next()) {
-                lista.add(
-                    ActividadModel(
-                        id = rs.getLong("id"),
-                        nombre = rs.getString("nombre"),
-                        fechaInicio = rs.getDate("fecha_inicio"),
-                        fechaFin = rs.getDate("fecha_fin"),
-                        descripcion = rs.getString("descripcion"),
-                        estado = rs.getBoolean("estado"),
-                        puntos = rs.getInt("puntos"),
-                        proyectoId = rs.getLong("proyecto_id")
+        conn.prepareStatement(sql).use { stmt ->
+            stmt.setLong(1, usuarioId)
+            stmt.executeQuery().use { rs ->
+                while (rs.next()) {
+                    lista.add(
+                        ActividadModel(
+                            id = rs.getLong("id"),
+                            nombre = rs.getString("nombre"),
+                            fechaInicio = rs.getDate("fecha_inicio"),
+                            fechaFin = rs.getDate("fecha_fin"),
+                            descripcion = rs.getString("descripcion"),
+                            estado = rs.getBoolean("estado"),
+                            puntos = rs.getInt("puntos"),
+                            proyectoId = rs.getLong("proyecto_id")
+                        )
                     )
-                )
+                }
             }
-        } catch (ex: Exception) {
-            Log.e("ActividadDao", "Error obtenerActividadesSinEvidencia: ${ex.message}")
-        } finally {
-            rs?.close()
-            stmt.close()
-            conn.close()
         }
+        conn.close()
         return lista
     }
 
-    fun obtenerActividadesConEvidencia(usuario: String): List<ActividadModel> {
+    fun obtenerActividadesConEvidenciaPendiente(usuarioId: Long): List<ActividadModel> {
         val lista = mutableListOf<ActividadModel>()
         val conn = MySqlConexion.getConexion() ?: return lista
 
         val sql = """
-        SELECT a.id, a.nombre, a.fecha_inicio, a.fecha_fin, a.descripcion, a.estado, a.puntos, a.proyecto_id
+        SELECT DISTINCT a.id, a.nombre, a.fecha_inicio, a.fecha_fin, a.descripcion, a.estado, a.puntos, a.proyecto_id
         FROM core_actividad a
         JOIN core_proyecto p ON a.proyecto_id = p.id
         JOIN core_liderproyectobarrio lp ON p.id = lp.proyecto_id
         JOIN core_usuario u ON lp.usuario_id = u.id
-        WHERE u.usuario = ? AND a.estado = 1
+        JOIN core_evidenciaactividad ea ON a.id = ea.actividad_id AND ea.usuario_id = u.id
+        WHERE u.id = ?
+          AND a.estado = 1
+          AND ea.estado IN ('en_espera', 'en_revision')
         ORDER BY a.fecha_inicio DESC
     """.trimIndent()
 
-        val stmt = conn.prepareStatement(sql)
-        var rs: ResultSet? = null
-
-        try {
-            stmt.setString(1, usuario)
-            rs = stmt.executeQuery()
-            while (rs.next()) {
-                lista.add(
-                    ActividadModel(
-                        id = rs.getLong("id"),
-                        nombre = rs.getString("nombre"),
-                        fechaInicio = rs.getDate("fecha_inicio"),
-                        fechaFin = rs.getDate("fecha_fin"),
-                        descripcion = rs.getString("descripcion"),
-                        estado = rs.getBoolean("estado"),
-                        puntos = rs.getInt("puntos"),
-                        proyectoId = rs.getLong("proyecto_id")
+        conn.prepareStatement(sql).use { stmt ->
+            stmt.setLong(1, usuarioId)
+            stmt.executeQuery().use { rs ->
+                while (rs.next()) {
+                    lista.add(
+                        ActividadModel(
+                            id = rs.getLong("id"),
+                            nombre = rs.getString("nombre"),
+                            fechaInicio = rs.getDate("fecha_inicio"),
+                            fechaFin = rs.getDate("fecha_fin"),
+                            descripcion = rs.getString("descripcion"),
+                            estado = rs.getBoolean("estado"),
+                            puntos = rs.getInt("puntos"),
+                            proyectoId = rs.getLong("proyecto_id")
+                        )
                     )
-                )
+                }
             }
-        } catch (ex: Exception) {
-            Log.e("ActividadDao", "Error obtenerActividadesConEvidencia: ${ex.message}")
-        } finally {
-            rs?.close()
-            stmt.close()
-            conn.close()
         }
+        conn.close()
         return lista
     }
 
 
+    fun obtenerActividadesAprobadas(usuarioId: Long): List<ActividadModel> {
+        val lista = mutableListOf<ActividadModel>()
+        val conn = MySqlConexion.getConexion() ?: return lista
+
+        val sql = """
+        SELECT DISTINCT a.id, a.nombre, a.fecha_inicio, a.fecha_fin, a.descripcion, a.estado, a.puntos, a.proyecto_id
+        FROM core_actividad a
+        JOIN core_proyecto p ON a.proyecto_id = p.id
+        JOIN core_liderproyectobarrio lp ON p.id = lp.proyecto_id
+        JOIN core_usuario u ON lp.usuario_id = u.id
+        JOIN core_evidenciaactividad ea ON a.id = ea.actividad_id AND ea.usuario_id = u.id
+        WHERE u.id = ? AND ea.estado = 'aprobado' AND a.estado = 1
+        ORDER BY a.fecha_inicio DESC
+    """
+
+        conn.prepareStatement(sql).use { stmt ->
+            stmt.setLong(1, usuarioId)
+            stmt.executeQuery().use { rs ->
+                while (rs.next()) {
+                    lista.add(
+                        ActividadModel(
+                            id = rs.getLong("id"),
+                            nombre = rs.getString("nombre"),
+                            fechaInicio = rs.getDate("fecha_inicio"),
+                            fechaFin = rs.getDate("fecha_fin"),
+                            descripcion = rs.getString("descripcion"),
+                            estado = rs.getBoolean("estado"),
+                            puntos = rs.getInt("puntos"),
+                            proyectoId = rs.getLong("proyecto_id")
+                        )
+                    )
+                }
+            }
+        }
+        conn.close()
+        return lista
+    }
 }
