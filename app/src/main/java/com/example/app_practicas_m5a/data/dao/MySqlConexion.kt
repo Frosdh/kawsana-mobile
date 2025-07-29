@@ -12,6 +12,7 @@ object MySqlConexion {
             Class.forName("com.mysql.jdbc.Driver")
 
             // Conexión a la base de datos en la nube
+            //
             DriverManager.getConnection(
                 "jdbc:mysql://kawsana.ccz2262m6wg3.us-east-1.rds.amazonaws.com:3306/kawsana_db?useSSL=false&serverTimezone=UTC",
                 "admin", // Usuario de la base de datos en la nube
