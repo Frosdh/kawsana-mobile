@@ -2,13 +2,17 @@ package com.example.app_practicas_m5a.presentacion.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.example.app_practicas_m5a.R
+import com.example.app_practicas_m5a.data.adapter.CarruselAdapter
 import com.example.app_practicas_m5a.data.dao.BarrioDaoProgresoGrafico
 import com.example.app_practicas_m5a.data.dao.ProyectosDispoVoluntarioDao
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +33,23 @@ class Pagina_principal_vol : AppCompatActivity() {
     private lateinit var nombreUsuario: String
     private lateinit var cardGraficas: LinearLayout
     private lateinit var cardNoticias: LinearLayout
+    private lateinit var cardNosotros: LinearLayout
+
+    private lateinit var viewPagerNosotros: ViewPager2
+    private lateinit var carruselAdapter: CarruselAdapter
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val slideInterval: Long = 4000 // 4 segundos
+
+    private val slideRunnable = object : Runnable {
+        override fun run() {
+            val currentItem = viewPagerNosotros.currentItem
+            val totalItems = carruselAdapter.itemCount
+            val nextItem = if (currentItem == totalItems - 1) 0 else currentItem + 1
+            viewPagerNosotros.setCurrentItem(nextItem, true)
+            // No programar postDelayed aquí para evitar acumulaciones
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +64,12 @@ class Pagina_principal_vol : AppCompatActivity() {
         progreso = findViewById(R.id.progressBarAvance)
         cardProyectos = findViewById(R.id.cardProyectos)
         cardActividades = findViewById(R.id.cardActividades)
-        btnPerfil = findViewById<ImageView>(R.id.btnPerfil)
-        cardNoticias = findViewById<LinearLayout>(R.id.cardNoticias)
+        btnPerfil = findViewById(R.id.btnPerfil)
+        cardNoticias = findViewById(R.id.cardNoticias)
         cardGraficas = findViewById(R.id.cardGraficas)
+        cardNosotros = findViewById(R.id.cardNosotros)
+
+        viewPagerNosotros = findViewById(R.id.viewPagerNosotros)
 
         // Obtener datos del intent
         usuario = intent.getStringExtra("usuario") ?: "No disponible"
@@ -54,7 +78,28 @@ class Pagina_principal_vol : AppCompatActivity() {
         // Mostrar saludo personalizado
         tvSaludo.text = "👋 Bienvenido, $nombreUsuario"
 
-        // Listeners
+        // Imagenes carrusel
+        val imagenesCarrusel = listOf(
+            R.drawable.wendy,
+            R.drawable.adri,
+            R.drawable.erick,
+            R.drawable.edwin,
+            R.drawable.kenny,
+            R.drawable.steven
+        )
+
+        carruselAdapter = CarruselAdapter(imagenesCarrusel)
+        viewPagerNosotros.adapter = carruselAdapter
+
+        // Registrar callback para reiniciar temporizador al cambiar página
+        viewPagerNosotros.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                handler.removeCallbacks(slideRunnable)
+                handler.postDelayed(slideRunnable, slideInterval)
+            }
+        })
+
+        // Listeners de otras cards
         cardActividades.setOnClickListener {
             val intent = Intent(this, Camara_IA_voluntario::class.java)
             startActivity(intent)
@@ -77,7 +122,6 @@ class Pagina_principal_vol : AppCompatActivity() {
             val puntosTotales = withContext(Dispatchers.IO) {
                 ProyectosDispoVoluntarioDao.obtenerPuntosTotalesPorUsuario(usuario)
             }
-            // Aquí defines tu máximo esperado de puntos (puedes cambiarlo)
             val maximoPuntos = 1000
             calcularInsigniaYProgreso(puntosTotales, maximoPuntos)
         }
@@ -111,9 +155,23 @@ class Pagina_principal_vol : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(slideRunnable)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handler.postDelayed(slideRunnable, slideInterval)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(slideRunnable)
+    }
+
     private fun calcularInsigniaYProgreso(puntos: Int, maximo: Int) {
         val puntosEscalados = calcularPorcentaje(puntos, maximo)
-
         val insignia = when (puntosEscalados) {
             in 1..19 -> "🥉 Novato"
             in 20..39 -> "🥈 Avanzado"
@@ -122,7 +180,6 @@ class Pagina_principal_vol : AppCompatActivity() {
             in 80..100 -> "🏆 Leyenda"
             else -> "🔰 Sin insignia"
         }
-
         tvPuntos.text = "🔥 Puntos reales: $puntos"
         tvInsignias.text = insignia
         tvAvance.text = "$puntosEscalados%"
@@ -134,5 +191,4 @@ class Pagina_principal_vol : AppCompatActivity() {
         val porcentaje = (puntos.toFloat() * 100f) / maximo.toFloat()
         return porcentaje.coerceAtMost(100f).toInt()
     }
-
 }
