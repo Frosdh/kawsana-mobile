@@ -52,7 +52,6 @@ class Perfil_Super_Admin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil_super_admin)
 
-        // Vincular vistas
         tvCedula = findViewById(R.id.tvCedula)
         tvNombres = findViewById(R.id.tvNombres)
         tvApellidos = findViewById(R.id.tvApellidos)
@@ -111,11 +110,11 @@ class Perfil_Super_Admin : AppCompatActivity() {
                 if (!validarCampos()) return@setOnClickListener
 
                 usuarioModel?.let {
-                    it.nombres = tvNombres.text.toString().trim()
-                    it.apellidos = tvApellidos.text.toString().trim()
-                    it.email = tvEmail.text.toString().trim()
-                    it.telefono = tvTelefono.text.toString().trim()
-                    it.direccion = tvDireccion.text.toString().trim()
+                    it.nombres = tvNombres.text.toString().trim().lowercase()
+                    it.apellidos = tvApellidos.text.toString().trim().lowercase()
+                    it.email = tvEmail.text.toString().trim().lowercase()
+                    it.telefono = tvTelefono.text.toString().trim().lowercase()
+                    it.direccion = tvDireccion.text.toString().trim().lowercase()
                     it.barrio_id = barrioSeleccionado?.id?.toLong()
 
                     lifecycleScope.launch {
